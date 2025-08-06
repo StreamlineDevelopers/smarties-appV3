@@ -1,17 +1,19 @@
 import React from 'react';
 
-const ProgressItem = ({ props }) => {
+const ProgressItem = ({}) => {
   return (
-    <div className="progress">
+    <div className={'progress'}>
       <img
-        width="70"
-        height="6"
-        alt=""
-        src="https://cdn.prod.website-files.com/681bd50cca2b1f41b87287dc/681cc8469035957598b9db9e_Progress-line.svg"
-        loading="lazy"
-        className="progress-line"
+        width={'70'}
+        height={'6'}
+        alt={''}
+        src={
+          'https://cdn.prod.website-files.com/681bd50cca2b1f41b87287dc/681cc8469035957598b9db9e_Progress-line.svg'
+        }
+        loading={'lazy'}
+        className={'progress-line'}
       />
-      <div className="slider-control"></div>
+      <div className={'slider-control'}></div>
     </div>
   );
 };

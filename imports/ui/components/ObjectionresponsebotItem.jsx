@@ -2,9 +2,9 @@ import React from 'react';
 import ObjectionresponsebotleftItem from './ObjectionresponsebotleftItem';
 import ObjectionresponsebotrightItem from './ObjectionresponsebotrightItem';
 
-const ObjectionresponsebotItem = ({ props }) => {
+const ObjectionresponsebotItem = ({}) => {
   return (
-    <div className="objection-response-bot">
+    <div className={'objection-response-bot'}>
       <ObjectionresponsebotleftItem />
       <ObjectionresponsebotrightItem />
     </div>

@@ -1,11 +1,17 @@
 import React from 'react';
+import WcheckboxItem from './WcheckboxItem';
 
-const ReusableItem11 = ({ props }) => {
+const ReusableItem11 = ({ label }) => {
   return (
     <div>
-      <div className="checkbox-label">function_tool</div>
-      <div className="checkbox-label sub">
-        499ce958-10ae-4fa1-be50-124f32dc05e9
+      <div className={'checbox-small'}>
+        <WcheckboxItem
+          name={'checkbox-3'}
+          id={'checkbox-3'}
+          dataName={'Checkbox 3'}
+          htmlFor={'checkbox-3'}
+          label={'#'}
+        />
       </div>
     </div>
   );

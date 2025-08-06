@@ -6,7 +6,7 @@ import TopbarLayout from '../components/TopbarLayout';
 const Account = () => {
   return (
     <>
-      <div className="page-wrap">
+      <div className={'page-wrap'}>
         <MaincontentLayout />
         <SidebarLayout />
         <TopbarLayout />

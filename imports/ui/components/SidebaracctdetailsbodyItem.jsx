@@ -1,14 +1,14 @@
 import React from 'react';
-import SidebaracctdetailsrowItem123 from './SidebaracctdetailsrowItem123';
-import SidebaracctdetailsrowItem124 from './SidebaracctdetailsrowItem124';
-import SidebaracctdetailsrowItem125 from './SidebaracctdetailsrowItem125';
+import SidebaracctdetailsrowItem104 from './SidebaracctdetailsrowItem104';
+import SidebaracctdetailsrowItem105 from './SidebaracctdetailsrowItem105';
+import SidebaracctdetailsrowItem106 from './SidebaracctdetailsrowItem106';
 
-const SidebaracctdetailsbodyItem = ({ props }) => {
+const SidebaracctdetailsbodyItem = ({}) => {
   return (
-    <div className="sidebar-acctdetails-body">
-      <SidebaracctdetailsrowItem123 />
-      <SidebaracctdetailsrowItem124 />
-      <SidebaracctdetailsrowItem125 />
+    <div className={'sidebar-acctdetails-body'}>
+      <SidebaracctdetailsrowItem104 />
+      <SidebaracctdetailsrowItem105 />
+      <SidebaracctdetailsrowItem106 />
     </div>
   );
 };

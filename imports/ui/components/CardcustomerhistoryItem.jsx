@@ -4,15 +4,15 @@ import HistoryconvonameItem from './HistoryconvonameItem';
 import Divblock35Item from './Divblock35Item';
 import CardcustomerhistorybotItem from './CardcustomerhistorybotItem';
 
-const CardcustomerhistoryItem = ({ props }) => {
+const CardcustomerhistoryItem = ({}) => {
   return (
-    <div className="card-customer-history">
+    <div className={'card-customer-history'}>
       <CardcustomerhistoryhdItem />
       <HistoryconvonameItem />
       <Divblock35Item />
       <CardcustomerhistorybotItem
-        src="images/smarties-avatar-3.svg"
-        divText="Mike Chen"
+        src={'images/smarties-avatar-3.svg'}
+        divText={'Mike Chen'}
       />
     </div>
   );

@@ -1,16 +1,16 @@
 import React from 'react';
 
-const WeathertempraturerowItem = ({ props }) => {
+const WeathertempraturerowItem = ({}) => {
   return (
-    <div className="weather-temprature-row">
-      <div className="icon-weather">
+    <div className={'weather-temprature-row'}>
+      <div className={'icon-weather'}>
         <img
-          src="images/smarties-contact-icon-weather.svg"
-          loading="lazy"
-          alt=""
+          src={'images/smarties-contact-icon-weather.svg'}
+          loading={'lazy'}
+          alt={''}
         />
       </div>
-      <div className="file-info-data">62°F, Cloudy</div>
+      <div className={'file-info-data'}>62°F, Cloudy</div>
     </div>
   );
 };

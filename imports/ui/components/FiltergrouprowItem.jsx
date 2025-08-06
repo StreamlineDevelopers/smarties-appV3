@@ -1,9 +1,9 @@
 import React from 'react';
 
-const FiltergrouprowItem = ({ props }) => {
+const FiltergrouprowItem = ({}) => {
   return (
-    <div className="filter-group_row">
-      <div className="tag-multi-select"></div>
+    <div className={'filter-group_row'}>
+      <div className={'tag-multi-select'}></div>
     </div>
   );
 };

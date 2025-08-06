@@ -6,10 +6,10 @@ const PodcastitemtopItem = ({ dataWId, divText, divText1 }) => {
   return (
     <div
       data-w-id={dataWId || 'a51ec3fe-b720-8090-e699-811edf3d48a2'}
-      className="podcast-item-top"
+      className={'podcast-item-top'}
     >
-      <PodcastitemtopleftItem divText={divText || 'Topic A'} />
-      <PodcastitemtoprightItem divText={divText1 || '1:50 min'} />
+      <PodcastitemtopleftItem divText={'Topic A'} />
+      <PodcastitemtoprightItem divText={'1:50 min'} />
     </div>
   );
 };

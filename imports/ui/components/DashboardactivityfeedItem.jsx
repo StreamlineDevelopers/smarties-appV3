@@ -1,20 +1,20 @@
 import React from 'react';
-import ActivityfeedtextcontentItem94 from './ActivityfeedtextcontentItem94';
+import ActivityfeedtextcontentItem80 from './ActivityfeedtextcontentItem80';
 
-const DashboardactivityfeedItem = ({ props }) => {
+const DashboardactivityfeedItem = ({}) => {
   return (
-    <div className="dashboard-activityfeed">
-      <div className="card-icon bg-orange">
+    <div className={'dashboard-activityfeed'}>
+      <div className={'card-icon bg-orange'}>
         <img
-          src="../images/smarties-bb-btnicon-02-icon.svg"
-          loading="lazy"
-          width="25"
-          height="25"
-          alt=""
-          className="card-icon-image"
+          src={'../images/smarties-bb-btnicon-02-icon.svg'}
+          loading={'lazy'}
+          width={'25'}
+          height={'25'}
+          alt={''}
+          className={'card-icon-image'}
         />
       </div>
-      <ActivityfeedtextcontentItem94 />
+      <ActivityfeedtextcontentItem80 />
     </div>
   );
 };

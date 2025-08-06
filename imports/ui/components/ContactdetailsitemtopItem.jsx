@@ -1,9 +1,9 @@
 import React from 'react';
 import BbcontinueeditingItem from './BbcontinueeditingItem';
 
-const ContactdetailsitemtopItem = ({ props }) => {
+const ContactdetailsitemtopItem = ({}) => {
   return (
-    <div className="contactdetails-item-top">
+    <div className={'contactdetails-item-top'}>
       <BbcontinueeditingItem />
     </div>
   );

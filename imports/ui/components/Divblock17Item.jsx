@@ -1,11 +1,11 @@
 import React from 'react';
 import DatacollectiontagItem from './DatacollectiontagItem';
 
-const Divblock17Item = ({ props }) => {
+const Divblock17Item = ({}) => {
   return (
-    <div className="div-block-17">
+    <div className={'div-block-17'}>
       <DatacollectiontagItem />
-      <div className="activityhistory-duration">Dec 15, 2024</div>
+      <div className={'activityhistory-duration'}>Dec 15, 2024</div>
     </div>
   );
 };

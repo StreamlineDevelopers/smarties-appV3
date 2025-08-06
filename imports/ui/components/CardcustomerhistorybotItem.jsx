@@ -4,10 +4,10 @@ import CardinboxtagItem from './CardinboxtagItem';
 
 const CardcustomerhistorybotItem = ({ src, divText }) => {
   return (
-    <div className="card-customer-history-bot">
+    <div className={'card-customer-history-bot'}>
       <Divblock36Item
-        src={src || 'images/smarties-bot-avatar.svg'}
-        divText={divText || 'Handled by Bot'}
+        src={'images/smarties-bot-avatar.svg'}
+        divText={'Handled by Bot'}
       />
       <CardinboxtagItem />
     </div>

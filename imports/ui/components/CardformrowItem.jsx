@@ -4,16 +4,13 @@ import SwitchdivItem from './SwitchdivItem';
 
 const CardformrowItem = ({ src, divText, description }) => {
   return (
-    <div className="card-form-row">
+    <div className={'card-form-row'}>
       <CardformrowleftItem
         src={
-          src ||
           'https://cdn.prod.website-files.com/681bd50cca2b1f41b87287dc/681dfc7e46f2135cf7a6b901_smarties-icon-sound.svg'
         }
-        divText={divText || 'Background Denoising Enabled'}
-        description={
-          description || 'Filter background noise while the user is talking.'
-        }
+        divText={'Background Denoising Enabled'}
+        description={'Filter background noise while the user is talking.'}
       />
       <SwitchdivItem />
     </div>

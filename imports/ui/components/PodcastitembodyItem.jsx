@@ -1,9 +1,9 @@
 import React from 'react';
 import PodcastitembodycontentItem from './PodcastitembodycontentItem';
 
-const PodcastitembodyItem = ({ props }) => {
+const PodcastitembodyItem = ({}) => {
   return (
-    <div className="podcast-item-body">
+    <div className={'podcast-item-body'}>
       <PodcastitembodycontentItem />
     </div>
   );

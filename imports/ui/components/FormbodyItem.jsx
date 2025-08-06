@@ -1,17 +1,17 @@
 import React from 'react';
 
-const FormbodyItem = ({ props }) => {
+const FormbodyItem = ({}) => {
   return (
-    <div className="form-body">
-      <div className="form-row mb-0">
+    <div className={'form-body'}>
+      <div className={'form-row mb-0'}>
         <input
-          className="inbox-search w-input"
-          maxlength="256"
-          name="search-2"
-          data-name="Search 2"
-          placeholder="Search"
-          type="text"
-          id="search-2"
+          className={'inbox-search w-input'}
+          maxlength={'256'}
+          name={'search-2'}
+          data-name={'Search 2'}
+          placeholder={'Search'}
+          type={'text'}
+          id={'search-2'}
           required
         />
       </div>

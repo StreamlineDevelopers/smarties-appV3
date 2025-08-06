@@ -3,11 +3,9 @@ import SidebarleadinfotimelineitemcardItem from './Sidebarleadinfotimelineitemca
 
 const SidebarleadinfotimelineitemItem = ({ label }) => {
   return (
-    <div className="sidebar-leadinfo-timeline-item">
-      <div className="sidebar-leadinfo-timeline-item-dot"></div>
-      <SidebarleadinfotimelineitemcardItem
-        label={label || 'Added product to cart'}
-      />
+    <div className={'sidebar-leadinfo-timeline-item'}>
+      <div className={'sidebar-leadinfo-timeline-item-dot'}></div>
+      <SidebarleadinfotimelineitemcardItem label={'Added product to cart'} />
     </div>
   );
 };

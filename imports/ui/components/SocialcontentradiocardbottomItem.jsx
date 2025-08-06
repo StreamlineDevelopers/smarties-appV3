@@ -1,12 +1,12 @@
 import React from 'react';
 import SocialcontentactionbtncontainerItem from './SocialcontentactionbtncontainerItem';
 
-const SocialcontentradiocardbottomItem = ({ props }) => {
+const SocialcontentradiocardbottomItem = ({}) => {
   return (
-    <div className="social-content-radiocard-bottom">
+    <div className={'social-content-radiocard-bottom'}>
       <SocialcontentactionbtncontainerItem
-        src="../images/lucidecalendar_1.svg"
-        divText="Reschedule"
+        src={'../images/lucidecalendar_1.svg'}
+        divText={'Reschedule'}
       />
     </div>
   );

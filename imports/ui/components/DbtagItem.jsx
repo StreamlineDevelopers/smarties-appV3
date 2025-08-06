@@ -1,8 +1,8 @@
 import React from 'react';
 
-const DbtagItem = ({ props }) => {
+const DbtagItem = ({}) => {
   return (
-    <div className="db-tag">
+    <div className={'db-tag'}>
       <div>ACTIVE</div>
     </div>
   );

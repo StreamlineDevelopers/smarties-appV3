@@ -1,12 +1,12 @@
 import React from 'react';
-import ContactdetailstablinkItem416 from './ContactdetailstablinkItem416';
-import ContactdetailstablinkItem417 from './ContactdetailstablinkItem417';
+import ContactdetailstablinkItem363 from './ContactdetailstablinkItem363';
+import ContactdetailstablinkItem364 from './ContactdetailstablinkItem364';
 
-const ActivitytabsmenuItem = ({ props }) => {
+const ActivitytabsmenuItem = ({}) => {
   return (
-    <div className="activity-tabsmenu w-tab-menu">
-      <ContactdetailstablinkItem416 />
-      <ContactdetailstablinkItem417 />
+    <div className={'activity-tabsmenu w-tab-menu'}>
+      <ContactdetailstablinkItem363 />
+      <ContactdetailstablinkItem364 />
     </div>
   );
 };

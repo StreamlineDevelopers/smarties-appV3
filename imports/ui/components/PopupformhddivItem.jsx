@@ -3,8 +3,8 @@ import FormhddivleftItem from './FormhddivleftItem';
 
 const PopupformhddivItem = ({ divText }) => {
   return (
-    <div className="popup-form-hd-div">
-      <FormhddivleftItem divText={divText || 'Data Enrichment Permissions'} />
+    <div className={'popup-form-hd-div'}>
+      <FormhddivleftItem divText={'Data Enrichment Permissions'} />
     </div>
   );
 };

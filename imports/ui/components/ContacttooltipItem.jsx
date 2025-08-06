@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ContacttooltipItem = ({ props }) => {
+const ContacttooltipItem = ({}) => {
   return (
-    <div className="contact-tooltip">
+    <div className={'contact-tooltip'}>
       <div>Email</div>
     </div>
   );

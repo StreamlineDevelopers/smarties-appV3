@@ -1,9 +1,9 @@
 import React from 'react';
 
-const NavlineItem = ({ props }) => {
+const NavlineItem = ({}) => {
   return (
-    <div className="nav-line">
-      <div className="nav-line"></div>
+    <div className={'nav-line'}>
+      <div className={'nav-line'}></div>
     </div>
   );
 };

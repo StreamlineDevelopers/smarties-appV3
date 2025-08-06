@@ -4,10 +4,10 @@ import FilteritembodyItem from './FilteritembodyItem';
 
 const FilteritemItem = ({ dataWId, divText }) => {
   return (
-    <div className="filter-item">
+    <div className={'filter-item'}>
       <FilteritemtopItem
-        dataWId={dataWId || '3dae18f8-3116-efb3-0cd3-8fba9cd40734'}
-        divText={divText || 'Title'}
+        dataWId={'3dae18f8-3116-efb3-0cd3-8fba9cd40734'}
+        divText={'Title'}
       />
       <FilteritembodyItem />
     </div>

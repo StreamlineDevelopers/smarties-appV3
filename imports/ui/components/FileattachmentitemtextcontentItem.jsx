@@ -1,10 +1,10 @@
 import React from 'react';
 import FileattachmentsubdivItem from './FileattachmentsubdivItem';
 
-const FileattachmentitemtextcontentItem = ({ props }) => {
+const FileattachmentitemtextcontentItem = ({}) => {
   return (
-    <div className="fileattachment-item-textcontent">
-      <div className="fileattacment-hdtext">TechnicalRequirements.pdf</div>
+    <div className={'fileattachment-item-textcontent'}>
+      <div className={'fileattacment-hdtext'}>TechnicalRequirements.pdf</div>
       <FileattachmentsubdivItem />
     </div>
   );

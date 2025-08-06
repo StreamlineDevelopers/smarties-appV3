@@ -4,13 +4,13 @@ const TabsmenulinksidecolumnItem = ({ dataWTab, src, divText }) => {
   return (
     <a
       data-w-tab={dataWTab || 'Tab 2'}
-      className="tabs-menu-link-side-column w-inline-block w-tab-link"
+      className={'tabs-menu-link-side-column w-inline-block w-tab-link'}
     >
-      <div className="icon-link-side-column">
+      <div className={'icon-link-side-column'}>
         <img
-          loading="lazy"
+          loading={'lazy'}
           src={src || 'images/smartties-tab-journey.svg'}
-          alt=""
+          alt={''}
         />
       </div>
       <div>{divText || 'Journey'}</div>

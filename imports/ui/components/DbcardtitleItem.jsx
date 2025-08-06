@@ -1,8 +1,8 @@
 import React from 'react';
 
-const DbcardtitleItem = ({ props }) => {
+const DbcardtitleItem = ({}) => {
   return (
-    <div className="db-card-title">
+    <div className={'db-card-title'}>
       <strong>New tweet</strong> scheduled for Thursday
     </div>
   );

@@ -1,23 +1,23 @@
 import React from 'react';
-import ContacttablecelldivItem87 from './ContacttablecelldivItem87';
-import ContacttablecelldivItem80 from './ContacttablecelldivItem80';
-import ContacttablecelldivItem71 from './ContacttablecelldivItem71';
-import ContacttablecelldivItem72 from './ContacttablecelldivItem72';
-import ContacttablecelldivItem73 from './ContacttablecelldivItem73';
-import ContacttablecelldivItem86 from './ContacttablecelldivItem86';
+import ContacttablecelldivItem75 from './ContacttablecelldivItem75';
+import ContacttablecelldivItem70 from './ContacttablecelldivItem70';
+import ContacttablecelldivItem61 from './ContacttablecelldivItem61';
+import ContacttablecelldivItem62 from './ContacttablecelldivItem62';
+import ContacttablecelldivItem63 from './ContacttablecelldivItem63';
+import ContacttablecelldivItem74 from './ContacttablecelldivItem74';
 
 const ContacttablerowItem = ({ src, divText, label, label1 }) => {
   return (
-    <div className="contact--table-row">
-      <ContacttablecelldivItem87
-        src={src || '../images/smarties-avatar-02_1smarties-avatar-02.png'}
-        divText={divText || 'Sarah Johnson'}
+    <div className={'contact--table-row'}>
+      <ContacttablecelldivItem75
+        src={'../images/smarties-avatar-02_1smarties-avatar-02.png'}
+        divText={'Sarah Johnson'}
       />
-      <ContacttablecelldivItem80 />
-      <ContacttablecelldivItem71 label={label || '1,245'} />
-      <ContacttablecelldivItem72 label={label1 || '12'} />
-      <ContacttablecelldivItem73 label="VIP Event Invitation (2 days)" />
-      <ContacttablecelldivItem86 />
+      <ContacttablecelldivItem70 />
+      <ContacttablecelldivItem61 label={'1,245'} />
+      <ContacttablecelldivItem62 label={'12'} />
+      <ContacttablecelldivItem63 label={'VIP Event Invitation (2 days)'} />
+      <ContacttablecelldivItem74 />
     </div>
   );
 };

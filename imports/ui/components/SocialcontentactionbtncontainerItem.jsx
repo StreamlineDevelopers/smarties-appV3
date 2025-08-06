@@ -1,16 +1,16 @@
 import React from 'react';
-import SocialcontentbtnItem393 from './SocialcontentbtnItem393';
+import SocialcontentbtnItem346 from './SocialcontentbtnItem346';
 
 const SocialcontentactionbtncontainerItem = ({ src, divText }) => {
   return (
-    <div className="socialcontent-action-btn-container">
-      <SocialcontentbtnItem393
-        src="../images/iconamoonedit-light_1.svg"
-        divText="Edit"
+    <div className={'socialcontent-action-btn-container'}>
+      <SocialcontentbtnItem346
+        src={'../images/iconamoonedit-light_1.svg'}
+        divText={'Edit'}
       />
-      <SocialcontentbtnItem393
-        src={src || '../images/lucidecalendar_1.svg'}
-        divText={divText || 'Reschedule'}
+      <SocialcontentbtnItem346
+        src={'../images/lucidecalendar_1.svg'}
+        divText={'Reschedule'}
       />
     </div>
   );

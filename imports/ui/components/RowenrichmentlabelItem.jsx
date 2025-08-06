@@ -3,7 +3,7 @@ import TagpremiumItem from './TagpremiumItem';
 
 const RowenrichmentlabelItem = ({ divText }) => {
   return (
-    <div className="row-enrichment-label">
+    <div className={'row-enrichment-label'}>
       <div>{divText || 'Company Size'}</div>
       <TagpremiumItem />
     </div>

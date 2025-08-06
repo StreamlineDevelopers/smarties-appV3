@@ -4,11 +4,9 @@ import ChatstatustooltipItem from './ChatstatustooltipItem';
 
 const ChatstatusdivItem = ({ dataWId }) => {
   return (
-    <div className="chat-status-div">
-      <ChatstatusItem
-        dataWId={dataWId || 'da766056-4c22-deca-22ff-455fcbcfc86a'}
-      />
-      <ChatstatustooltipItem divText="Active" />
+    <div className={'chat-status-div'}>
+      <ChatstatusItem dataWId={'da766056-4c22-deca-22ff-455fcbcfc86a'} />
+      <ChatstatustooltipItem divText={'Active'} />
     </div>
   );
 };

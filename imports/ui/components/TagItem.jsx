@@ -1,8 +1,8 @@
 import React from 'react';
 
-const TagItem = ({ props }) => {
+const TagItem = ({}) => {
   return (
-    <div className="tag">
+    <div className={'tag'}>
       <div>Paid</div>
     </div>
   );

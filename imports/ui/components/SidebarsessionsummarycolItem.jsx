@@ -10,16 +10,14 @@ const SidebarsessionsummarycolItem = ({
   divText1,
 }) => {
   return (
-    <div className="sidebar-sessionsummary-col">
+    <div className={'sidebar-sessionsummary-col'}>
       <SidebarsessionsummaryicondivItem
-        src={src || 'images/icon-park-outlinepage.svg'}
-        width={width || '15'}
-        height={height || '15'}
-        divText={divText || '5'}
+        src={'images/icon-park-outlinepage.svg'}
+        width={'15'}
+        height={'15'}
+        divText={'5'}
       />
-      <SidebarsessionsummarytextcontentItem
-        divText={divText1 || 'Pages Visited'}
-      />
+      <SidebarsessionsummarytextcontentItem divText={'Pages Visited'} />
     </div>
   );
 };

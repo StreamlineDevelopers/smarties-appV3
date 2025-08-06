@@ -1,9 +1,9 @@
 import React from 'react';
 import CreatefunctionItem from './CreatefunctionItem';
 
-const Formrow2Item = ({ props }) => {
+const Formrow2Item = ({}) => {
   return (
-    <div className="form-row-2">
+    <div className={'form-row-2'}>
       <CreatefunctionItem />
     </div>
   );

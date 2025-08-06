@@ -1,9 +1,13 @@
 import React from 'react';
+import DataenrichmentstatusItem from './DataenrichmentstatusItem';
 
-const TablecelldivItem47 = ({ divText }) => {
+const TablecelldivItem47 = ({ src, divText }) => {
   return (
-    <div className="table-cell-div">
-      <div className="dataenrichment-field">{divText || 'LinkedIn'}</div>
+    <div className={'table-cell-div _w-10'}>
+      <DataenrichmentstatusItem
+        src={'../images/smarties-contact-icon-lock.svg'}
+        divText={'Locked'}
+      />
     </div>
   );
 };

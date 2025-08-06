@@ -6,9 +6,9 @@ const BtndataenrichmentItem = ({ dataWId }) => {
   return (
     <a
       data-w-id={dataWId || '170a6bed-e932-1987-cb24-7f7bc570b353'}
-      href="#"
-      target="_blank"
-      className="btn-dataenrichment"
+      href={'#'}
+      target={'_blank'}
+      className={'btn-dataenrichment'}
     >
       <BtndataenrichmentleftItem />
       <BtnaipowertagItem />

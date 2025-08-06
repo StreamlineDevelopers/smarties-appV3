@@ -1,13 +1,20 @@
 import React from 'react';
-import FormcelldivItem14 from './FormcelldivItem14';
+import FormcelldivItem17 from './FormcelldivItem17';
 
-const Formrow2Item18 = ({ id, name, dataName }) => {
+const Formrow2Item18 = ({}) => {
   return (
-    <div className="form-row-2 prompt">
-      <FormcelldivItem14
-        id={id || 'System-Prompt'}
-        name={name || 'System-Prompt'}
-        dataName={dataName || 'System Prompt'}
+    <div className={'form-row-2 prompt'}>
+      <FormcelldivItem17
+        label={'Prompt'}
+        description={
+          "This is the prompt that's used to extract structured data from the call."
+        }
+        id={'System-Prompt-2'}
+        name={'System-Prompt-2'}
+        dataName={'System Prompt 2'}
+        placeholder={
+          "Welcome, Leo! You are the friendly and helpful voice of SmartHome Innovations, here to assist customers with their smart home devices. Your main task is to provide support through audio interactions, answering questions, troubleshooting problems, offering advice, and making product recommendations. Remember, customers can't see you, so your words need to paint the picture clearly and warmly."
+        }
       />
     </div>
   );

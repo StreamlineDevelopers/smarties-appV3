@@ -1,17 +1,17 @@
 import React from 'react';
 import PoatdateItem from './PoatdateItem';
 
-const PostdatecontainerItem = ({ props }) => {
+const PostdatecontainerItem = ({}) => {
   return (
-    <div className="post-date-container">
+    <div className={'post-date-container'}>
       <PoatdateItem />
       <img
-        src="../images/iconamoonedit-light.svg"
-        loading="lazy"
-        width="14"
-        height="14"
-        alt=""
-        className="icon-edit"
+        src={'../images/iconamoonedit-light.svg'}
+        loading={'lazy'}
+        width={'14'}
+        height={'14'}
+        alt={''}
+        className={'icon-edit'}
       />
     </div>
   );

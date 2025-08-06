@@ -1,12 +1,12 @@
 import React from 'react';
-import Btnstyle1Item377 from './Btnstyle1Item377';
-import Btnstyle1Item375 from './Btnstyle1Item375';
+import Btnstyle1Item330 from './Btnstyle1Item330';
+import Btnstyle1Item329 from './Btnstyle1Item329';
 
-const ObjectionresponsebotrightItem = ({ props }) => {
+const ObjectionresponsebotrightItem = ({}) => {
   return (
-    <div className="objection-response-botright">
-      <Btnstyle1Item377 />
-      <Btnstyle1Item375 />
+    <div className={'objection-response-botright'}>
+      <Btnstyle1Item330 />
+      <Btnstyle1Item329 />
     </div>
   );
 };

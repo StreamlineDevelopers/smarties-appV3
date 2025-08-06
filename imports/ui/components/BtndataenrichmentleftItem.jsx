@@ -1,9 +1,9 @@
 import React from 'react';
 import DivElementItem from './DivElementItem';
 
-const BtndataenrichmentleftItem = ({ props }) => {
+const BtndataenrichmentleftItem = ({}) => {
   return (
-    <div className="btn-dataenrichment-left">
+    <div className={'btn-dataenrichment-left'}>
       <DivElementItem />
       <div>Data Enrichment</div>
     </div>

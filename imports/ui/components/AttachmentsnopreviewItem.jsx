@@ -3,10 +3,10 @@ import DocumentattachmentItem from './DocumentattachmentItem';
 
 const AttachmentsnopreviewItem = ({ src, title }) => {
   return (
-    <div className="attachments-nopreview height-auto">
+    <div className={'attachments-nopreview height-auto'}>
       <DocumentattachmentItem
-        src={src || 'images/smarties-icon-asset2.svg'}
-        title={title || 'sample.txt'}
+        src={'images/smarties-icon-asset2.svg'}
+        title={'sample.txt'}
       />
     </div>
   );

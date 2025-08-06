@@ -1,9 +1,9 @@
 import React from 'react';
 
-const DatefielddashItem = ({ props }) => {
+const DatefielddashItem = ({}) => {
   return (
-    <div className="datefield_dash">
-      <div className="customer-info-label">-</div>
+    <div className={'datefield_dash'}>
+      <div className={'customer-info-label'}>-</div>
     </div>
   );
 };

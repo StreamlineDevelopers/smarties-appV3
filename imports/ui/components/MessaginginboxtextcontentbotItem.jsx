@@ -1,9 +1,9 @@
 import React from 'react';
 import MessaginginboxiconsdivItem from './MessaginginboxiconsdivItem';
 
-const MessaginginboxtextcontentbotItem = ({ props }) => {
+const MessaginginboxtextcontentbotItem = ({}) => {
   return (
-    <div className="messaging-inbox-textcontent-bot">
+    <div className={'messaging-inbox-textcontent-bot'}>
       <MessaginginboxiconsdivItem />
     </div>
   );

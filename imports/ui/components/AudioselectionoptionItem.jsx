@@ -4,11 +4,11 @@ import AudioselectionoptionrightItem from './AudioselectionoptionrightItem';
 
 const AudioselectionoptionItem = ({ src, divText, divText1 }) => {
   return (
-    <div className="audioselection-option">
+    <div className={'audioselection-option'}>
       <AudioselectionoptionleftItem
-        src={src || '../images/smarties-avatar-03_1smarties-avatar-03.png'}
-        divText={divText || 'Denver'}
-        divText1={divText1 || 'Male, Casual'}
+        src={'../images/smarties-avatar-03_1smarties-avatar-03.png'}
+        divText={'Denver'}
+        divText1={'Male, Casual'}
       />
       <AudioselectionoptionrightItem />
     </div>

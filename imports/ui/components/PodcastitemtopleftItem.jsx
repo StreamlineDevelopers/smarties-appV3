@@ -3,16 +3,16 @@ import TopictagItem from './TopictagItem';
 
 const PodcastitemtopleftItem = ({ divText }) => {
   return (
-    <div className="podcast-item-topleft">
-      <div className="podcast-filter-item-chevron rotate">
+    <div className={'podcast-item-topleft'}>
+      <div className={'podcast-filter-item-chevron rotate'}>
         <img
-          src="../images/smarties-filter-chevrondown.svg"
-          loading="lazy"
-          alt=""
+          src={'../images/smarties-filter-chevrondown.svg'}
+          loading={'lazy'}
+          alt={''}
         />
       </div>
       <div>{divText || 'Topic A'}</div>
-      <TopictagItem divText="Informative" />
+      <TopictagItem divText={'Informative'} />
     </div>
   );
 };

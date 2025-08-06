@@ -1,11 +1,10 @@
 import React from 'react';
+import Btnstyle1Item168 from './Btnstyle1Item168';
 
 const ContacttablecelldivItem174 = ({ divText }) => {
   return (
-    <div className="contact-table-cell-div stretch">
-      <div className="dataenrichment-field">
-        {divText || '10 Marketing Automation Trends for 2023'}
-      </div>
+    <div className={'contact-table-cell-div _w-15'}>
+      <Btnstyle1Item168 divText={'Contact'} />
     </div>
   );
 };

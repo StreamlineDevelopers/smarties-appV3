@@ -1,9 +1,9 @@
 import React from 'react';
 
-const PercentagebarItem = ({ props }) => {
+const PercentagebarItem = ({}) => {
   return (
-    <div className="percentage-bar">
-      <div className="percentage-active"></div>
+    <div className={'percentage-bar'}>
+      <div className={'percentage-active'}></div>
     </div>
   );
 };

@@ -3,10 +3,10 @@ import ButtonaddmessageItem from './ButtonaddmessageItem';
 
 const FormhddivrightItem = ({ dataWId, label }) => {
   return (
-    <div className="form-hd-div-right">
+    <div className={'form-hd-div-right'}>
       <ButtonaddmessageItem
-        dataWId={dataWId || '1849b75f-9350-98c1-3481-367f0109f99d'}
-        label={label || 'Add Property'}
+        dataWId={'1849b75f-9350-98c1-3481-367f0109f99d'}
+        label={'Add Property'}
       />
     </div>
   );

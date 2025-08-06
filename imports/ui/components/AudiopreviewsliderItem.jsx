@@ -1,9 +1,9 @@
 import React from 'react';
 
-const AudiopreviewsliderItem = ({ props }) => {
+const AudiopreviewsliderItem = ({}) => {
   return (
-    <div className="audiopreview-slider">
-      <div className="audiopreview-slider-percent"></div>
+    <div className={'audiopreview-slider'}>
+      <div className={'audiopreview-slider-percent'}></div>
     </div>
   );
 };

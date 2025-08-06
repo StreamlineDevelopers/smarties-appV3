@@ -1,9 +1,10 @@
 import React from 'react';
+import Dataenrichmentbtnstyle1Item from './Dataenrichmentbtnstyle1Item';
 
-const TablecelldivItem46 = ({ divText }) => {
+const TablecelldivItem46 = ({}) => {
   return (
-    <div className="table-cell-div _w-10">
-      <div className="table-date-text">{divText || 'Source'}</div>
+    <div className={'table-cell-div _w-10'}>
+      <Dataenrichmentbtnstyle1Item />
     </div>
   );
 };

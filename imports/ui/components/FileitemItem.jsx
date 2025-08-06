@@ -2,9 +2,9 @@ import React from 'react';
 import FileitemleftItem from './FileitemleftItem';
 import PropertyitemrightItem from './PropertyitemrightItem';
 
-const FileitemItem = ({ props }) => {
+const FileitemItem = ({}) => {
   return (
-    <div className="file-item">
+    <div className={'file-item'}>
       <FileitemleftItem />
       <PropertyitemrightItem />
     </div>

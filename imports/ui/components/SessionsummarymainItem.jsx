@@ -2,12 +2,12 @@ import React from 'react';
 
 const SessionsummarymainItem = ({ src, divText }) => {
   return (
-    <div className="session-summary-main">
-      <div className="icon-small-2 smaller">
+    <div className={'session-summary-main'}>
+      <div className={'icon-small-2 smaller'}>
         <img
-          loading="lazy"
+          loading={'lazy'}
           src={src || 'images/smarties-icon-journey-page.svg'}
-          alt=""
+          alt={''}
         />
       </div>
       <div>{divText || '5'}</div>

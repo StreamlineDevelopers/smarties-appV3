@@ -1,10 +1,10 @@
 import React from 'react';
 
-const RecentactivitystepcolItem = ({ props }) => {
+const RecentactivitystepcolItem = ({}) => {
   return (
-    <div className="recentactivity-step-col">
-      <div className="recentactivity-step"></div>
-      <div className="hiw-item-step-line"></div>
+    <div className={'recentactivity-step-col'}>
+      <div className={'recentactivity-step'}></div>
+      <div className={'hiw-item-step-line'}></div>
     </div>
   );
 };

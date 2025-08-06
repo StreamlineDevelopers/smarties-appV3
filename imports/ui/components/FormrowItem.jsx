@@ -14,20 +14,20 @@ const FormrowItem = ({
   id1,
 }) => {
   return (
-    <div className="form-row horizontal">
+    <div className={'form-row horizontal'}>
       <Formcol2Item
-        label={label || 'Full Name'}
-        name={name || 'full-name'}
-        dataName={dataName || 'full name'}
-        type={type || 'text'}
-        id={id || 'full-name'}
+        label={'Full Name'}
+        name={'full-name'}
+        dataName={'full name'}
+        type={'text'}
+        id={'full-name'}
       />
       <Formcol2Item
-        label={label1 || 'Email Address'}
-        name={name1 || 'email-address'}
-        dataName={dataName1 || 'email address'}
-        type={type1 || 'email'}
-        id={id1 || 'email-address'}
+        label={'Email Address'}
+        name={'email-address'}
+        dataName={'email address'}
+        type={'email'}
+        id={'email-address'}
       />
     </div>
   );

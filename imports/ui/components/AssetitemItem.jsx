@@ -4,17 +4,17 @@ import Divblock32Item from './Divblock32Item';
 
 const AssetitemItem = ({ src, divText, divText1 }) => {
   return (
-    <div className="asset-item">
-      <div className="file-avatar">
+    <div className={'asset-item'}>
+      <div className={'file-avatar'}>
         <img
-          loading="lazy"
+          loading={'lazy'}
           src={src || 'images/smarties-icon-asset1.svg'}
-          alt=""
+          alt={''}
         />
       </div>
       <Divblock31Item
-        divText={divText || 'profile-picture.jpg'}
-        divText1={divText1 || 'Added 2 days ago'}
+        divText={'profile-picture.jpg'}
+        divText1={'Added 2 days ago'}
       />
       <Divblock32Item />
     </div>

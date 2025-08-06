@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ContactdetailsitemdurationItem = ({ props }) => {
+const ContactdetailsitemdurationItem = ({}) => {
   return (
-    <div className="contactdetails-item-duration">
+    <div className={'contactdetails-item-duration'}>
       <div>20 minutes</div>
     </div>
   );

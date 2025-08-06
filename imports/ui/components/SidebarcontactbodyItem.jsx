@@ -2,10 +2,10 @@ import React from 'react';
 import SidebarhddivItem from './SidebarhddivItem';
 import SidebartagbodyItem from './SidebartagbodyItem';
 
-const SidebarcontactbodyItem = ({ props }) => {
+const SidebarcontactbodyItem = ({}) => {
   return (
-    <div className="sidebar-contact-body">
-      <SidebarhddivItem divText="Tags" />
+    <div className={'sidebar-contact-body'}>
+      <SidebarhddivItem divText={'Tags'} />
       <SidebartagbodyItem />
     </div>
   );

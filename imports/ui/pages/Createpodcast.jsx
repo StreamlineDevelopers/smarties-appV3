@@ -1,15 +1,15 @@
 import React from 'react';
-import TopbarLayout235 from '../components/TopbarLayout235';
-import MaincontentLayout239 from '../components/MaincontentLayout239';
-import SidebarLayout238 from '../components/SidebarLayout238';
+import TopbarLayout196 from '../components/TopbarLayout196';
+import MaincontentLayout200 from '../components/MaincontentLayout200';
+import SidebarLayout199 from '../components/SidebarLayout199';
 
 const Createpodcast = () => {
   return (
     <>
-      <div className="page-wrap">
-        <TopbarLayout235 />
-        <MaincontentLayout239 />
-        <SidebarLayout238 />
+      <div className={'page-wrap'}>
+        <TopbarLayout196 />
+        <MaincontentLayout200 />
+        <SidebarLayout199 />
       </div>
     </>
   );

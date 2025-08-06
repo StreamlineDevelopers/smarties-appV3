@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ContactagenttooltipItem = ({ props }) => {
+const ContactagenttooltipItem = ({}) => {
   return (
-    <div className="contact-agent-tooltip">
+    <div className={'contact-agent-tooltip'}>
       <div>Anima Agrawal</div>
     </div>
   );

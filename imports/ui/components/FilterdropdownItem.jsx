@@ -5,11 +5,11 @@ import FilterdropdownlistItem from './FilterdropdownlistItem';
 const FilterdropdownItem = ({ divText }) => {
   return (
     <div
-      data-delay="0"
-      data-hover="false"
-      className="filter-dropdown w-dropdown"
+      data-delay={'0'}
+      data-hover={'false'}
+      className={'filter-dropdown w-dropdown'}
     >
-      <FilterdropdowntoggleItem divText={divText || 'Assigned to Me'} />
+      <FilterdropdowntoggleItem divText={'Assigned to Me'} />
       <FilterdropdownlistItem />
     </div>
   );

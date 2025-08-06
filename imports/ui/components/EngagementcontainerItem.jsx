@@ -3,11 +3,11 @@ import EngagementvaluecontainerItem from './EngagementvaluecontainerItem';
 
 const EngagementcontainerItem = ({ src, divText }) => {
   return (
-    <div className="engagement-container">
-      <div className="engagement-label">Predicted Engagement:</div>
+    <div className={'engagement-container'}>
+      <div className={'engagement-label'}>Predicted Engagement:</div>
       <EngagementvaluecontainerItem
-        src={src || '../images/mdiflame.svg'}
-        divText={divText || '91'}
+        src={'../images/mdiflame.svg'}
+        divText={'91'}
       />
     </div>
   );

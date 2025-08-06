@@ -2,9 +2,9 @@ import React from 'react';
 import DashboardassistantleftItem from './DashboardassistantleftItem';
 import DashboardassistantrightItem from './DashboardassistantrightItem';
 
-const DashboardassistantItem = ({ props }) => {
+const DashboardassistantItem = ({}) => {
   return (
-    <div className="dashboard-assistant">
+    <div className={'dashboard-assistant'}>
       <DashboardassistantleftItem />
       <DashboardassistantrightItem />
     </div>

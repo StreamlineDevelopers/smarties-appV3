@@ -1,10 +1,10 @@
 import React from 'react';
-import IcontopicstagItem410 from './IcontopicstagItem410';
+import IcontopicstagItem358 from './IcontopicstagItem358';
 
 const ScheduketagItem = ({ divText }) => {
   return (
-    <div className="scheduke-tag">
-      <IcontopicstagItem410 />
+    <div className={'scheduke-tag'}>
+      <IcontopicstagItem358 />
       <div>{divText || 'Mon'}</div>
     </div>
   );

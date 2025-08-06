@@ -3,9 +3,9 @@ import WfformsearchformItem from './WfformsearchformItem';
 import WformdoneItem from './WformdoneItem';
 import WformfailItem from './WformfailItem';
 
-const SearchformblockItem = ({ props }) => {
+const SearchformblockItem = ({}) => {
   return (
-    <div className="search-formblock w-form">
+    <div className={'search-formblock w-form'}>
       <WfformsearchformItem />
       <WformdoneItem />
       <WformfailItem />

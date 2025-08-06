@@ -1,15 +1,15 @@
 import React from 'react';
-import TopbarLayout484 from '../components/TopbarLayout484';
-import MaincontentLayout486 from '../components/MaincontentLayout486';
-import SidebarLayout485 from '../components/SidebarLayout485';
+import TopbarLayout423 from '../components/TopbarLayout423';
+import MaincontentLayout424 from '../components/MaincontentLayout424';
+import SidebarLayout199 from '../components/SidebarLayout199';
 
 const Writeblog = () => {
   return (
     <>
-      <div className="page-wrap">
-        <TopbarLayout484 />
-        <MaincontentLayout486 />
-        <SidebarLayout485 />
+      <div className={'page-wrap'}>
+        <TopbarLayout423 />
+        <MaincontentLayout424 />
+        <SidebarLayout199 />
       </div>
     </>
   );

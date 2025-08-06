@@ -1,8 +1,8 @@
 import React from 'react';
 
-const BtnaipowertagItem = ({ props }) => {
+const BtnaipowertagItem = ({}) => {
   return (
-    <div className="btn-ai-powertag">
+    <div className={'btn-ai-powertag'}>
       <div>AI-Powered</div>
     </div>
   );

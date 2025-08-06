@@ -3,12 +3,12 @@ import OptimizationcardleftItem from './OptimizationcardleftItem';
 
 const OptimizationcardItem = ({ title }) => {
   return (
-    <div className="optimization-card">
+    <div className={'optimization-card'}>
       <OptimizationcardleftItem
-        src="../images/smarties-icon-check-full.svg"
-        title={title || 'Title is optimized'}
+        src={'../images/smarties-icon-check-full.svg'}
+        title={'Title is optimized'}
       />
-      <a href="#" className="optimzation-link">
+      <a href={'#'} className={'optimzation-link'}>
         Edit
       </a>
     </div>

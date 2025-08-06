@@ -1,10 +1,10 @@
 import React from 'react';
-import ReusableItem214 from './ReusableItem214';
+import ReusableItem183 from './ReusableItem183';
 
-const SocialtopictooltipItem = ({ props }) => {
+const SocialtopictooltipItem = ({}) => {
   return (
-    <div className="social-topic-tooltip">
-      <ReusableItem214 />
+    <div className={'social-topic-tooltip'}>
+      <ReusableItem183 />
     </div>
   );
 };

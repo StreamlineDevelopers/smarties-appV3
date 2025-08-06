@@ -1,9 +1,10 @@
 import React from 'react';
+import ContactstabletagsdivItem from './ContactstabletagsdivItem';
 
-const ContacttablecelldivItem70 = ({ header }) => {
+const ContacttablecelldivItem70 = ({}) => {
   return (
-    <div className="contact-table-cell-div _w-15">
-      <div className="contact-table-header-text">{header || 'points'}</div>
+    <div className={'contact-table-cell-div _w-10'}>
+      <ContactstabletagsdivItem />
     </div>
   );
 };

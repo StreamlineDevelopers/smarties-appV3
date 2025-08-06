@@ -1,8 +1,8 @@
 import React from 'react';
 
-const DatacollectiontagItem = ({ props }) => {
+const DatacollectiontagItem = ({}) => {
   return (
-    <div className="datacollection-tag">
+    <div className={'datacollection-tag'}>
       <div>Permanent</div>
     </div>
   );

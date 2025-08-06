@@ -4,14 +4,14 @@ import ObjectionresponsetoprightItem from './ObjectionresponsetoprightItem';
 
 const ObjectionresponsetopItem = ({ divText, divText1, divText2, dataWId }) => {
   return (
-    <div className="objection-response-top">
+    <div className={'objection-response-top'}>
       <ObjectionresponsetopleftItem
-        divText={divText || 'Response #1'}
-        divText1={divText1 || 'ROI'}
-        divText2={divText2 || 'Value'}
+        divText={'Response #1'}
+        divText1={'ROI'}
+        divText2={'Value'}
       />
       <ObjectionresponsetoprightItem
-        dataWId={dataWId || '6c69d6e6-d7e0-44df-2be5-fd5ef4d20f56'}
+        dataWId={'6c69d6e6-d7e0-44df-2be5-fd5ef4d20f56'}
       />
     </div>
   );

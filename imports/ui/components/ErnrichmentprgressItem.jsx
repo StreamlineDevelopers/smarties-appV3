@@ -1,9 +1,9 @@
 import React from 'react';
 import PercentagebarItem from './PercentagebarItem';
 
-const ErnrichmentprgressItem = ({ props }) => {
+const ErnrichmentprgressItem = ({}) => {
   return (
-    <div className="ernrichment-prgress">
+    <div className={'ernrichment-prgress'}>
       <PercentagebarItem />
       <div>92% confidence</div>
     </div>

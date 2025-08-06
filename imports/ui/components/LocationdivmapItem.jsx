@@ -1,13 +1,13 @@
 import React from 'react';
 
-const LocationdivmapItem = ({ props }) => {
+const LocationdivmapItem = ({}) => {
   return (
-    <div className="location-div-map">
-      <div className="map-pin">
+    <div className={'location-div-map'}>
+      <div className={'map-pin'}>
         <img
-          src="images/smarties-contact-icon-mappin.svg"
-          loading="lazy"
-          alt=""
+          src={'images/smarties-contact-icon-mappin.svg'}
+          loading={'lazy'}
+          alt={''}
         />
       </div>
     </div>

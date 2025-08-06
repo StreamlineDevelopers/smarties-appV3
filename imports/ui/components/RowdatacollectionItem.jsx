@@ -3,13 +3,13 @@ import RowdatacollectionmainItem from './RowdatacollectionmainItem';
 
 const RowdatacollectionItem = ({ label, divText }) => {
   return (
-    <div className="row-data-collection">
+    <div className={'row-data-collection'}>
       <RowdatacollectionmainItem
-        label={label || 'Referral Source'}
-        divText={divText || 'Google Search'}
+        label={'Referral Source'}
+        divText={'Google Search'}
       />
-      <div className="edit-data">
-        <img loading="lazy" src="images/smarties-icon-edit.svg" alt="" />
+      <div className={'edit-data'}>
+        <img loading={'lazy'} src={'images/smarties-icon-edit.svg'} alt={''} />
       </div>
     </div>
   );

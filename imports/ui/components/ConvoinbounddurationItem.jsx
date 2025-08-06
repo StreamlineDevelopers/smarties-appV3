@@ -3,10 +3,10 @@ import DurationdivItem from './DurationdivItem';
 
 const ConvoinbounddurationItem = ({ dataWId, divText }) => {
   return (
-    <div className="convo-inbound-duration">
+    <div className={'convo-inbound-duration'}>
       <DurationdivItem
-        dataWId={dataWId || 'd2601b0f-93ed-ec78-d431-297ce3d04872'}
-        divText={divText || '10:30 AM'}
+        dataWId={'d2601b0f-93ed-ec78-d431-297ce3d04872'}
+        divText={'10:30 AM'}
       />
     </div>
   );

@@ -1,9 +1,17 @@
 import React from 'react';
+import IconembedItem from './IconembedItem';
 
-const Btnstyle1Item193 = ({ divText }) => {
+const Btnstyle1Item193 = ({ dataWId, iconSrc }) => {
   return (
-    <a href="#" className="btn-style1 small w-inline-block">
-      <div>{divText || 'Send Offer'}</div>
+    <a
+      data-w-id={dataWId || 'fbd42258-8070-6bdc-608e-3f00fc811259'}
+      href={'#'}
+      className={'btn-style1 w-inline-block'}
+    >
+      <div>Continue</div>
+      <IconembedItem
+        iconSrc={'/svgs/icon-05e60be02362b63346cf645f41bc4094.svg'}
+      />
     </a>
   );
 };

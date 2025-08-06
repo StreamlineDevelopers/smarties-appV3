@@ -2,9 +2,9 @@ import React from 'react';
 import ContactweathermaindivleftItem from './ContactweathermaindivleftItem';
 import LocationmapminiItem from './LocationmapminiItem';
 
-const ContactweathermaindivItem = ({ props }) => {
+const ContactweathermaindivItem = ({}) => {
   return (
-    <div className="contact-weather-maindiv">
+    <div className={'contact-weather-maindiv'}>
       <ContactweathermaindivleftItem />
       <LocationmapminiItem />
     </div>

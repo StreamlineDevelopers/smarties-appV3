@@ -1,13 +1,11 @@
 import React from 'react';
-import ContactnamedivItem from './ContactnamedivItem';
 
-const ContacttablecelldivItem87 = ({ src, divText }) => {
+const ContacttablecelldivItem87 = ({ header }) => {
   return (
-    <div className="contact-table-cell-div stretch">
-      <ContactnamedivItem
-        src={src || '../images/smarties-avatar-02_1smarties-avatar-02.png'}
-        divText={divText || 'Sarah Johnson'}
-      />
+    <div className={'contact-table-cell-div _w-5'}>
+      <div className={'contact-table-header-text'}>
+        {header || 'last activity'}
+      </div>
     </div>
   );
 };

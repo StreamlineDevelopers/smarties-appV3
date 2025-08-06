@@ -1,11 +1,10 @@
 import React from 'react';
+import ConfidencerowItem from './ConfidencerowItem';
 
-const TablecelldivItem48 = ({ label }) => {
+const TablecelldivItem48 = ({}) => {
   return (
-    <div className="table-cell-div stretch">
-      <div className="settings-sublabel">
-        {label || 'linkedin.com/in/sarahjohnson'}
-      </div>
+    <div className={'table-cell-div'}>
+      <ConfidencerowItem />
     </div>
   );
 };

@@ -1,15 +1,15 @@
 import React from 'react';
 
-const ContactdetailsitemtimeItem = ({ props }) => {
+const ContactdetailsitemtimeItem = ({}) => {
   return (
-    <div className="contactdetails-item-time">
+    <div className={'contactdetails-item-time'}>
       <img
-        width="20"
-        height="20"
-        alt=""
-        src="images/iconamoonclock-light.svg"
-        loading="lazy"
-        className="contactdetails-icon-time"
+        width={'20'}
+        height={'20'}
+        alt={''}
+        src={'images/iconamoonclock-light.svg'}
+        loading={'lazy'}
+        className={'contactdetails-icon-time'}
       />
       <div>Just Now</div>
     </div>

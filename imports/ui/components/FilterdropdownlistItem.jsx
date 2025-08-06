@@ -1,12 +1,12 @@
 import React from 'react';
 
-const FilterdropdownlistItem = ({ props }) => {
+const FilterdropdownlistItem = ({}) => {
   return (
-    <nav className="filterdropdown-list w-dropdown-list">
-      <a href="#" className="filter-dropdownlink w-dropdown-link">
+    <nav className={'filterdropdown-list w-dropdown-list'}>
+      <a href={'#'} className={'filter-dropdownlink w-dropdown-link'}>
         Newest
       </a>
-      <a href="#" className="filter-dropdownlink w-dropdown-link">
+      <a href={'#'} className={'filter-dropdownlink w-dropdown-link'}>
         Older
       </a>
     </nav>

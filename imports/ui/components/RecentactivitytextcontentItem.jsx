@@ -1,13 +1,13 @@
 import React from 'react';
 
-const RecentactivitytextcontentItem = ({ props }) => {
+const RecentactivitytextcontentItem = ({}) => {
   return (
-    <div className="recentactivity-textcontent">
-      <div className="recent-activity-title">Replied to your proposal</div>
-      <div className="messaging-inbox-preview">
+    <div className={'recentactivity-textcontent'}>
+      <div className={'recent-activity-title'}>Replied to your proposal</div>
+      <div className={'messaging-inbox-preview'}>
         Campaign strategy discussion - 32 min
       </div>
-      <div className="messaging-inbox-duration">Today</div>
+      <div className={'messaging-inbox-duration'}>Today</div>
     </div>
   );
 };

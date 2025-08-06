@@ -1,14 +1,14 @@
 import React from 'react';
-import ReusableItem40 from './ReusableItem40';
+import ReusableItem34 from './ReusableItem34';
 
 const Formcontrol2Item = ({ dataWId, name, dataName, id }) => {
   return (
-    <div className="form-control-2">
-      <ReusableItem40
-        dataWId={dataWId || '379fe386-af88-ed7e-3780-62a6bbc10af6'}
-        name={name || 'Assistant-Tools'}
-        dataName={dataName || 'Assistant Tools'}
-        id={id || 'Assistant-Tools'}
+    <div className={'form-control-2'}>
+      <ReusableItem34
+        dataWId={'379fe386-af88-ed7e-3780-62a6bbc10af6'}
+        name={'Assistant-Tools'}
+        dataName={'Assistant Tools'}
+        id={'Assistant-Tools'}
       />
     </div>
   );

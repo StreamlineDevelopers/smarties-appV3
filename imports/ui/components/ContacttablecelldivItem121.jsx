@@ -1,10 +1,10 @@
 import React from 'react';
-import ContactstabletagsdivItem109 from './ContactstabletagsdivItem109';
+import AgentsmaindivItem from './AgentsmaindivItem';
 
-const ContacttablecelldivItem121 = ({ props }) => {
+const ContacttablecelldivItem121 = ({ dataWId }) => {
   return (
-    <div className="contact-table-cell-div _w-8">
-      <ContactstabletagsdivItem109 />
+    <div className={'contact-table-cell-div _w-8 agents'}>
+      <AgentsmaindivItem dataWId={'14a5560b-10e9-89de-42ba-ec1f5053f7ab'} />
     </div>
   );
 };

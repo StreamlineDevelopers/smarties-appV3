@@ -1,12 +1,12 @@
 import React from 'react';
-import MessaginginboxnamerowItem273 from './MessaginginboxnamerowItem273';
-import MessaginginboxiconsdivItem274 from './MessaginginboxiconsdivItem274';
+import MessaginginboxnamerowItem231 from './MessaginginboxnamerowItem231';
+import MessaginginboxiconsdivItem232 from './MessaginginboxiconsdivItem232';
 
 const DataenrichmentinboxtextcontentItem = ({ divText, divText1 }) => {
   return (
-    <div className="dataenrichment-inbox-textcontent">
-      <MessaginginboxnamerowItem273 divText={divText || 'Alex Johnson'} />
-      <MessaginginboxiconsdivItem274 divText={divText1 || 'Agent'} />
+    <div className={'dataenrichment-inbox-textcontent'}>
+      <MessaginginboxnamerowItem231 divText={'Alex Johnson'} />
+      <MessaginginboxiconsdivItem232 divText={'Agent'} />
     </div>
   );
 };

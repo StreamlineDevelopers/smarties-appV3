@@ -1,12 +1,12 @@
 import React from 'react';
-import Btnstyle1Item256 from './Btnstyle1Item256';
-import Btnstyle1Item257 from './Btnstyle1Item257';
+import Btnstyle1Item214 from './Btnstyle1Item214';
+import Btnstyle1Item215 from './Btnstyle1Item215';
 
-const DbjourneyextrabtncontainerItem = ({ props }) => {
+const DbjourneyextrabtncontainerItem = ({}) => {
   return (
-    <div className="db-journey-extra-btncontainer">
-      <Btnstyle1Item256 divText="See Analytics" />
-      <Btnstyle1Item257 />
+    <div className={'db-journey-extra-btncontainer'}>
+      <Btnstyle1Item214 divText={'See Analytics'} />
+      <Btnstyle1Item215 />
     </div>
   );
 };

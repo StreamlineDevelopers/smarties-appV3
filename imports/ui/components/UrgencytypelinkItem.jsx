@@ -1,9 +1,9 @@
 import React from 'react';
 
-const UrgencytypelinkItem = ({ props }) => {
+const UrgencytypelinkItem = ({}) => {
   return (
-    <a href="#" target="_blank" className="urgency-type-link">
-      <div className="text-79">Add</div>
+    <a href={'#'} target={'_blank'} className={'urgency-type-link'}>
+      <div className={'text-79'}>Add</div>
     </a>
   );
 };

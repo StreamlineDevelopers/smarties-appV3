@@ -1,11 +1,13 @@
 import React from 'react';
-import IconembedItem371 from './IconembedItem371';
 
-const Btnstyle1Item375 = ({ props }) => {
+const Btnstyle1Item375 = ({ dataWId }) => {
   return (
-    <a href="#" className="btn-style1 outline-orange w-inline-block">
-      <div>Send via Chat</div>
-      <IconembedItem371 />
+    <a
+      href={'#'}
+      data-w-id={dataWId || '1849b75f-9350-98c1-3481-367f0109f9c5'}
+      className={'btn-style1 outline'}
+    >
+      <div>Cancel</div>
     </a>
   );
 };

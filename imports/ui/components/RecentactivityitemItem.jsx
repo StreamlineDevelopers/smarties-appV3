@@ -2,9 +2,9 @@ import React from 'react';
 import RecentactivitystepcolItem from './RecentactivitystepcolItem';
 import RecentactivitytextcontentItem from './RecentactivitytextcontentItem';
 
-const RecentactivityitemItem = ({ props }) => {
+const RecentactivityitemItem = ({}) => {
   return (
-    <div className="recentactivity-item">
+    <div className={'recentactivity-item'}>
       <RecentactivitystepcolItem />
       <RecentactivitytextcontentItem />
     </div>

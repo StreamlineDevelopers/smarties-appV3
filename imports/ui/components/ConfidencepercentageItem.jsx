@@ -1,9 +1,9 @@
 import React from 'react';
 
-const ConfidencepercentageItem = ({ props }) => {
+const ConfidencepercentageItem = ({}) => {
   return (
-    <div className="confidence-percentage">
-      <div className="confidence-percent _w-75"></div>
+    <div className={'confidence-percentage'}>
+      <div className={'confidence-percent _w-75'}></div>
     </div>
   );
 };

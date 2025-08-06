@@ -1,8 +1,8 @@
 import React from 'react';
 
-const SmartassitanttagItem = ({ props }) => {
+const SmartassitanttagItem = ({}) => {
   return (
-    <div className="smartassitant-tag blue">
+    <div className={'smartassitant-tag blue'}>
       <div>Scheduled</div>
     </div>
   );

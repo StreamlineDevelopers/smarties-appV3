@@ -1,23 +1,13 @@
 import React from 'react';
+import FirstmessagetextareaItem from './FirstmessagetextareaItem';
 
-const FormcelldivItem10 = ({ label, name, dataName, id }) => {
+const FormcelldivItem10 = ({}) => {
   return (
-    <div className="form--cell-div">
-      <label htmlFor="" className="form-label-2">
-        {label || 'Name'}
+    <div className={'form--cell-div'}>
+      <label htmlFor={''} className={'form-label-2'}>
+        Description
       </label>
-      <div className="form-control-2">
-        <input
-          className="form-input white w-input"
-          maxlength="256"
-          name={name || 'Background-Sound-URL-3'}
-          data-name={dataName || 'Background Sound URL 3'}
-          placeholder=""
-          type="text"
-          id={id || 'Background-Sound-URL-3'}
-          required
-        />
-      </div>
+      <FirstmessagetextareaItem />
     </div>
   );
 };

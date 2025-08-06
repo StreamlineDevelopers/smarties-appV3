@@ -1,10 +1,9 @@
 import React from 'react';
-import Layer1Item128 from './Layer1Item128';
 
-const FavoriteembedItem = ({ props }) => {
+const FavoriteembedItem = ({ iconSrc }) => {
   return (
-    <div className="favorite-embed w-embed">
-      <Layer1Item128 d="M34.72,75.82l15.28-9.21,15.28,9.34-4-17.46,13.46-11.64-17.7-1.58-7.03-16.49-7.03,16.37-17.7,1.58,13.46,11.76-4,17.34ZM20.05,96.07l7.88-34.07L1.5,39.09l34.92-3.03L50,3.93l13.58,32.13,34.92,3.03-26.43,22.91,7.88,34.07-29.95-18.06-29.95,18.06Z" />
+    <div className={'favorite-embed w-embed'}>
+      <img src={iconSrc} alt="icon" />
     </div>
   );
 };

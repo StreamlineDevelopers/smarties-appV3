@@ -1,15 +1,15 @@
 import React from 'react';
-import ContactstabletagsdivItem119 from './ContactstabletagsdivItem119';
+import ContactstabletagsdivItem100 from './ContactstabletagsdivItem100';
 
-const Divblock21Item = ({ props }) => {
+const Divblock21Item = ({}) => {
   return (
-    <div className="div-block-21">
-      <ContactstabletagsdivItem119 />
-      <div className="div-block-22">
+    <div className={'div-block-21'}>
+      <ContactstabletagsdivItem100 />
+      <div className={'div-block-22'}>
         <img
-          src="../images/smarties-emoji_1smarties-emoji.png"
-          loading="lazy"
-          alt=""
+          src={'../images/smarties-emoji_1smarties-emoji.png'}
+          loading={'lazy'}
+          alt={''}
         />
       </div>
     </div>

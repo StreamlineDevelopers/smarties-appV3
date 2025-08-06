@@ -5,11 +5,11 @@ import DocumentdownloadItem from './DocumentdownloadItem';
 
 const DocumentattachmentItem = ({ src, title }) => {
   return (
-    <div className="document-attachment">
-      <SmsattachmentpopupItem header="SampleFilename.mp4" />
+    <div className={'document-attachment'}>
+      <SmsattachmentpopupItem header={'SampleFilename.mp4'} />
       <DocumentattachmentleftItem
-        src={src || 'images/smarties-icon-asset2.svg'}
-        title={title || 'sample.txt'}
+        src={'images/smarties-icon-asset2.svg'}
+        title={'sample.txt'}
       />
       <DocumentdownloadItem />
     </div>

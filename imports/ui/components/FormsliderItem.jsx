@@ -1,9 +1,9 @@
 import React from 'react';
 import SliderItem from './SliderItem';
 
-const FormsliderItem = ({ props }) => {
+const FormsliderItem = ({}) => {
   return (
-    <div className="form-slider">
+    <div className={'form-slider'}>
       <SliderItem />
     </div>
   );

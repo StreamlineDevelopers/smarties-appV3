@@ -1,9 +1,9 @@
 import React from 'react';
 
-const PlanusageprogressrowItem = ({ props }) => {
+const PlanusageprogressrowItem = ({}) => {
   return (
-    <div className="plan-usage-progress-row">
-      <div className="plan-usage-progress"></div>
+    <div className={'plan-usage-progress-row'}>
+      <div className={'plan-usage-progress'}></div>
     </div>
   );
 };

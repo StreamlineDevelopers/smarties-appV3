@@ -1,15 +1,15 @@
 import React from 'react';
-import MaincontentLayout295 from '../components/MaincontentLayout295';
-import SidebarLayout296 from '../components/SidebarLayout296';
-import TopbarLayout294 from '../components/TopbarLayout294';
+import MaincontentLayout253 from '../components/MaincontentLayout253';
+import SidebarLayout254 from '../components/SidebarLayout254';
+import TopbarLayout252 from '../components/TopbarLayout252';
 
 const Files = () => {
   return (
     <>
-      <div className="page-wrap">
-        <MaincontentLayout295 />
-        <SidebarLayout296 />
-        <TopbarLayout294 />
+      <div className={'page-wrap'}>
+        <MaincontentLayout253 />
+        <SidebarLayout254 />
+        <TopbarLayout252 />
       </div>
     </>
   );
