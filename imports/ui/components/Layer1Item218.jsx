@@ -1,0 +1,24 @@
+import React from 'react';
+import ReusableItem0 from './ReusableItem0';
+
+const Layer1Item218 = ({ d }) => {
+  return (
+    <svg
+      id="Layer_1"
+      data-name="Layer 1"
+      xmlns="http://www.w3.org/2000/svg"
+      viewbox="0 0 100 100"
+    >
+      <ReusableItem0 />
+      <path
+        className="cls-1"
+        d={
+          d ||
+          'M57.07,11.1c0-3.91-3.16-7.07-7.07-7.07s-7.07,3.16-7.07,7.07v31.83H11.1c-3.91,0-7.07,3.16-7.07,7.07s3.16,7.07,7.07,7.07h31.83v31.83c0,3.91,3.16,7.07,7.07,7.07s7.07-3.16,7.07-7.07v-31.83h31.83c3.91,0,7.07-3.16,7.07-7.07s-3.16-7.07-7.07-7.07h-31.83V11.1Z'
+        }
+      ></path>
+    </svg>
+  );
+};
+
+export default Layer1Item218;
