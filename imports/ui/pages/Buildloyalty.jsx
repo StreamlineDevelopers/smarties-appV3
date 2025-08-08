@@ -1,7 +1,7 @@
 import React from 'react';
 import TopbarLayout76 from '../components/TopbarLayout76';
 import MaincontentLayout78 from '../components/MaincontentLayout78';
-import SidebarLayout77 from '../components/SidebarLayout77';
+import SidebarLayout from '../components/SidebarLayout';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
 import FormrowItem71 from '../components/FormrowItem71';
 import FormrowItem72 from '../components/FormrowItem72';
@@ -17,7 +17,7 @@ const Buildloyalty = () => {
       <div className={'page-wrap'}>
         <TopbarLayout76 />
         <MaincontentLayout78 />
-        <SidebarLayout77 />
+        <SidebarLayout />
         <div className={'popup-upload-document'}>
           <div className={'popup-card'}>
             <CardsettingshddivItem divText={'Upload Documents'} />

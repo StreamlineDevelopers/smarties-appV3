@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout146 from '../components/MaincontentLayout146';
-import SidebarLayout145 from '../components/SidebarLayout145';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout140 from '../components/TopbarLayout140';
 import MessagingsidebarhddivItem from '../components/MessagingsidebarhddivItem';
 import Btnstyle1Item97 from '../components/Btnstyle1Item97';
@@ -18,7 +18,7 @@ const Contacts = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout146 />
-        <SidebarLayout145 />
+        <SidebarLayout />
         <TopbarLayout140 />
         <div className={'popup-contactdetails'}>
           <MessagingsidebarhddivItem

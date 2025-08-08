@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout333 from '../components/MaincontentLayout333';
-import SidebarLayout332 from '../components/SidebarLayout332';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout331 from '../components/TopbarLayout331';
 import TablecelldivItem from '../components/TablecelldivItem';
 import TablecelldivItem40 from '../components/TablecelldivItem40';
@@ -16,7 +16,7 @@ const Objectionfeed = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout333 />
-        <SidebarLayout332 />
+        <SidebarLayout />
         <TopbarLayout331 />
         <div className={'popup-dataenrichment'}>
           <div className={'popup-card _w-70'}>

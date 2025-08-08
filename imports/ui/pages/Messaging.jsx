@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout319 from '../components/MaincontentLayout319';
-import SidebarLayout318 from '../components/SidebarLayout318';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout314 from '../components/TopbarLayout314';
 import TablecelldivItem from '../components/TablecelldivItem';
 import TablecelldivItem40 from '../components/TablecelldivItem40';
@@ -16,7 +16,7 @@ const Messaging = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout319 />
-        <SidebarLayout318 />
+        <SidebarLayout />
         <TopbarLayout314 />
         <div className={'popup-dataenrichment'}>
           <div className={'popup-card _w-70'}>

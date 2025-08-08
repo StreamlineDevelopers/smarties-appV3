@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout244 from '../components/MaincontentLayout244';
-import SidebarLayout243 from '../components/SidebarLayout243';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout242 from '../components/TopbarLayout242';
 import TablecelldivItem from '../components/TablecelldivItem';
 import TablecelldivItem40 from '../components/TablecelldivItem40';
@@ -17,7 +17,7 @@ const Dataenrichment = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout244 />
-        <SidebarLayout243 />
+        <SidebarLayout />
         <TopbarLayout242 />
         <div className={'popup-dataenrichment'}>
           <div className={'popup-card _w-70'}>

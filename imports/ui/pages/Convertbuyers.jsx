@@ -1,7 +1,7 @@
 import React from 'react';
 import TopbarLayout179 from '../components/TopbarLayout179';
 import MaincontentLayout182 from '../components/MaincontentLayout182';
-import SidebarLayout181 from '../components/SidebarLayout181';
+import SidebarLayout from '../components/SidebarLayout';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
 import FormrowItem71 from '../components/FormrowItem71';
 import FormrowItem72 from '../components/FormrowItem72';
@@ -17,7 +17,7 @@ const Convertbuyers = () => {
       <div className={'page-wrap'}>
         <TopbarLayout179 />
         <MaincontentLayout182 />
-        <SidebarLayout181 />
+        <SidebarLayout />
         <div className={'popup-upload-document'}>
           <div className={'popup-card'}>
             <CardsettingshddivItem divText={'Upload Documents'} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout342 from '../components/MaincontentLayout342';
-import SidebarLayout343 from '../components/SidebarLayout343';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout341 from '../components/TopbarLayout341';
 import Btnstyle1Item334 from '../components/Btnstyle1Item334';
 import WformdoneItem from '../components/WformdoneItem';
@@ -11,7 +11,7 @@ const Phonenumbers = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout342 />
-        <SidebarLayout343 />
+        <SidebarLayout />
         <TopbarLayout341 />
         <div className={'popup-createphonenumber'}>
           <div className={'popup-card _w-50'}>

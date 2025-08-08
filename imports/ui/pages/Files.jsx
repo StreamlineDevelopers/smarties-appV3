@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout253 from '../components/MaincontentLayout253';
-import SidebarLayout254 from '../components/SidebarLayout254';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout252 from '../components/TopbarLayout252';
 
 const Files = () => {
@@ -8,7 +8,7 @@ const Files = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout253 />
-        <SidebarLayout254 />
+        <SidebarLayout />
         <TopbarLayout252 />
       </div>
     </>

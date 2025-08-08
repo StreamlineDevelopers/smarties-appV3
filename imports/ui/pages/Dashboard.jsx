@@ -1,7 +1,6 @@
 import React from 'react';
 import TopbarLayout227 from '../components/TopbarLayout227';
 import MaincontentLayout229 from '../components/MaincontentLayout229';
-import SidebarLayout228 from '../components/SidebarLayout228';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
 import FormrowItem71 from '../components/FormrowItem71';
 import FormrowItem72 from '../components/FormrowItem72';
@@ -10,6 +9,7 @@ import FormbtncontainerItem from '../components/FormbtncontainerItem';
 import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
 import ListitemItem from '../components/ListitemItem';
+import SidebarLayout from '../components/SidebarLayout';
 
 const Dashboard = () => {
   return (
@@ -17,7 +17,7 @@ const Dashboard = () => {
       <div className={'page-wrap'}>
         <TopbarLayout227 />
         <MaincontentLayout229 />
-        <SidebarLayout228 />
+        <SidebarLayout />
         <div className={'popup-upload-document'}>
           <div className={'popup-card'}>
             <CardsettingshddivItem divText={'Upload Documents'} />

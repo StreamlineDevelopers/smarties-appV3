@@ -1,7 +1,7 @@
 import React from 'react';
 import TopbarLayout162 from '../components/TopbarLayout162';
 import MaincontentLayout164 from '../components/MaincontentLayout164';
-import SidebarLayout163 from '../components/SidebarLayout163';
+import SidebarLayout from '../components/SidebarLayout';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
 import FormrowItem71 from '../components/FormrowItem71';
 import FormrowItem72 from '../components/FormrowItem72';
@@ -17,7 +17,7 @@ const Contentlibrary = () => {
       <div className={'page-wrap'}>
         <TopbarLayout162 />
         <MaincontentLayout164 />
-        <SidebarLayout163 />
+        <SidebarLayout />
         <div className={'popup-upload-document'}>
           <div className={'popup-card'}>
             <CardsettingshddivItem divText={'Upload Documents'} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import TopbarLayout84 from '../components/TopbarLayout84';
 import MaincontentLayout86 from '../components/MaincontentLayout86';
-import SidebarLayout85 from '../components/SidebarLayout85';
+import SidebarLayout from '../components/SidebarLayout';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
 import FormrowItem71 from '../components/FormrowItem71';
 import FormrowItem72 from '../components/FormrowItem72';
@@ -17,7 +17,7 @@ const Buzzbuilderhub = () => {
       <div className={'page-wrap'}>
         <TopbarLayout84 />
         <MaincontentLayout86 />
-        <SidebarLayout85 />
+        <SidebarLayout />
         <div className={'popup-upload-document'}>
           <div className={'popup-card'}>
             <CardsettingshddivItem divText={'Upload Documents'} />

@@ -1,6 +1,6 @@
 import React from 'react';
-import MaincontentLayout51 from '../components/MaincontentLayout51';
-import SidebarLayout50 from '../components/SidebarLayout50';
+// import MaincontentLayout51 from '../components/MaincontentLayout51';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout49 from '../components/TopbarLayout49';
 import TablecelldivItem from '../components/TablecelldivItem';
 import TablecelldivItem40 from '../components/TablecelldivItem40';
@@ -15,8 +15,8 @@ const Attractshoppers = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout51 />
-        <SidebarLayout50 />
+        {/* <MaincontentLayout51 /> */}
+        <SidebarLayout />
         <TopbarLayout49 />
         <div className={'popup-dataenrichment'}>
           <div className={'popup-card _w-70'}>

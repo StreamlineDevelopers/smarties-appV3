@@ -1,7 +1,6 @@
 import React from 'react';
 import TopbarLayout263 from '../components/TopbarLayout263';
 import MaincontentLayout264 from '../components/MaincontentLayout264';
-import SidebarLayout265 from '../components/SidebarLayout265';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
 import FormrowItem71 from '../components/FormrowItem71';
 import FormrowItem72 from '../components/FormrowItem72';
@@ -10,6 +9,7 @@ import FormbtncontainerItem from '../components/FormbtncontainerItem';
 import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
 import ListitemItem from '../components/ListitemItem';
+import SidebarLayout from '../components/SidebarLayout';
 
 const Index = () => {
   return (
@@ -17,7 +17,7 @@ const Index = () => {
       <div className={'page-wrap'}>
         <TopbarLayout263 />
         <MaincontentLayout264 />
-        <SidebarLayout265 />
+        <SidebarLayout />
         <div className={'popup-upload-document'}>
           <div className={'popup-card'}>
             <CardsettingshddivItem divText={'Upload Documents'} />

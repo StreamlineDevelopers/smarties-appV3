@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout39 from '../components/MaincontentLayout39';
-import SidebarLayout38 from '../components/SidebarLayout38';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout31 from '../components/TopbarLayout31';
 import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
@@ -10,7 +10,7 @@ const Assistant = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout39 />
-        <SidebarLayout38 />
+        <SidebarLayout />
         <TopbarLayout31 />
         <div className={'popup-createphonenumber'}>
           <div className={'popup-card _w-50'}>

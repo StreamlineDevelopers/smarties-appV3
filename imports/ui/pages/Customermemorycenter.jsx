@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout211 from '../components/MaincontentLayout211';
-import SidebarLayout210 from '../components/SidebarLayout210';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout208 from '../components/TopbarLayout208';
 import TablecelldivItem from '../components/TablecelldivItem';
 import TablecelldivItem40 from '../components/TablecelldivItem40';
@@ -16,7 +16,7 @@ const Customermemorycenter = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout211 />
-        <SidebarLayout210 />
+        <SidebarLayout />
         <TopbarLayout208 />
         <div className={'popup-dataenrichment'}>
           <div className={'popup-card _w-70'}>

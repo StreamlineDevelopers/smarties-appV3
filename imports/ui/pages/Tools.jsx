@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout400 from '../components/MaincontentLayout400';
-import SidebarLayout399 from '../components/SidebarLayout399';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout398 from '../components/TopbarLayout398';
 import FormrowItem385 from '../components/FormrowItem385';
 import FormrowItem386 from '../components/FormrowItem386';
@@ -21,7 +21,7 @@ const Tools = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout400 />
-        <SidebarLayout399 />
+        <SidebarLayout />
         <TopbarLayout398 />
         <div className={'popup-create-tool'}>
           <div className={'popup-card _w-50'}>

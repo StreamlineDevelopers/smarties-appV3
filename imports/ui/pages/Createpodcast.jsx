@@ -1,7 +1,7 @@
 import React from 'react';
 import TopbarLayout196 from '../components/TopbarLayout196';
 import MaincontentLayout200 from '../components/MaincontentLayout200';
-import SidebarLayout199 from '../components/SidebarLayout199';
+import SidebarLayout from '../components/SidebarLayout';
 
 const Createpodcast = () => {
   return (
@@ -9,7 +9,7 @@ const Createpodcast = () => {
       <div className={'page-wrap'}>
         <TopbarLayout196 />
         <MaincontentLayout200 />
-        <SidebarLayout199 />
+        <SidebarLayout />
       </div>
     </>
   );

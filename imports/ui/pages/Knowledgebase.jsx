@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout279 from '../components/MaincontentLayout279';
-import SidebarLayout280 from '../components/SidebarLayout280';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout278 from '../components/TopbarLayout278';
 import SearchformblockItem275 from '../components/SearchformblockItem275';
 import TableheaderItem from '../components/TableheaderItem';
@@ -14,7 +14,7 @@ const Knowledgebase = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout279 />
-        <SidebarLayout280 />
+        <SidebarLayout />
         <TopbarLayout278 />
         <div className={'popup-addfile'}>
           <div className={'popup-card _w-50'}>

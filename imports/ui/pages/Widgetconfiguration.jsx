@@ -1,6 +1,6 @@
 import React from 'react';
 import MaincontentLayout413 from '../components/MaincontentLayout413';
-import SidebarLayout414 from '../components/SidebarLayout414';
+import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout412 from '../components/TopbarLayout412';
 import FormrowItem410 from '../components/FormrowItem410';
 import FormhddivrightItem409 from '../components/FormhddivrightItem409';
@@ -15,7 +15,7 @@ const Widgetconfiguration = () => {
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout413 />
-        <SidebarLayout414 />
+        <SidebarLayout />
         <TopbarLayout412 />
         <div className={'popup-create-config'}>
           <div className={'popup-card _w-50'}>
