@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Btnstyle1Item97 from './Btnstyle1Item97';
 import SearchformblockItem from './SearchformblockItem';
 import Btnstyle1Item98 from './Btnstyle1Item98';
@@ -28,8 +28,15 @@ import DatacollectioncardItem from './DatacollectioncardItem';
 import ActivityhistoryhandlerItem from './ActivityhistoryhandlerItem';
 import RecentactivityitemItem from './RecentactivityitemItem';
 import FilteritemItem from './FilteritemItem';
+import ContactWatcher, { POPUP } from '../../api/client/watchers/ContactWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
 
-const MaincontentLayout146 = ({}) => {
+const MaincontentLayout146 = ({ }) => {
+  const watcher = useRef(ContactWatcher).current;
+  useWatcher(watcher);
+
+  const isFilterPopupOpen = watcher.getValue(POPUP.FILTER_CONTACTS);
+
   return (
     <div
       id={'w-node-_61da7caa-6ca5-b4ce-88b2-5ad4777a9580-f14725ce'}
@@ -49,11 +56,12 @@ const MaincontentLayout146 = ({}) => {
                 divText={'New Contact'}
               />
               <div className={'contacts-main-top-right'}>
-                <SearchformblockItem />
+                <SearchformblockItem handleSearch={(e) => watcher.searchContacts(e.target.value)} />
                 <a
                   data-w-id={'6229025e-89ec-5fd5-555f-a0c9a0c162e8'}
                   href={'#'}
                   className={'btn-style1 outline w-inline-block'}
+                  onClick={() => watcher.toggleFilterContactsPopup()}
                 >
                   <div className={'btn-icon'}>
                     <img
@@ -203,6 +211,7 @@ const MaincontentLayout146 = ({}) => {
                         dataWId4={'5d9ed109-0287-49e5-d932-829a7a498bbb'}
                         dataWId5={'7ee79f28-1055-c466-27e8-3173f706dca1'}
                         dataWId6={'d9d41f7f-0057-93a0-759a-4f4719e2e394'}
+                        handleSelectContact={() => watcher.setSelectedContact('d5d24fc8-f7d9-5f76-d442-ba200f41338a')}
                       />
                       <ContacttablerowItem144
                         dataWId={'999a0daa-6b66-b255-7493-3bfa478f4fdf'}
@@ -320,7 +329,7 @@ const MaincontentLayout146 = ({}) => {
               </div>
             </div>
           </div>
-          <div className={'contact-sidebar-customerintelliigence'}>
+          <div className={'contact-sidebar-customerintelliigence'} style={{ display: 'flex' }}>
             <MessagingsidebarhddivItem
               divText={'Customer Intelligence'}
               dataWId={'d40e6ff1-a7b5-c151-b08f-dd8db3b3dda2'}
@@ -719,10 +728,11 @@ const MaincontentLayout146 = ({}) => {
               </div>
             </div>
           </div>
-          <div className={'contact-sidebar-filter'}>
+          <div className={'contact-sidebar-filter'} style={{ display: isFilterPopupOpen ? 'flex' : 'none' }}>
             <MessagingsidebarhddivItem
               divText={'Filter'}
               dataWId={'49b86335-b3af-16b1-7cdb-77c51e373354'}
+              onClick={() => watcher.toggleFilterContactsPopup()}
             />
             <div className={'w-form'}>
               <form

@@ -1,10 +1,11 @@
 import React from 'react';
 
-const CardsidecolumnhdItem = ({ dataWId, divText }) => {
+const CardsidecolumnhdItem = ({ dataWId, divText, onClick = () => { } }) => {
   return (
     <div
       data-w-id={dataWId || '420b0f02-28d9-8e15-64f3-0d8b5aa4b10e'}
       className={'card-side-column-hd'}
+      onClick={onClick}
     >
       <div>{divText || 'Contact Details'}</div>
       <div className={'side-column-arrow'}>

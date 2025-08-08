@@ -21,11 +21,13 @@ const ContacttablerowItem144 = ({
   dataWId4,
   dataWId5,
   dataWId6,
+  handleSelectContact = () => { },
 }) => {
   return (
     <div
       data-w-id={dataWId || 'd5d24fc8-f7d9-5f76-d442-ba200f41338a'}
       className={'contact--table-row'}
+      onClick={handleSelectContact}
     >
       <div className={'contact-table-cell-div _w-3'}>
         <WcheckboxItem96 dataWId={'e126a55e-d39a-9fdc-2dc4-f201db972168'} />

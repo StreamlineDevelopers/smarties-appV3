@@ -22,7 +22,6 @@ export const TOGGLE = {
 
 export const TAB = {
     MESSAGES: "messagesTab",
-    SCRIPT_INJECTION: "scriptInjectionTab",
     CUSTOMER_INFORMATION: "customerInformationTab"
 }
 
@@ -34,10 +33,12 @@ class MessagingWatcher extends Watcher2 {
     constructor(parent) {
         super(parent);
         this.setValue(TAB.MESSAGES, 'all');
+        this.setValue(TAB.CUSTOMER_INFORMATION, 'profile');
         this.setValue(POPUP.MESSAGES_FILTER, false);
     }
 
 
+    // Messages
     searchMessages(value) {
         console.log("Searching messages...", value);
     }
@@ -48,19 +49,35 @@ class MessagingWatcher extends Watcher2 {
     messagesTabChange(tab = 'all') {
         this.setValue(TAB.MESSAGES, tab);
     }
-    uploadDocumentFile() { }
-    sendMessage() { }
 
+    sendMessage() {
+        console.log(this.getValue('messageText'))
+    }
+
+    uploadDocumentFile() { }
+
+
+    // Script Injection
     setScriptInjectionPopup(flag = false) {
         this.setValue(POPUP.SCRIPT_INJECTION, flag);
     }
 
-    searchScriptInjection() { }
-    filterScriptInjection() { }
-    scriptInjectionSelect() { }
+    searchScriptInjection(value) {
+        console.log("Searching script injection...", value);
+    }
+
+    filterScriptInjection(value) {
+        console.log("Filtering script injection...", value);
+    }
+    scriptInjectionSelect(id) {
+        console.log("Script injection selected", id);
+    }
 
 
-    customerInformationTabChange() { }
+    // Customer Information
+    customerInformationTabChange(tab = 'profile') {
+        this.setValue(TAB.CUSTOMER_INFORMATION, tab);
+    }
     setDataEnrichmentSideColumn(flag = false) {
         this.setValue(POPUP.DATA_ENRICHMENT, flag);
     }

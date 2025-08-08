@@ -14,11 +14,11 @@ class SampleWatcher extends Watcher2 {
     #data
     #processes = {};
     #lastBasis = null;
-    #processes = {};
     #listen = null;
     constructor(parent) {
         super(parent);
     }
+
 }
 
 export default new SampleWatcher(Client);

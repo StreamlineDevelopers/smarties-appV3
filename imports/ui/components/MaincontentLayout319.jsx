@@ -55,6 +55,7 @@ const MaincontentLayout319 = ({ }) => {
   const isSmartiesAssistantToggled = watcher.getValue(TOGGLE.SMARTIES_ASSISTANT);
   const isScriptInjectionPopupOpen = watcher.getValue(POPUP.SCRIPT_INJECTION);
   const activeMessageTab = watcher.getValue(TAB.MESSAGES);
+  const activeCustomerInformationTab = watcher.getValue(TAB.CUSTOMER_INFORMATION);
   const isMessageFilterPopupOpen = watcher.getValue(POPUP.MESSAGES_FILTER);
 
   return (
@@ -98,7 +99,7 @@ const MaincontentLayout319 = ({ }) => {
                 <div
                   data-w-id={'22da1d15-a272-dba8-d763-7cbf1103c82f'}
                   className={'a_filter-btn'}
-                  onClick={() => watcher.filterMessagesPopup()}
+                  onClick={() => watcher.togglefilterMessagesPopup()}
                 >
                   <img
                     loading={'lazy'}
@@ -141,7 +142,7 @@ const MaincontentLayout319 = ({ }) => {
                           <div className={'filter-btn-div'}>
                             <a
                               data-w-id={'22da1d15-a272-dba8-d763-7cbf1103c8b3'}
-                              onClick={() => watcher.filterMessagesPopup()}
+                              onClick={() => watcher.togglefilterMessagesPopup()}
                               className={'btn-style1-2 outline w-inline-block'}
                             >
                               <div>Cancel</div>
@@ -212,7 +213,7 @@ const MaincontentLayout319 = ({ }) => {
               <div className={'messaging-inbox-tabscontent w-tab-content'}>
                 <div
                   data-w-tab={'Tab 1'}
-                  className={`w-tab-pane ${watcher.getValue(TAB.MESSAGES) == 'all' ? 'w--tab-active' : ''}`}
+                  className={`w-tab-pane ${activeMessageTab == 'all' ? 'w--tab-active' : ''}`}
                 >
                   <div className={'messaging-tabpane-div'}>
                     <div className={'filter-row gap-10'}>
@@ -957,6 +958,7 @@ const MaincontentLayout319 = ({ }) => {
                           placeholder={'Type your message'}
                           type={'url'}
                           id={'reply-input'}
+                          onChange={(e) => watcher.setValue('messageText', e.target.value)}
                         />
                         <div className={'reply-btn-container'}>
                           <div className={'reply-btn-icon-white'}>
@@ -984,7 +986,7 @@ const MaincontentLayout319 = ({ }) => {
                               alt={''}
                             />
                           </div>
-                          <div className={'reply-btn-icon'}>
+                          <div className={'reply-btn-icon'} onClick={() => watcher.sendMessage()}>
                             <img
                               loading={'lazy'}
                               src={'images/smarties-inbox-icon-send.svg'}
@@ -1036,6 +1038,7 @@ const MaincontentLayout319 = ({ }) => {
                                   placeholder={'Search Script'}
                                   type={'text'}
                                   id={'field'}
+                                  onChange={(e) => watcher.searchScriptInjection(e.target.value)}
                                   required
                                 />
                                 <div className={'messagepopup-filter'}>
@@ -1056,6 +1059,7 @@ const MaincontentLayout319 = ({ }) => {
                                   description={
                                     'Guide the customer through subscription issues and billing problems'
                                   }
+                                  selectInjectionScript={() => watcher.scriptInjectionSelect('d76ae3fe-514d-db09-b76d-ac292998104d')}
                                 />
                                 <ScriptinjectorcarditemItem
                                   dataWId={
@@ -1108,7 +1112,7 @@ const MaincontentLayout319 = ({ }) => {
               <WformfailItem />
             </div>
           </div>
-          <div className={'contact-side-column'}>
+          <div className={'contact-side-column contacts'} style={{ display: 'flex' }}>
             <div className={'side-column-hd'}>
               <div className={'side-column-text-hd'}>Customer Information</div>
               <div className={'sidebar-contact-maindiv'}>
@@ -1159,8 +1163,9 @@ const MaincontentLayout319 = ({ }) => {
                   <a
                     data-w-tab={'Tab 1'}
                     className={
-                      'tabs-menu-link-side-column w-inline-block w-tab-link w--current'
+                      `tabs-menu-link-side-column w-inline-block w-tab-link ${activeCustomerInformationTab == 'profile' ? 'w--current' : ''}`
                     }
+                    onClick={() => watcher.customerInformationTabChange('profile')}
                   >
                     <div className={'icon-link-side-column'}>
                       <img
@@ -1175,22 +1180,28 @@ const MaincontentLayout319 = ({ }) => {
                     dataWTab={'Tab 2'}
                     src={'images/smartties-tab-journey.svg'}
                     divText={'Journey'}
+                    isActive={activeCustomerInformationTab == 'journey'}
+                    onClick={() => watcher.customerInformationTabChange('journey')}
                   />
                   <TabsmenulinksidecolumnItem
                     dataWTab={'Tab 3'}
                     src={'images/smartties-tab-history.svg'}
                     divText={'History'}
+                    isActive={activeCustomerInformationTab == 'history'}
+                    onClick={() => watcher.customerInformationTabChange('history')}
                   />
                   <TabsmenulinksidecolumnItem
                     dataWTab={'Tab 4'}
                     src={'images/smartties-tab-data.svg'}
                     divText={'Data'}
+                    isActive={activeCustomerInformationTab == 'data'}
+                    onClick={() => watcher.customerInformationTabChange('data')}
                   />
                 </div>
                 <div className={'tabs-content-side-column w-tab-content'}>
                   <div
                     data-w-tab={'Tab 1'}
-                    className={'tabs-pane-side-column w-tab-pane w--tab-active'}
+                    className={`tabs-pane-side-column w-tab-pane ${activeCustomerInformationTab == 'profile' ? 'w--tab-active' : ''}`}
                   >
                     <div className={'side-column-profile'}>
                       <div className={'data-enrichment-div'}>
@@ -1499,7 +1510,7 @@ const MaincontentLayout319 = ({ }) => {
                   </div>
                   <div
                     data-w-tab={'Tab 2'}
-                    className={'tabs-pane-side-column w-tab-pane'}
+                    className={`tabs-pane-side-column w-tab-pane ${activeCustomerInformationTab == 'journey' ? 'w--tab-active' : ''}`}
                   >
                     <div className={'side-column-journey'}>
                       <div className={'journey-main-content dont-shrinkgrow'}>
@@ -1532,8 +1543,9 @@ const MaincontentLayout319 = ({ }) => {
                             <CardsidecolumnhdItem
                               dataWId={'420b0f02-28d9-8e15-64f3-0d8b5aa4b1d7'}
                               divText={'Customer Journey'}
+                              onClick={() => watcher.setValue('showCustomerJourney', !watcher.getValue('showCustomerJourney'))}
                             />
-                            <div className={'card-side-column-content'}>
+                            <div className={'card-side-column-content'} style={{ display: !watcher.getValue('showCustomerJourney') ? 'block' : 'none' }}>
                               <div className={'customer-journey'}>
                                 <div className={'row-journey'}>
                                   <div className={'icon-journey'}>
@@ -1647,7 +1659,7 @@ const MaincontentLayout319 = ({ }) => {
                   </div>
                   <div
                     data-w-tab={'Tab 3'}
-                    className={'tabs-pane-side-column w-tab-pane'}
+                    className={`tabs-pane-side-column w-tab-pane ${activeCustomerInformationTab == 'history' ? 'w--tab-active' : ''}`}
                   >
                     <div className={'side-column-history'}>
                       <div className={'history-search-filter'}>
@@ -1790,7 +1802,7 @@ const MaincontentLayout319 = ({ }) => {
                   </div>
                   <div
                     data-w-tab={'Tab 4'}
-                    className={'tabs-pane-side-column w-tab-pane'}
+                    className={`tabs-pane-side-column w-tab-pane ${activeCustomerInformationTab == 'data' ? 'w--tab-active' : ''}`}
                   >
                     <div className={'side-column-data'}>
                       <div className={'journey-main-content'}>

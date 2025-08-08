@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import MaincontentLayout146 from '../components/MaincontentLayout146';
 import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout140 from '../components/TopbarLayout140';
@@ -12,15 +12,20 @@ import MessagingsidebarcardsItem139 from '../components/MessagingsidebarcardsIte
 import ContactdetailstablinkcountItem from '../components/ContactdetailstablinkcountItem';
 import ContactdetailstablinkItem95 from '../components/ContactdetailstablinkItem95';
 import ContactdetailsitemItem from '../components/ContactdetailsitemItem';
+import ContactWatcher, { POPUP } from '../../api/client/watchers/ContactWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
 
 const Contacts = () => {
+  const watcher = useRef(ContactWatcher).current;
+  useWatcher(watcher);
+
   return (
     <>
       <div className={'page-wrap'}>
         <MaincontentLayout146 />
         <SidebarLayout />
         <TopbarLayout140 />
-        <div className={'popup-contactdetails'}>
+        <div className={'popup-contactdetails'} style={{}}>
           <MessagingsidebarhddivItem
             divText={'Contact Details'}
             dataWId={'51139ba3-92d1-d655-61bf-e694c0ce8aeb'}

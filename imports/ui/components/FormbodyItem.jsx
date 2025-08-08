@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FormbodyItem = ({}) => {
+const FormbodyItem = ({ handleSearch }) => {
   return (
     <div className={'form-body'}>
       <div className={'form-row mb-0'}>
@@ -13,6 +13,7 @@ const FormbodyItem = ({}) => {
           type={'text'}
           id={'search-2'}
           required
+          onChange={handleSearch}
         />
       </div>
     </div>
