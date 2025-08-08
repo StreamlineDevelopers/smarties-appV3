@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Btnstyle1Item65 = ({}) => {
+const Btnstyle1Item65 = ({ handleCancel }) => {
   return (
-    <a href={'#'} className={'btn-style1 outline'}>
+    <a href={'#'} className={'btn-style1 outline'} onClick={handleCancel}>
       <div>Cancel</div>
     </a>
   );

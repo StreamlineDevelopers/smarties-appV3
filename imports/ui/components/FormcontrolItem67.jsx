@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FormcontrolItem67 = ({ id }) => {
+const FormcontrolItem67 = ({ id, value, onChange }) => {
   return (
     <div className={'form-control'}>
       <div className={'form-label'}>Assistant Name</div>
@@ -12,6 +12,8 @@ const FormcontrolItem67 = ({ id }) => {
         placeholder={''}
         type={'text'}
         id={id || 'assistant-name'}
+        value={value || ''}
+        onChange={onChange}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import TopbarLayout263 from '../components/TopbarLayout263';
 import MaincontentLayout264 from '../components/MaincontentLayout264';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
@@ -10,15 +10,23 @@ import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
 import ListitemItem from '../components/ListitemItem';
 import SidebarLayout from '../components/SidebarLayout';
+import IndexWatcher, { ASSISTANT_FORM, POPUP } from '../../api/client/watchers/IndexWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
 
 const Index = () => {
+  const watcher = useRef(IndexWatcher).current;
+  useWatcher(watcher);
+
+  const isUploadDocumentPopupOpen = watcher.getValue(POPUP.UPLOAD_DOCUMENT);
+  const isRecordVoicePopupOpen = watcher.getValue(POPUP.RECORD_VOICE);
+
   return (
     <>
       <div className={'page-wrap'}>
         <TopbarLayout263 />
         <MaincontentLayout264 />
         <SidebarLayout />
-        <div className={'popup-upload-document'}>
+        <div className={'popup-upload-document'} style={{ display: isUploadDocumentPopupOpen ? 'flex' : 'none' }}>
           <div className={'popup-card'}>
             <CardsettingshddivItem divText={'Upload Documents'} />
             <div className={'w-form'}>
@@ -31,8 +39,8 @@ const Index = () => {
                 data-wf-element-id={'1de059f2-77c2-8d93-3a9c-b53409cc6a0f'}
               >
                 <div className={'form-body'}>
-                  <FormrowItem71 id={'assistant-name'} />
-                  <FormrowItem72 id={'assistant-description'} />
+                  <FormrowItem71 id={'assistant-name'} value={watcher.getValue(ASSISTANT_FORM.NAME)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.NAME, e.target.value)} />
+                  <FormrowItem72 id={'assistant-description'} value={watcher.getValue(ASSISTANT_FORM.DESCRIPTION)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.DESCRIPTION, e.target.value)} />
                   <div className={'form-row'}>
                     <FormcontrolItem64 label={'Upload Documents'} />
                     <div className={'file-upload-base'}>
@@ -111,7 +119,7 @@ const Index = () => {
                       documents may take longer to process.
                     </div>
                   </div>
-                  <FormbtncontainerItem />
+                  <FormbtncontainerItem handleSubmit={() => watcher.handleSubmitUploadDocumentForm()} handleCancel={() => watcher.setUploadDocumentPopup(false)} />
                 </div>
               </form>
               <WformdoneItem />
@@ -120,12 +128,13 @@ const Index = () => {
             <div
               data-w-id={'2dbd5768-3788-eb14-8b45-fb7744b0a391'}
               className={'popup-close'}
+              onClick={() => watcher.setUploadDocumentPopup(false)}
             >
               <img src={'images/smarties-x.svg'} loading={'lazy'} alt={''} />
             </div>
           </div>
         </div>
-        <div className={'popup-recordvoice'}>
+        <div className={'popup-recordvoice'} style={{ display: isRecordVoicePopupOpen ? 'flex' : 'none' }}>
           <div className={'popup-card'}>
             <CardsettingshddivItem divText={'Record Voice'} />
             <div className={'w-form'}>
@@ -138,8 +147,8 @@ const Index = () => {
                 data-wf-element-id={'85855c31-c03d-5480-b4ae-bfcf12bbf628'}
               >
                 <div className={'form-body'}>
-                  <FormrowItem71 id={'assistant-name-2'} />
-                  <FormrowItem72 id={'assistant-description-2'} />
+                  <FormrowItem71 id={'assistant-name-2'} value={watcher.getValue(ASSISTANT_FORM.NAME)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.NAME, e.target.value)} />
+                  <FormrowItem72 id={'assistant-description-2'} value={watcher.getValue(ASSISTANT_FORM.DESCRIPTION)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.DESCRIPTION, e.target.value)} />
                   <div className={'form-row'}>
                     <div className={'recordvoice-maindiv'}>
                       <div className={'mic-button'}>
@@ -200,7 +209,7 @@ const Index = () => {
                       recording new ones.
                     </div>
                   </div>
-                  <FormbtncontainerItem />
+                  <FormbtncontainerItem handleSubmit={() => watcher.handleSubmitRecordVoiceForm()} handleCancel={() => watcher.setRecordVoicePopup(false)} />
                 </div>
               </form>
               <WformdoneItem />
@@ -209,6 +218,7 @@ const Index = () => {
             <div
               data-w-id={'85855c31-c03d-5480-b4ae-bfcf12bbf66a'}
               className={'popup-close'}
+              onClick={() => watcher.setRecordVoicePopup(false)}
             >
               <img src={'images/smarties-x.svg'} loading={'lazy'} alt={''} />
             </div>

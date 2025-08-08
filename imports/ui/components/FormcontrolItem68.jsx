@@ -1,6 +1,6 @@
 import React from 'react';
 
-const FormcontrolItem68 = ({ id }) => {
+const FormcontrolItem68 = ({ id, value, onChange }) => {
   return (
     <div className={'form-control'}>
       <div className={'form-label'}>Assistant Description</div>
@@ -11,6 +11,8 @@ const FormcontrolItem68 = ({ id }) => {
         name={'assistant-description'}
         data-name={'assistant description'}
         className={'form-textarea w-input'}
+        value={value || ''}
+        onChange={onChange}
       ></textarea>
     </div>
   );

@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import DashboardheadertextItem from './DashboardheadertextItem';
 import DbstatcardItem262 from './DbstatcardItem262';
 import DashboardassistantItem from './DashboardassistantItem';
 import DashboardactivityfeedItem261 from './DashboardactivityfeedItem261';
+import IndexWatcher from '../../api/client/watchers/IndexWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
 
-const MaincontentLayout264 = ({}) => {
+const MaincontentLayout264 = ({ }) => {
+  const watcher = useRef(IndexWatcher).current;
+  useWatcher(watcher);
+
   return (
     <div
       id={'w-node-_79790694-08dd-78e5-e5cb-53de24331ffd-f147256a'}
@@ -74,6 +79,7 @@ const MaincontentLayout264 = ({}) => {
                 data-w-id={'c4da4dbd-0538-3352-f2c2-ce7bd3daf02e'}
                 href={'#'}
                 className={'dashboard-quickactions w-inline-block'}
+                onClick={() => watcher.setUploadDocumentPopup(true)}
               >
                 <div className={'card-icon'}>
                   <img
@@ -114,6 +120,7 @@ const MaincontentLayout264 = ({}) => {
                 data-w-id={'43e2bb55-ffe1-0d32-4992-4bf4aad5a054'}
                 href={'#'}
                 className={'dashboard-quickactions w-inline-block'}
+                onClick={() => watcher.setRecordVoicePopup(true)}
               >
                 <div className={'card-icon blue'}>
                   <img

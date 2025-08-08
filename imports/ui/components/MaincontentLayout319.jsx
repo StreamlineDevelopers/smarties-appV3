@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import FiltergroupItem317 from './FiltergroupItem317';
 import FiltergroupItem300 from './FiltergroupItem300';
 import FiltergroupItem303 from './FiltergroupItem303';
@@ -44,8 +44,19 @@ import RowdatacollectionItem from './RowdatacollectionItem';
 import RowenrichmentItem from './RowenrichmentItem';
 import RowenrichmentItem307 from './RowenrichmentItem307';
 import RowenrichmentItem311 from './RowenrichmentItem311';
+import MessagingWatcher, { POPUP, TAB, TOGGLE } from '../../api/client/watchers/MessagingWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
 
-const MaincontentLayout319 = ({}) => {
+
+const MaincontentLayout319 = ({ }) => {
+  const watcher = useRef(MessagingWatcher).current;
+  useWatcher(watcher);
+
+  const isSmartiesAssistantToggled = watcher.getValue(TOGGLE.SMARTIES_ASSISTANT);
+  const isScriptInjectionPopupOpen = watcher.getValue(POPUP.SCRIPT_INJECTION);
+  const activeMessageTab = watcher.getValue(TAB.MESSAGES);
+  const isMessageFilterPopupOpen = watcher.getValue(POPUP.MESSAGES_FILTER);
+
   return (
     <div
       id={'w-node-_29f7b4c2-cc51-33c6-047b-9accbc43f6c6-f14725cd'}
@@ -68,6 +79,7 @@ const MaincontentLayout319 = ({}) => {
                 <form action={'/search'} className={'message-search w-form'}>
                   <input
                     className={'message-search-input w-input'}
+                    onChange={(e) => watcher.searchMessages(e.target.value)}
                     maxlength={'256'}
                     name={'query'}
                     placeholder={'Search…'}
@@ -82,10 +94,11 @@ const MaincontentLayout319 = ({}) => {
                   />
                 </form>
               </div>
-              <div className={'a_inbox-filter-div'}>
+              <div className={'a_inbox-filter-div'} >
                 <div
                   data-w-id={'22da1d15-a272-dba8-d763-7cbf1103c82f'}
                   className={'a_filter-btn'}
+                  onClick={() => watcher.filterMessagesPopup()}
                 >
                   <img
                     loading={'lazy'}
@@ -93,7 +106,7 @@ const MaincontentLayout319 = ({}) => {
                     alt={''}
                   />
                 </div>
-                <div className={'filter-popup'}>
+                <div className={'filter-popup'} style={{ display: isMessageFilterPopupOpen ? 'flex' : 'none' }}>
                   <div className={'w-form'}>
                     <form
                       id={'email-form'}
@@ -128,7 +141,7 @@ const MaincontentLayout319 = ({}) => {
                           <div className={'filter-btn-div'}>
                             <a
                               data-w-id={'22da1d15-a272-dba8-d763-7cbf1103c8b3'}
-                              href={'#'}
+                              onClick={() => watcher.filterMessagesPopup()}
                               className={'btn-style1-2 outline w-inline-block'}
                             >
                               <div>Cancel</div>
@@ -155,8 +168,9 @@ const MaincontentLayout319 = ({}) => {
                 <a
                   data-w-tab={'Tab 1'}
                   className={
-                    'messaging-tablink w-inline-block w-tab-link w--current'
+                    `messaging-tablink w-inline-block w-tab-link ${activeMessageTab == 'all' ? 'w--current' : ''}`
                   }
+                  onClick={() => watcher.messagesTabChange()}
                 >
                   <div>All </div>
                   <div className={'messaging-tablink-notify-count'}>12</div>
@@ -164,16 +178,21 @@ const MaincontentLayout319 = ({}) => {
                 <MessagingtablinkItem291
                   dataWTab={'Tab 2'}
                   divText={'Active'}
+                  isActive={activeMessageTab == 'active'}
+                  onClick={() => watcher.messagesTabChange('active')}
                 />
                 <MessagingtablinkItem291
                   dataWTab={'Tab 3'}
                   divText={'Pending'}
+                  isActive={activeMessageTab == 'pending'}
+                  onClick={() => watcher.messagesTabChange('pending')}
                 />
                 <a
                   data-w-tab={'Tab 4'}
                   className={
-                    'messaging-tablink close w-inline-block w-tab-link'
+                    `messaging-tablink close w-inline-block w-tab-link ${activeMessageTab == 'close' ? 'w--current' : ''}`
                   }
+                  onClick={() => watcher.messagesTabChange('close')}
                 >
                   <div className={'duration-div'}>
                     <div
@@ -193,7 +212,7 @@ const MaincontentLayout319 = ({}) => {
               <div className={'messaging-inbox-tabscontent w-tab-content'}>
                 <div
                   data-w-tab={'Tab 1'}
-                  className={'w-tab-pane w--tab-active'}
+                  className={`w-tab-pane ${watcher.getValue(TAB.MESSAGES) == 'all' ? 'w--tab-active' : ''}`}
                 >
                   <div className={'messaging-tabpane-div'}>
                     <div className={'filter-row gap-10'}>
@@ -398,9 +417,9 @@ const MaincontentLayout319 = ({}) => {
                     </div>
                   </div>
                 </div>
-                <div data-w-tab={'Tab 2'} className={'w-tab-pane'}></div>
-                <div data-w-tab={'Tab 3'} className={'w-tab-pane'}></div>
-                <div data-w-tab={'Tab 4'} className={'w-tab-pane'}></div>
+                <div data-w-tab={'Tab 2'} className={`w-tab-pane ${activeMessageTab == 'active' ? 'w--tab-active' : ''}`}></div>
+                <div data-w-tab={'Tab 3'} className={`w-tab-pane ${activeMessageTab == 'pending' ? 'w--tab-active' : ''}`}></div>
+                <div data-w-tab={'Tab 4'} className={`w-tab-pane ${activeMessageTab == 'close' ? 'w--tab-active' : ''}`}></div>
               </div>
             </div>
           </div>
@@ -452,7 +471,7 @@ const MaincontentLayout319 = ({}) => {
                         </div>
                       </div>
                       <div className={'messaging-main-topright'}>
-                        <div className={'messaging-handling-aibot'}>
+                        <div className={'messaging-handling-aibot'} style={{ display: isSmartiesAssistantToggled ? 'flex' : 'none' }}>
                           <div className={'message-handle-avatar'}>
                             <img
                               loading={'lazy'}
@@ -469,7 +488,7 @@ const MaincontentLayout319 = ({}) => {
                             </div>
                           </div>
                         </div>
-                        <div className={'messaging-handling-agent'}>
+                        <div className={'messaging-handling-agent'} style={{ display: !isSmartiesAssistantToggled ? 'flex' : 'none' }}>
                           <div className={'message-handle-avatar agent'}>
                             <img
                               loading={'lazy'}
@@ -490,6 +509,8 @@ const MaincontentLayout319 = ({}) => {
                           <div
                             data-w-id={'466d0a60-7ecd-180d-fff7-c46b23c60015'}
                             className={'button-returnai'}
+                            onClick={() => watcher.toggleSmartiesAssistant()}
+                            style={{ display: !isSmartiesAssistantToggled ? 'flex' : 'none' }}
                           >
                             <div>Return to AI</div>
                             <div className={'fluentchat-28-regular'}>
@@ -503,6 +524,8 @@ const MaincontentLayout319 = ({}) => {
                           <div
                             data-w-id={'a6dc440d-420d-352d-d335-dbe1bda29f2e'}
                             className={'button-takeover'}
+                            onClick={() => watcher.toggleSmartiesAssistant()}
+                            style={{ display: isSmartiesAssistantToggled ? 'flex' : 'none' }}
                           >
                             <div className={'fluentchat-28-regular'}>
                               <img
@@ -597,8 +620,8 @@ const MaincontentLayout319 = ({}) => {
                             </div>
                           </div>
                         </div>
-                        <div className={'messaging-handling-aibot-bg'}></div>
-                        <div className={'messaging-handling-agent-bg'}></div>
+                        <div className={'messaging-handling-aibot-bg'} style={{ display: !isSmartiesAssistantToggled ? 'block' : 'none' }}></div>
+                        <div className={'messaging-handling-agent-bg'} style={{ display: isSmartiesAssistantToggled ? 'block' : 'none' }}></div>
                       </div>
                     </div>
                     <div className={'messaging-main-conversation-div'}>
@@ -953,6 +976,7 @@ const MaincontentLayout319 = ({}) => {
                           <div
                             data-w-id={'ba1016a2-eb6c-7f64-14a0-e5664eb3de73'}
                             className={'reply-btn-icon-white'}
+                            onClick={() => watcher.setScriptInjectionPopup(true)}
                           >
                             <img
                               loading={'lazy'}
@@ -967,7 +991,7 @@ const MaincontentLayout319 = ({}) => {
                               alt={''}
                             />
                           </div>
-                          <div className={'popup-scriptinjection'}>
+                          <div className={'popup-scriptinjection'} style={{ display: isScriptInjectionPopupOpen ? 'flex' : 'none' }}>
                             <div className={'message-popup-hd'}>
                               <div className={'message-popup-hd-left'}>
                                 <img
@@ -986,9 +1010,11 @@ const MaincontentLayout319 = ({}) => {
                                 data-w-id={
                                   '8badf8db-09fe-5c18-4ceb-bfbf6893b9eb'
                                 }
-                                href={'#'}
+                                // href={'#'}
                                 target={'_blank'}
                                 className={'message-popup-btn-close'}
+                                onClick={() => watcher.setScriptInjectionPopup(false)}
+                                style={{ cursor: 'pointer' }}
                               >
                                 <img
                                   width={'16'}
