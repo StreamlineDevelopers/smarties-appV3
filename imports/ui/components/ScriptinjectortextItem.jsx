@@ -8,9 +8,8 @@ const ScriptinjectortextItem = ({ }) => {
       const preferences = analyzePreferences(userHistory);  <br />
       <br />
       // Filter catalog based on preferences  <br />
-      return catalog.filter(product   <br />
+      <br />
       matchesPreferences(product, preferences)  <br />
-      ).slice(0, 5); // Return top 5 matches
       <br />
     </div>
   );

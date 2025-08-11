@@ -1,10 +1,10 @@
 import React from 'react';
-import DivElementItem94 from './DivElementItem94';
+import DivElementItem_f08dbb1f from './DivElementItem_f08dbb1f';
 
 const ActivityhistorytagItem = ({}) => {
   return (
     <div className={'activityhistory-tag'}>
-      <DivElementItem94 />
+      <DivElementItem_f08dbb1f />
       <div className={'text-35'}>Bot</div>
     </div>
   );

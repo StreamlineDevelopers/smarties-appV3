@@ -1,14 +1,14 @@
 import React from 'react';
-import SidebaracctdetailsrowItem104 from './SidebaracctdetailsrowItem104';
-import SidebaracctdetailsrowItem105 from './SidebaracctdetailsrowItem105';
-import SidebaracctdetailsrowItem106 from './SidebaracctdetailsrowItem106';
+import SidebaracctdetailsrowItem_1a7f0798 from './SidebaracctdetailsrowItem_1a7f0798';
+import SidebaracctdetailsrowItem_657f7944 from './SidebaracctdetailsrowItem_657f7944';
+import SidebaracctdetailsrowItem_f4d18ba5 from './SidebaracctdetailsrowItem_f4d18ba5';
 
 const SidebaracctdetailsbodyItem = ({}) => {
   return (
     <div className={'sidebar-acctdetails-body'}>
-      <SidebaracctdetailsrowItem104 />
-      <SidebaracctdetailsrowItem105 />
-      <SidebaracctdetailsrowItem106 />
+      <SidebaracctdetailsrowItem_1a7f0798 />
+      <SidebaracctdetailsrowItem_657f7944 />
+      <SidebaracctdetailsrowItem_f4d18ba5 />
     </div>
   );
 };

@@ -1,9 +1,12 @@
 import React from 'react';
 
-const ContenticonembedItem = ({}) => {
+const ContenticonembedItem = ({ }) => {
   return (
     <div className={'content-icon-embed w-embed'}>
-      <img src="/svgs/icon-8077b3ad19fb4359a390866171f5c264.svg" alt="icon" />
+      <img
+        src="/public/svgs/icon-8077b3ad19fb4359a390866171f5c264.svg"
+        alt="icon"
+      />
     </div>
   );
 };

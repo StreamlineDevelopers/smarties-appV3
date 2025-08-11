@@ -1,10 +1,10 @@
 import React from 'react';
-import MaincontentLayout413 from '../components/MaincontentLayout413';
+import MaincontentLayout_c74a3781 from '../components/MaincontentLayout_c74a3781';
 import SidebarLayout from '../components/SidebarLayout';
-import TopbarLayout412 from '../components/TopbarLayout412';
-import FormrowItem410 from '../components/FormrowItem410';
-import FormhddivrightItem409 from '../components/FormhddivrightItem409';
-import Noticedivstyle2Item402 from '../components/Noticedivstyle2Item402';
+import TopbarLayout_6c435aa4 from '../components/TopbarLayout_6c435aa4';
+import FormrowItem_ca5d0667 from '../components/FormrowItem_ca5d0667';
+import FormhddivrightItem_9a765689 from '../components/FormhddivrightItem_9a765689';
+import Noticedivstyle2Item_4778ebad from '../components/Noticedivstyle2Item_4778ebad';
 import DomainlistItem from '../components/DomainlistItem';
 import DomaindivItem from '../components/DomaindivItem';
 import WformdoneItem from '../components/WformdoneItem';
@@ -14,9 +14,9 @@ const Widgetconfiguration = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout413 />
+        <MaincontentLayout_c74a3781 />
         <SidebarLayout />
-        <TopbarLayout412 />
+        <TopbarLayout_6c435aa4 />
         <div className={'popup-create-config'}>
           <div className={'popup-card _w-50'}>
             <div className={'card-settings-hd-div'}>
@@ -32,7 +32,7 @@ const Widgetconfiguration = () => {
                 data-wf-element-id={'63a9b66e-78d6-7eee-4643-e54302a9ae49'}
               >
                 <div className={'form-body'}>
-                  <FormrowItem410
+                  <FormrowItem_ca5d0667
                     label={'Configuration Name'}
                     name={'config-name'}
                     dataName={'config name'}
@@ -45,11 +45,11 @@ const Widgetconfiguration = () => {
                         <div className={'form-hd-div-left'}>
                           <div className={'form-label'}>Domain</div>
                         </div>
-                        <FormhddivrightItem409
+                        <FormhddivrightItem_9a765689
                           dataWId={'b4274f11-8c4c-3670-a676-a8a0e61dff7e'}
                         />
                       </div>
-                      <Noticedivstyle2Item402 />
+                      <Noticedivstyle2Item_4778ebad />
                       <DomainlistItem
                         dataWId={'b4274f11-8c4c-3670-a676-a8a0e61dff8d'}
                         dataWId1={'b4274f11-8c4c-3670-a676-a8a0e61dff96'}

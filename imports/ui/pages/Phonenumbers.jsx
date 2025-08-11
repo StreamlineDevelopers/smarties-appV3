@@ -1,8 +1,8 @@
 import React from 'react';
-import MaincontentLayout342 from '../components/MaincontentLayout342';
+import MaincontentLayout_a5296cf6 from '../components/MaincontentLayout_a5296cf6';
 import SidebarLayout from '../components/SidebarLayout';
-import TopbarLayout341 from '../components/TopbarLayout341';
-import Btnstyle1Item334 from '../components/Btnstyle1Item334';
+import TopbarLayout_45767b82 from '../components/TopbarLayout_45767b82';
+import Btnstyle1Item_4107f5be from '../components/Btnstyle1Item_4107f5be';
 import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
 
@@ -10,9 +10,9 @@ const Phonenumbers = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout342 />
+        <MaincontentLayout_a5296cf6 />
         <SidebarLayout />
-        <TopbarLayout341 />
+        <TopbarLayout_45767b82 />
         <div className={'popup-createphonenumber'}>
           <div className={'popup-card _w-50'}>
             <div className={'card-settings-hd-div'}>
@@ -54,7 +54,7 @@ const Phonenumbers = () => {
                     </div>
                   </div>
                   <div className={'form-btn-container mb-20'}>
-                    <Btnstyle1Item334 divText={'Cancel'} />
+                    <Btnstyle1Item_4107f5be divText={'Cancel'} />
                     <a href={'#'} className={'btn-style1'}>
                       <div>Create</div>
                     </a>

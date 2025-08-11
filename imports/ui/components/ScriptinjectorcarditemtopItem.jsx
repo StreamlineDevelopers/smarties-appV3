@@ -2,7 +2,7 @@ import React from 'react';
 import ScriptinjectorcarditemleftItem from './ScriptinjectorcarditemleftItem';
 import ScriptinjectorcarditemrightItem from './ScriptinjectorcarditemrightItem';
 
-const ScriptinjectorcarditemtopItem = ({ dataWId, title, description, selectInjectionScript }) => {
+const ScriptinjectorcarditemtopItem = ({ dataWId, title, description }) => {
   return (
     <div
       data-w-id={dataWId || 'd76ae3fe-514d-db09-b76d-ac292998104d'}
@@ -14,7 +14,7 @@ const ScriptinjectorcarditemtopItem = ({ dataWId, title, description, selectInje
           'Guide the customer through subscription issues and billing problems'
         }
       />
-      <ScriptinjectorcarditemrightItem selectInjectionScript={selectInjectionScript} />
+      <ScriptinjectorcarditemrightItem />
     </div>
   );
 };

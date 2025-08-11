@@ -1,5 +1,5 @@
 import React from 'react';
-import ActivityhistorycardtopItem126 from './ActivityhistorycardtopItem126';
+import ActivityhistorycardtopItem_68f81b4c from './ActivityhistorycardtopItem_68f81b4c';
 
 const DatacollectioncardItem = ({ src, width }) => {
   return (
@@ -7,7 +7,7 @@ const DatacollectioncardItem = ({ src, width }) => {
       <div className={'datacollection-text'}>
         Customer requested a refund for the invoice discrepancy
       </div>
-      <ActivityhistorycardtopItem126
+      <ActivityhistorycardtopItem_68f81b4c
         src={'images/smarties-head.png'}
         width={'Auto'}
       />

@@ -1,11 +1,11 @@
 import React from 'react';
-import CardformrowleftItem238 from './CardformrowleftItem238';
+import CardformrowleftItem_e8b02e61 from './CardformrowleftItem_e8b02e61';
 import SwitchdivItem from './SwitchdivItem';
 
 const DataenrichmentformrowItem = ({ divText }) => {
   return (
     <div className={'dataenrichment-formrow'}>
-      <CardformrowleftItem238 divText={'IP Address'} />
+      <CardformrowleftItem_e8b02e61 divText={'IP Address'} />
       <SwitchdivItem />
     </div>
   );

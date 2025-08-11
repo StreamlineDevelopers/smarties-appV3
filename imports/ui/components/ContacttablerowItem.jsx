@@ -1,23 +1,25 @@
 import React from 'react';
-import ContacttablecelldivItem75 from './ContacttablecelldivItem75';
-import ContacttablecelldivItem70 from './ContacttablecelldivItem70';
-import ContacttablecelldivItem61 from './ContacttablecelldivItem61';
-import ContacttablecelldivItem62 from './ContacttablecelldivItem62';
-import ContacttablecelldivItem63 from './ContacttablecelldivItem63';
-import ContacttablecelldivItem74 from './ContacttablecelldivItem74';
+import ContacttablecelldivItem_00c9231e from './ContacttablecelldivItem_00c9231e';
+import ContacttablecelldivItem_bbde43b8 from './ContacttablecelldivItem_bbde43b8';
+import ContacttablecelldivItem_89bc2880 from './ContacttablecelldivItem_89bc2880';
+import ContacttablecelldivItem_5dc40295 from './ContacttablecelldivItem_5dc40295';
+import ContacttablecelldivItem_9aa00f4d from './ContacttablecelldivItem_9aa00f4d';
+import ContacttablecelldivItem_06b1398f from './ContacttablecelldivItem_06b1398f';
 
 const ContacttablerowItem = ({ src, divText, label, label1 }) => {
   return (
     <div className={'contact--table-row'}>
-      <ContacttablecelldivItem75
+      <ContacttablecelldivItem_00c9231e
         src={'../images/smarties-avatar-02_1smarties-avatar-02.png'}
         divText={'Sarah Johnson'}
       />
-      <ContacttablecelldivItem70 />
-      <ContacttablecelldivItem61 label={'1,245'} />
-      <ContacttablecelldivItem62 label={'12'} />
-      <ContacttablecelldivItem63 label={'VIP Event Invitation (2 days)'} />
-      <ContacttablecelldivItem74 />
+      <ContacttablecelldivItem_bbde43b8 />
+      <ContacttablecelldivItem_89bc2880 label={'1,245'} />
+      <ContacttablecelldivItem_5dc40295 label={'12'} />
+      <ContacttablecelldivItem_9aa00f4d
+        label={'VIP Event Invitation (2 days)'}
+      />
+      <ContacttablecelldivItem_06b1398f />
     </div>
   );
 };

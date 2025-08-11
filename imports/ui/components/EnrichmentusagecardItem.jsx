@@ -1,7 +1,7 @@
 import React from 'react';
 import PlanusagedivtextcontentItem from './PlanusagedivtextcontentItem';
 import PlanusageprogressrowItem from './PlanusageprogressrowItem';
-import PlanusagedivtextcontentItem45 from './PlanusagedivtextcontentItem45';
+import PlanusagedivtextcontentItem_a55a9ba3 from './PlanusagedivtextcontentItem_a55a9ba3';
 
 const EnrichmentusagecardItem = ({ label, divText, label1, divText1 }) => {
   return (
@@ -11,7 +11,7 @@ const EnrichmentusagecardItem = ({ label, divText, label1, divText1 }) => {
         divText={'38-52%'}
       />
       <PlanusageprogressrowItem />
-      <PlanusagedivtextcontentItem45
+      <PlanusagedivtextcontentItem_a55a9ba3
         label={'Industry avg: 22%'}
         divText={'Your best: 58%'}
       />

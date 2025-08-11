@@ -1,12 +1,12 @@
 import React from 'react';
-import WcheckboxItem283 from './WcheckboxItem283';
-import WcheckboxItem290 from './WcheckboxItem290';
+import WcheckboxItem_36de37cd from './WcheckboxItem_36de37cd';
+import WcheckboxItem_ce038a3c from './WcheckboxItem_ce038a3c';
 
 const ChannelsubItem = ({}) => {
   return (
     <div className={'channel-sub'}>
       <div className={'filter-group_row'}>
-        <WcheckboxItem283
+        <WcheckboxItem_36de37cd
           name={'checkbox-8'}
           id={'checkbox-8'}
           dataName={'Checkbox 8'}
@@ -15,7 +15,7 @@ const ChannelsubItem = ({}) => {
         />
       </div>
       <div className={'filter-group_row'}>
-        <WcheckboxItem283
+        <WcheckboxItem_36de37cd
           name={'checkbox-9'}
           id={'checkbox-9'}
           dataName={'Checkbox 9'}
@@ -24,7 +24,7 @@ const ChannelsubItem = ({}) => {
         />
       </div>
       <div className={'filter-group_row'}>
-        <WcheckboxItem290 />
+        <WcheckboxItem_ce038a3c />
       </div>
     </div>
   );

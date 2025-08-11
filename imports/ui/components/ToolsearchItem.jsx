@@ -1,6 +1,6 @@
 import React from 'react';
 import Divblock9Item from './Divblock9Item';
-import ReusableItem7 from './ReusableItem7';
+import ReusableItem_90d5a5b5 from './ReusableItem_90d5a5b5';
 
 const ToolsearchItem = ({}) => {
   return (
@@ -18,7 +18,7 @@ const ToolsearchItem = ({}) => {
         />
       </div>
       <Divblock9Item />
-      <ReusableItem7 />
+      <ReusableItem_90d5a5b5 />
     </div>
   );
 };

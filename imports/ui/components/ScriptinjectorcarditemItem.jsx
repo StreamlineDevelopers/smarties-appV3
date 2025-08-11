@@ -2,7 +2,7 @@ import React from 'react';
 import ScriptinjectorcarditemtopItem from './ScriptinjectorcarditemtopItem';
 import ScriptinjectorcarditembotItem from './ScriptinjectorcarditembotItem';
 
-const ScriptinjectorcarditemItem = ({ dataWId, title, description, selectInjectionScript = () => { } }) => {
+const ScriptinjectorcarditemItem = ({ dataWId, title, description }) => {
   return (
     <div className={'scriptinjector-card-item'}>
       <ScriptinjectorcarditemtopItem
@@ -11,7 +11,6 @@ const ScriptinjectorcarditemItem = ({ dataWId, title, description, selectInjecti
         description={
           'Guide the customer through subscription issues and billing problems'
         }
-        selectInjectionScript={selectInjectionScript}
       />
       <ScriptinjectorcarditembotItem />
     </div>

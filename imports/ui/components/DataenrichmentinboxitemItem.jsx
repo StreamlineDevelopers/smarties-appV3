@@ -1,11 +1,11 @@
 import React from 'react';
-import MessaginginboxavatarcolItem233 from './MessaginginboxavatarcolItem233';
+import MessaginginboxavatarcolItem_b1a26143 from './MessaginginboxavatarcolItem_b1a26143';
 import DataenrichmentinboxtextcontentItem from './DataenrichmentinboxtextcontentItem';
 
 const DataenrichmentinboxitemItem = ({ src, divText }) => {
   return (
     <a href={'#'} className={'dataenrichment-inbox-item w-inline-block'}>
-      <MessaginginboxavatarcolItem233
+      <MessaginginboxavatarcolItem_b1a26143
         src={'../images/smarties-avatar-02_1smarties-avatar-02.png'}
       />
       <DataenrichmentinboxtextcontentItem

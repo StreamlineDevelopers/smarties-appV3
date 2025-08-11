@@ -1,5 +1,5 @@
 import React from 'react';
-import FormrowItem371 from '../components/FormrowItem371';
+import FormrowItem_6b8c0b8b from '../components/FormrowItem_6b8c0b8b';
 
 const Resetpassword = () => {
   return (
@@ -23,13 +23,13 @@ const Resetpassword = () => {
                   data-wf-page-id={'688b61ee631f6165f14725b9'}
                   data-wf-element-id={'139ff807-3ea3-2584-93b9-1c985bf00930'}
                 >
-                  <FormrowItem371
+                  <FormrowItem_6b8c0b8b
                     label={'New Password'}
                     name={'new-password'}
                     dataName={'new password'}
                     id={'new-password'}
                   />
-                  <FormrowItem371
+                  <FormrowItem_6b8c0b8b
                     label={'Confirm New Password'}
                     name={'confirm-new-password'}
                     dataName={'confirm new password'}

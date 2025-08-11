@@ -1,5 +1,5 @@
 import React from 'react';
-import FormrowItem282 from '../components/FormrowItem282';
+import FormrowItem_e8606e74 from '../components/FormrowItem_e8606e74';
 
 const Login = () => {
   return (
@@ -30,7 +30,7 @@ const Login = () => {
                 data-wf-page-id={'688b61ee631f6165f14725b6'}
                 data-wf-element-id={'86a1b823-6722-4912-718e-32f306ade401'}
               >
-                <FormrowItem282
+                <FormrowItem_e8606e74
                   label={'Email'}
                   name={'email'}
                   dataName={'email'}
@@ -38,7 +38,7 @@ const Login = () => {
                   type={'email'}
                   id={'email'}
                 />
-                <FormrowItem282
+                <FormrowItem_e8606e74
                   label={'Password'}
                   name={'password'}
                   dataName={'password'}

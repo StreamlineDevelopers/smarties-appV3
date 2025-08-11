@@ -1,5 +1,5 @@
 import React from 'react';
-import DbquickactiontextcontentItem204 from './DbquickactiontextcontentItem204';
+import DbquickactiontextcontentItem_d0e2d9ee from './DbquickactiontextcontentItem_d0e2d9ee';
 
 const RelationshipcardItem = ({ src, title, divText }) => {
   return (
@@ -14,7 +14,7 @@ const RelationshipcardItem = ({ src, title, divText }) => {
           className={'card-icon-image'}
         />
       </div>
-      <DbquickactiontextcontentItem204
+      <DbquickactiontextcontentItem_d0e2d9ee
         title={'Anniversary Coming Up'}
         divText={
           "Customer's 2-year anniversary with your service is in 15 days."

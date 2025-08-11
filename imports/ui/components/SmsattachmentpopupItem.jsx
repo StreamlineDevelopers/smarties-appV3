@@ -1,12 +1,12 @@
 import React from 'react';
 import SmsattachmentpopupheaderItem from './SmsattachmentpopupheaderItem';
-import ReusableItem306 from './ReusableItem306';
+import ReusableItem_c73a7407 from './ReusableItem_c73a7407';
 
 const SmsattachmentpopupItem = ({ header }) => {
   return (
     <div className={'sms-attachment-popup'}>
       <SmsattachmentpopupheaderItem header={'SampleFilename.jpg'} />
-      <ReusableItem306 />
+      <ReusableItem_c73a7407 />
     </div>
   );
 };

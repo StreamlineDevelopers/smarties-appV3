@@ -1,23 +1,23 @@
 import React from 'react';
-import MaincontentLayout319 from '../components/MaincontentLayout319';
+import MaincontentLayout_9944083a from '../components/MaincontentLayout_9944083a';
 import SidebarLayout from '../components/SidebarLayout';
-import TopbarLayout314 from '../components/TopbarLayout314';
+import TopbarLayout_bfbd8ad8 from '../components/TopbarLayout_bfbd8ad8';
 import TablecelldivItem from '../components/TablecelldivItem';
-import TablecelldivItem40 from '../components/TablecelldivItem40';
-import TablecelldivItem41 from '../components/TablecelldivItem41';
-import TablecelldivItem42 from '../components/TablecelldivItem42';
-import TablecelldivItem43 from '../components/TablecelldivItem43';
-import TablecelldivItem296 from '../components/TablecelldivItem296';
-import TablecelldivItem46 from '../components/TablecelldivItem46';
-import TablecelldivItem48 from '../components/TablecelldivItem48';
+import TablecelldivItem_1074fda0 from '../components/TablecelldivItem_1074fda0';
+import TablecelldivItem_e2b278af from '../components/TablecelldivItem_e2b278af';
+import TablecelldivItem_5adc2253 from '../components/TablecelldivItem_5adc2253';
+import TablecelldivItem_32fbc566 from '../components/TablecelldivItem_32fbc566';
+import TablecelldivItem_131c18fd from '../components/TablecelldivItem_131c18fd';
+import TablecelldivItem_36735cb6 from '../components/TablecelldivItem_36735cb6';
+import TablecelldivItem_5d77e023 from '../components/TablecelldivItem_5d77e023';
 
 const Messaging = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout319 />
+        <MaincontentLayout_9944083a />
         <SidebarLayout />
-        <TopbarLayout314 />
+        <TopbarLayout_bfbd8ad8 />
         <div className={'popup-dataenrichment'}>
           <div className={'popup-card _w-70'}>
             <div className={'card-settings-hd-div'}>
@@ -58,18 +58,18 @@ const Messaging = () => {
                     <div className={'table-cell-div stretch'}>
                       <div className={'table-date-text'}>Value Found</div>
                     </div>
-                    <TablecelldivItem40 divText={'Source'} />
+                    <TablecelldivItem_1074fda0 divText={'Source'} />
                     <TablecelldivItem divText={'Confidence'} />
-                    <TablecelldivItem40 divText={'Status'} />
-                    <TablecelldivItem40 divText={'Action'} />
+                    <TablecelldivItem_1074fda0 divText={'Status'} />
+                    <TablecelldivItem_1074fda0 divText={'Action'} />
                   </div>
                   <div className={'table-content'}>
                     <div className={'dataenrichment---table-row'}>
-                      <TablecelldivItem41 divText={'LinkedIn'} />
-                      <TablecelldivItem42
+                      <TablecelldivItem_e2b278af divText={'LinkedIn'} />
+                      <TablecelldivItem_5adc2253
                         label={'linkedin.com/in/sarahjohnson'}
                       />
-                      <TablecelldivItem43 label={'Linkedin'} />
+                      <TablecelldivItem_32fbc566 label={'Linkedin'} />
                       <div className={'table-cell-div'}>
                         <div className={'confidence-row'}>
                           <div className={'confidence-percentage'}>
@@ -78,16 +78,18 @@ const Messaging = () => {
                           <div className={'confidence-percent-text'}>96%</div>
                         </div>
                       </div>
-                      <TablecelldivItem296
+                      <TablecelldivItem_131c18fd
                         src={'images/smarties-contact-icon-lock.svg'}
                         divText={'Locked'}
                       />
-                      <TablecelldivItem46 />
+                      <TablecelldivItem_36735cb6 />
                     </div>
                     <div className={'dataenrichment---table-row'}>
-                      <TablecelldivItem41 divText={'Job Title'} />
-                      <TablecelldivItem42 label={'Director of Operations'} />
-                      <TablecelldivItem43 label={'Company'} />
+                      <TablecelldivItem_e2b278af divText={'Job Title'} />
+                      <TablecelldivItem_5adc2253
+                        label={'Director of Operations'}
+                      />
+                      <TablecelldivItem_32fbc566 label={'Company'} />
                       <div className={'table-cell-div'}>
                         <div className={'confidence-row'}>
                           <div className={'confidence-percentage'}>
@@ -96,7 +98,7 @@ const Messaging = () => {
                           <div className={'confidence-percent-text'}>88%</div>
                         </div>
                       </div>
-                      <TablecelldivItem296
+                      <TablecelldivItem_131c18fd
                         src={'images/smarties-icon-check-green.svg'}
                         divText={'Enriched'}
                       />
@@ -112,10 +114,10 @@ const Messaging = () => {
                       </div>
                     </div>
                     <div className={'dataenrichment---table-row'}>
-                      <TablecelldivItem41 divText={'Region'} />
-                      <TablecelldivItem42 label={'North America'} />
-                      <TablecelldivItem43 label={'CRM Sync'} />
-                      <TablecelldivItem48 />
+                      <TablecelldivItem_e2b278af divText={'Region'} />
+                      <TablecelldivItem_5adc2253 label={'North America'} />
+                      <TablecelldivItem_32fbc566 label={'CRM Sync'} />
+                      <TablecelldivItem_5d77e023 />
                       <div className={'table-cell-div _w-10'}>
                         <div className={'dataenrichmentstatus'}>
                           <div className={'file-info-data'}>Free</div>
@@ -133,9 +135,9 @@ const Messaging = () => {
                       </div>
                     </div>
                     <div className={'dataenrichment---table-row'}>
-                      <TablecelldivItem41 divText={'Company Size'} />
-                      <TablecelldivItem42 label={'50-100 employees'} />
-                      <TablecelldivItem43 label={'LinkedIn'} />
+                      <TablecelldivItem_e2b278af divText={'Company Size'} />
+                      <TablecelldivItem_5adc2253 label={'50-100 employees'} />
+                      <TablecelldivItem_32fbc566 label={'LinkedIn'} />
                       <div className={'table-cell-div'}>
                         <div className={'confidence-row'}>
                           <div className={'confidence-percentage'}>
@@ -144,22 +146,22 @@ const Messaging = () => {
                           <div className={'confidence-percent-text'}>82%</div>
                         </div>
                       </div>
-                      <TablecelldivItem296
+                      <TablecelldivItem_131c18fd
                         src={'images/smarties-contact-icon-lock.svg'}
                         divText={'Locked'}
                       />
-                      <TablecelldivItem46 />
+                      <TablecelldivItem_36735cb6 />
                     </div>
                     <div className={'dataenrichment---table-row'}>
-                      <TablecelldivItem41 divText={'Region'} />
-                      <TablecelldivItem42 label={'North America'} />
-                      <TablecelldivItem43 label={'CRM Sync'} />
-                      <TablecelldivItem48 />
-                      <TablecelldivItem296
+                      <TablecelldivItem_e2b278af divText={'Region'} />
+                      <TablecelldivItem_5adc2253 label={'North America'} />
+                      <TablecelldivItem_32fbc566 label={'CRM Sync'} />
+                      <TablecelldivItem_5d77e023 />
+                      <TablecelldivItem_131c18fd
                         src={'images/smarties-contact-icon-lock.svg'}
                         divText={'Locked'}
                       />
-                      <TablecelldivItem46 />
+                      <TablecelldivItem_36735cb6 />
                     </div>
                   </div>
                 </div>

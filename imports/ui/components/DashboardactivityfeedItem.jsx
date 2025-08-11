@@ -1,5 +1,5 @@
 import React from 'react';
-import ActivityfeedtextcontentItem80 from './ActivityfeedtextcontentItem80';
+import ActivityfeedtextcontentItem_e0b95ab0 from './ActivityfeedtextcontentItem_e0b95ab0';
 
 const DashboardactivityfeedItem = ({}) => {
   return (
@@ -14,7 +14,7 @@ const DashboardactivityfeedItem = ({}) => {
           className={'card-icon-image'}
         />
       </div>
-      <ActivityfeedtextcontentItem80 />
+      <ActivityfeedtextcontentItem_e0b95ab0 />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import SocialcontentradiocardtopItem from './SocialcontentradiocardtopItem';
-import SocialcontentradiocardbottomItem361 from './SocialcontentradiocardbottomItem361';
+import SocialcontentradiocardbottomItem_ea75eecd from './SocialcontentradiocardbottomItem_ea75eecd';
 
 const SocialcontentradiocardItem = ({
   divText,
@@ -17,7 +17,7 @@ const SocialcontentradiocardItem = ({
         divText1={'#DigitalMarketing'}
         divText2={'#WorkSmarter'}
       />
-      <SocialcontentradiocardbottomItem361 />
+      <SocialcontentradiocardbottomItem_ea75eecd />
       <div className={'social-content-tag'}>{divText3 || 'Professional'}</div>
     </div>
   );

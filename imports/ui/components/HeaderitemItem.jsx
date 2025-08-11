@@ -1,16 +1,16 @@
 import React from 'react';
-import FormcolItem377 from './FormcolItem377';
+import FormcolItem_f952aba4 from './FormcolItem_f952aba4';
 
 const HeaderitemItem = ({ name, dataName, id, name1, dataName1, id1 }) => {
   return (
     <div className={'header-item'}>
-      <FormcolItem377
+      <FormcolItem_f952aba4
         name={'header-name-2'}
         dataName={'Header Name 2'}
         placeholder={'Header Name'}
         id={'header-name-2'}
       />
-      <FormcolItem377
+      <FormcolItem_f952aba4
         name={'header-value-2'}
         dataName={'Header Value 2'}
         placeholder={'Value'}

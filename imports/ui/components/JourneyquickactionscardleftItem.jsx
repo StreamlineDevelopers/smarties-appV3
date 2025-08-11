@@ -1,5 +1,5 @@
 import React from 'react';
-import ActivityfeedtextcontentItem157 from './ActivityfeedtextcontentItem157';
+import ActivityfeedtextcontentItem_4f231b66 from './ActivityfeedtextcontentItem_4f231b66';
 
 const JourneyquickactionscardleftItem = ({ title, itemText }) => {
   return (
@@ -14,7 +14,7 @@ const JourneyquickactionscardleftItem = ({ title, itemText }) => {
           className={'icon-style1'}
         />
       </div>
-      <ActivityfeedtextcontentItem157
+      <ActivityfeedtextcontentItem_4f231b66
         title={'Repurpose as Tweet Thread'}
         itemText={
           'Break down key points into a 6-part tweet thread to drive traffic.'

@@ -1,12 +1,12 @@
 import React from 'react';
-import PropertyitemleftItem403 from './PropertyitemleftItem403';
-import PropertyitemrightItem408 from './PropertyitemrightItem408';
+import PropertyitemleftItem_59ab252f from './PropertyitemleftItem_59ab252f';
+import PropertyitemrightItem_e1c79fd5 from './PropertyitemrightItem_e1c79fd5';
 
 const DomainitemItem = ({ dataWId }) => {
   return (
     <div className={'domain-item'}>
-      <PropertyitemleftItem403 />
-      <PropertyitemrightItem408
+      <PropertyitemleftItem_59ab252f />
+      <PropertyitemrightItem_e1c79fd5
         dataWId={'5cefa7b3-c9ea-0bf4-45d3-c9b1b57787b1'}
       />
     </div>

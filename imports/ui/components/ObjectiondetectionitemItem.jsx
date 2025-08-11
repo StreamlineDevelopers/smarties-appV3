@@ -1,10 +1,10 @@
 import React from 'react';
-import IconembedItem325 from './IconembedItem325';
+import IconembedItem_5b1b2f6b from './IconembedItem_5b1b2f6b';
 
 const ObjectiondetectionitemItem = ({ divText }) => {
   return (
     <div className={'objectiondetection-item'}>
-      <IconembedItem325 />
+      <IconembedItem_5b1b2f6b />
       <div className={'messaging-inbox-duration'}>
         {divText || 'Detected in 12 conversations'}
       </div>

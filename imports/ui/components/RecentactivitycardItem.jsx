@@ -1,5 +1,5 @@
 import React from 'react';
-import ActivityhistorycardtopItem239 from './ActivityhistorycardtopItem239';
+import ActivityhistorycardtopItem_39fd0fb1 from './ActivityhistorycardtopItem_39fd0fb1';
 
 const RecentactivitycardItem = ({ divText }) => {
   return (
@@ -7,7 +7,7 @@ const RecentactivitycardItem = ({ divText }) => {
       <div className={'datacollection-text'}>
         {divText || 'IP Address visibility enabled'}
       </div>
-      <ActivityhistorycardtopItem239 />
+      <ActivityhistorycardtopItem_39fd0fb1 />
     </div>
   );
 };

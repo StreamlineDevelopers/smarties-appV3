@@ -1,14 +1,14 @@
 import React from 'react';
-import SocialcontentbtnItem346 from './SocialcontentbtnItem346';
+import SocialcontentbtnItem_bdddcdb9 from './SocialcontentbtnItem_bdddcdb9';
 
 const SocialcontentactionbtncontainerItem = ({ src, divText }) => {
   return (
     <div className={'socialcontent-action-btn-container'}>
-      <SocialcontentbtnItem346
+      <SocialcontentbtnItem_bdddcdb9
         src={'../images/iconamoonedit-light_1.svg'}
         divText={'Edit'}
       />
-      <SocialcontentbtnItem346
+      <SocialcontentbtnItem_bdddcdb9
         src={'../images/lucidecalendar_1.svg'}
         divText={'Reschedule'}
       />

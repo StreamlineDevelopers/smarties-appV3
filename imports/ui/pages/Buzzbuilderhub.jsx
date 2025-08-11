@@ -1,11 +1,11 @@
 import React from 'react';
-import TopbarLayout84 from '../components/TopbarLayout84';
-import MaincontentLayout86 from '../components/MaincontentLayout86';
+import TopbarLayout_2e71f984 from '../components/TopbarLayout_2e71f984';
+import MaincontentLayout_c0ce3d83 from '../components/MaincontentLayout_c0ce3d83';
 import SidebarLayout from '../components/SidebarLayout';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
-import FormrowItem71 from '../components/FormrowItem71';
-import FormrowItem72 from '../components/FormrowItem72';
-import FormcontrolItem64 from '../components/FormcontrolItem64';
+import FormrowItem_ce4d5db1 from '../components/FormrowItem_ce4d5db1';
+import FormrowItem_55033cc5 from '../components/FormrowItem_55033cc5';
+import FormcontrolItem_a3540037 from '../components/FormcontrolItem_a3540037';
 import FormbtncontainerItem from '../components/FormbtncontainerItem';
 import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
@@ -15,8 +15,8 @@ const Buzzbuilderhub = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <TopbarLayout84 />
-        <MaincontentLayout86 />
+        <TopbarLayout_2e71f984 />
+        <MaincontentLayout_c0ce3d83 />
         <SidebarLayout />
         <div className={'popup-upload-document'}>
           <div className={'popup-card'}>
@@ -31,10 +31,10 @@ const Buzzbuilderhub = () => {
                 data-wf-element-id={'a68109ff-67f4-f404-77cb-19f0c68b40a2'}
               >
                 <div className={'form-body'}>
-                  <FormrowItem71 id={'assistant-name'} />
-                  <FormrowItem72 id={'assistant-description'} />
+                  <FormrowItem_ce4d5db1 id={'assistant-name'} />
+                  <FormrowItem_55033cc5 id={'assistant-description'} />
                   <div className={'form-row'}>
-                    <FormcontrolItem64 label={'Upload Documents'} />
+                    <FormcontrolItem_a3540037 label={'Upload Documents'} />
                     <div className={'file-upload-base'}>
                       <div className={'file-upload-content'}>
                         <div className={'fileupload-icon'}>
@@ -64,7 +64,7 @@ const Buzzbuilderhub = () => {
                     </div>
                   </div>
                   <div className={'form-row'}>
-                    <FormcontrolItem64 label={'Uploaded Files (1)'} />
+                    <FormcontrolItem_a3540037 label={'Uploaded Files (1)'} />
                     <div className={'uploadedfile-item'}>
                       <div className={'uploadeditem-icon'}>
                         <img
@@ -138,8 +138,8 @@ const Buzzbuilderhub = () => {
                 data-wf-element-id={'a68109ff-67f4-f404-77cb-19f0c68b40ec'}
               >
                 <div className={'form-body'}>
-                  <FormrowItem71 id={'assistant-name-2'} />
-                  <FormrowItem72 id={'assistant-description-2'} />
+                  <FormrowItem_ce4d5db1 id={'assistant-name-2'} />
+                  <FormrowItem_55033cc5 id={'assistant-description-2'} />
                   <div className={'form-row'}>
                     <div className={'recordvoice-maindiv'}>
                       <div className={'mic-button'}>
@@ -165,7 +165,7 @@ const Buzzbuilderhub = () => {
                     </div>
                   </div>
                   <div className={'form-row'}>
-                    <FormcontrolItem64 label={'Recording Tips'} />
+                    <FormcontrolItem_a3540037 label={'Recording Tips'} />
                     <ul role={'list'} className={'recordingtip-list'}>
                       <ListitemItem
                         divText={'Speak clearly and at a normal pace'}

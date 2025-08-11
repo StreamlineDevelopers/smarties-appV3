@@ -1,8 +1,8 @@
 import React from 'react';
-import FormrowItem397 from './FormrowItem397';
-import FormrowItem386 from './FormrowItem386';
-import WcheckboxItem382 from './WcheckboxItem382';
-import FormbtncontainerItem387 from './FormbtncontainerItem387';
+import FormrowItem_e438ab9e from './FormrowItem_e438ab9e';
+import FormrowItem_e7b693eb from './FormrowItem_e7b693eb';
+import WcheckboxItem_75945490 from './WcheckboxItem_75945490';
+import FormbtncontainerItem_71346157 from './FormbtncontainerItem_71346157';
 
 const PropertydivItem = ({
   htmlFor,
@@ -25,7 +25,7 @@ const PropertydivItem = ({
 }) => {
   return (
     <div className={'property-div'}>
-      <FormrowItem397
+      <FormrowItem_e438ab9e
         htmlFor={'parameter-name-2'}
         name={'parameter-name-2'}
         dataName={'Parameter Name 2'}
@@ -35,14 +35,14 @@ const PropertydivItem = ({
         name1={'parameter-type-2'}
         dataName1={'Parameter Type 2'}
       />
-      <FormrowItem386
+      <FormrowItem_e7b693eb
         label={'Description'}
         id={'parameter-description-2'}
         name={'parameter-description-2'}
         dataName={'Parameter Description 2'}
       />
       <div className={'form-row horizontal align-left mb-0'}>
-        <WcheckboxItem382
+        <WcheckboxItem_75945490
           name={'check-parameter-required-2'}
           id={'check-parameter-required-2'}
           dataName={'Check Parameter Required 2'}
@@ -50,7 +50,7 @@ const PropertydivItem = ({
           label={'Required'}
         />
       </div>
-      <FormbtncontainerItem387
+      <FormbtncontainerItem_71346157
         dataWId={'1849b75f-9350-98c1-3481-367f0109f9c5'}
         dataWId1={'1849b75f-9350-98c1-3481-367f0109f9c8'}
       />

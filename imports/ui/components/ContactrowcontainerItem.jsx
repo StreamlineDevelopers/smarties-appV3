@@ -1,8 +1,8 @@
 import React from 'react';
 import ContactdetailsrowItem from './ContactdetailsrowItem';
-import ContactdetailsrowItem123 from './ContactdetailsrowItem123';
-import ContactdetailsrowItem130 from './ContactdetailsrowItem130';
-import ContactdetailsrowItem138 from './ContactdetailsrowItem138';
+import ContactdetailsrowItem_1fc6171f from './ContactdetailsrowItem_1fc6171f';
+import ContactdetailsrowItem_68aad6a4 from './ContactdetailsrowItem_68aad6a4';
+import ContactdetailsrowItem_3b1987d9 from './ContactdetailsrowItem_3b1987d9';
 
 const ContactrowcontainerItem = ({
   dataWId,
@@ -18,18 +18,18 @@ const ContactrowcontainerItem = ({
         src={'images/smarties-contact-icon-email.svg'}
         divText={'alex.morgan@orbital.com'}
       />
-      <ContactdetailsrowItem123
+      <ContactdetailsrowItem_1fc6171f
         dataWId={'170a6bed-e932-1987-cb24-7f7bc570b370'}
         src={'images/smarties-contact-icon-phone.svg'}
       />
-      <ContactdetailsrowItem123
+      <ContactdetailsrowItem_1fc6171f
         dataWId={'170a6bed-e932-1987-cb24-7f7bc570b37a'}
         src={'images/smarties-contact-icon-company.svg'}
       />
-      <ContactdetailsrowItem130
+      <ContactdetailsrowItem_68aad6a4
         dataWId={'170a6bed-e932-1987-cb24-7f7bc570b384'}
       />
-      <ContactdetailsrowItem138
+      <ContactdetailsrowItem_3b1987d9
         dataWId={'170a6bed-e932-1987-cb24-7f7bc570b390'}
       />
     </div>

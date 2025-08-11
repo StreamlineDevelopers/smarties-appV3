@@ -1,7 +1,7 @@
 import React from 'react';
 import FormhddivItem from './FormhddivItem';
 import FormrowItem from './FormrowItem';
-import Formcol2Item0 from './Formcol2Item0';
+import Formcol2Item_5ad64f1c from './Formcol2Item_5ad64f1c';
 import WformdoneItem from './WformdoneItem';
 import WformfailItem from './WformfailItem';
 
@@ -101,11 +101,11 @@ const MaincontentLayout = ({}) => {
                   <div className={'account_row noborder'}>
                     <FormhddivItem divText={'Account Information'} />
                     <div className={'form-row horizontal'}>
-                      <Formcol2Item0
+                      <Formcol2Item_5ad64f1c
                         label={'Member Since'}
                         divText={'March 2023'}
                       />
-                      <Formcol2Item0
+                      <Formcol2Item_5ad64f1c
                         label={'Account Type'}
                         divText={'Premium'}
                       />

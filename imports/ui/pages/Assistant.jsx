@@ -1,7 +1,7 @@
 import React from 'react';
-import MaincontentLayout39 from '../components/MaincontentLayout39';
+import MaincontentLayout_8acf32ed from '../components/MaincontentLayout_8acf32ed';
 import SidebarLayout from '../components/SidebarLayout';
-import TopbarLayout31 from '../components/TopbarLayout31';
+import TopbarLayout_f63a6461 from '../components/TopbarLayout_f63a6461';
 import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
 
@@ -9,9 +9,9 @@ const Assistant = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout39 />
+        <MaincontentLayout_8acf32ed />
         <SidebarLayout />
-        <TopbarLayout31 />
+        <TopbarLayout_f63a6461 />
         <div className={'popup-createphonenumber'}>
           <div className={'popup-card _w-50'}>
             <div className={'card-settings-hd-div'}>

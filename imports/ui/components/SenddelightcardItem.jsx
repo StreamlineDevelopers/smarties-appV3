@@ -1,5 +1,5 @@
 import React from 'react';
-import ActivityfeedtextcontentItem202 from './ActivityfeedtextcontentItem202';
+import ActivityfeedtextcontentItem_b8a265e5 from './ActivityfeedtextcontentItem_b8a265e5';
 
 const SenddelightcardItem = ({ title, itemText }) => {
   return (
@@ -14,7 +14,7 @@ const SenddelightcardItem = ({ title, itemText }) => {
           className={'icon-style1'}
         />
       </div>
-      <ActivityfeedtextcontentItem202
+      <ActivityfeedtextcontentItem_b8a265e5
         title={'Gift Free Dessert'}
         itemText={'Send dessert voucher for next visit'}
       />

@@ -1,14 +1,14 @@
 import React from 'react';
-import TopbarLayout368 from '../components/TopbarLayout368';
-import MaincontentLayout369 from '../components/MaincontentLayout369';
+import TopbarLayout_e0000c3c from '../components/TopbarLayout_e0000c3c';
+import MaincontentLayout_f630638e from '../components/MaincontentLayout_f630638e';
 import SidebarLayout from '../components/SidebarLayout';
 
 const Posttosocial = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <TopbarLayout368 />
-        <MaincontentLayout369 />
+        <TopbarLayout_e0000c3c />
+        <MaincontentLayout_f630638e />
         <SidebarLayout />
       </div>
     </>

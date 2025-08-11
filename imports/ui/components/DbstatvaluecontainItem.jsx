@@ -1,11 +1,11 @@
 import React from 'react';
-import DbstattagItem217 from './DbstattagItem217';
+import DbstattagItem_11f5a4b8 from './DbstattagItem_11f5a4b8';
 
 const DbstatvaluecontainItem = ({ divText, src, divText1 }) => {
   return (
     <div className={'db-stat-value-contain'}>
       <div className={'stat-value'}>{divText || '38.2%'}</div>
-      <DbstattagItem217
+      <DbstattagItem_11f5a4b8
         src={
           'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccf5ef19e13e52bd7f0_db-stat-arrow.svg'
         }

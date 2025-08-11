@@ -1,11 +1,11 @@
 import React from 'react';
-import WcheckboxItem284 from './WcheckboxItem284';
+import WcheckboxItem_795e2775 from './WcheckboxItem_795e2775';
 
 const RowenrichmentItem = ({ divText }) => {
   return (
     <div className={'row-enrichment'}>
       <div>{divText || 'Job Title'}</div>
-      <WcheckboxItem284 />
+      <WcheckboxItem_795e2775 />
     </div>
   );
 };

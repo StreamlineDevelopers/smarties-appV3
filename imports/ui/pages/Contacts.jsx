@@ -1,34 +1,37 @@
 import React, { useRef } from 'react';
-import MaincontentLayout146 from '../components/MaincontentLayout146';
+import MaincontentLayout_053c4465 from '../components/MaincontentLayout_053c4465';
 import SidebarLayout from '../components/SidebarLayout';
-import TopbarLayout140 from '../components/TopbarLayout140';
+import TopbarLayout_c643a255 from '../components/TopbarLayout_c643a255';
 import MessagingsidebarhddivItem from '../components/MessagingsidebarhddivItem';
-import Btnstyle1Item97 from '../components/Btnstyle1Item97';
-import MenuitemItem107 from '../components/MenuitemItem107';
+import Btnstyle1Item_f9f58207 from '../components/Btnstyle1Item_f9f58207';
+import MenuitemItem_c64440ab from '../components/MenuitemItem_c64440ab';
 import DatanerichmentdivItem from '../components/DatanerichmentdivItem';
-import MessagingsidebarcardsItem142 from '../components/MessagingsidebarcardsItem142';
+import MessagingsidebarcardsItem_bc6eb4f7 from '../components/MessagingsidebarcardsItem_bc6eb4f7';
 import MessagingsidebarcardsItem from '../components/MessagingsidebarcardsItem';
-import MessagingsidebarcardsItem139 from '../components/MessagingsidebarcardsItem139';
+import MessagingsidebarcardsItem_61a76bb7 from '../components/MessagingsidebarcardsItem_61a76bb7';
 import ContactdetailstablinkcountItem from '../components/ContactdetailstablinkcountItem';
-import ContactdetailstablinkItem95 from '../components/ContactdetailstablinkItem95';
+import ContactdetailstablinkItem_8f6eaf6f from '../components/ContactdetailstablinkItem_8f6eaf6f';
 import ContactdetailsitemItem from '../components/ContactdetailsitemItem';
-import ContactWatcher, { POPUP } from '../../api/client/watchers/ContactWatcher';
+import ContactWatcher, { POPUP, TAB } from '../../api/client/watchers/ContactWatcher';
 import { useWatcher } from '../../api/client/Watcher2';
 
 const Contacts = () => {
   const watcher = useRef(ContactWatcher).current;
   useWatcher(watcher);
 
+  const isContactDetailsPopupOpen = watcher.getValue(POPUP.CONTACT_DETAILS);
+  const activeContactDetailsTab = watcher.getValue(TAB.CONTACT_DETAILS);
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout146 />
+        <MaincontentLayout_053c4465 />
         <SidebarLayout />
-        <TopbarLayout140 />
-        <div className={'popup-contactdetails'} style={{}}>
+        <TopbarLayout_c643a255 />
+        <div className={'popup-contactdetails'} style={{ display: isContactDetailsPopupOpen ? 'flex' : 'none' }}>
           <MessagingsidebarhddivItem
             divText={'Contact Details'}
             dataWId={'51139ba3-92d1-d655-61bf-e694c0ce8aeb'}
+            onClick={() => watcher.toggleContactDetailsPopup()}
           />
           <div className={'contact-details-top'}>
             <div className={'contact-details-topleft'}>
@@ -43,7 +46,7 @@ const Contacts = () => {
               </div>
             </div>
             <div className={'contact-details-topright'}>
-              <Btnstyle1Item97
+              <Btnstyle1Item_f9f58207
                 src={'images/smarties-inbox-icon-send.svg'}
                 divText={'Send Message'}
               />
@@ -64,19 +67,19 @@ const Contacts = () => {
                   />
                 </div>
                 <div className={'menu-dropdown'}>
-                  <MenuitemItem107
+                  <MenuitemItem_c64440ab
                     src={'images/smarties-icon-version.svg'}
                     divText={'Version History'}
                   />
-                  <MenuitemItem107
+                  <MenuitemItem_c64440ab
                     src={'images/smarties-icon-document.svg'}
                     divText={'Call Logs'}
                   />
-                  <MenuitemItem107
+                  <MenuitemItem_c64440ab
                     src={'images/smarties-icon-duplicate.svg'}
                     divText={'Duplicate'}
                   />
-                  <MenuitemItem107
+                  <MenuitemItem_c64440ab
                     src={'images/smarties-icon-delete_outline.svg'}
                     divText={'Delete'}
                   />
@@ -89,7 +92,7 @@ const Contacts = () => {
               <DatanerichmentdivItem
                 dataWId={'793bb4d5-773e-085c-ab14-3a78a2ba1983'}
               />
-              <MessagingsidebarcardsItem142
+              <MessagingsidebarcardsItem_bc6eb4f7
                 dataWId={'793bb4d5-773e-085c-ab14-3a78a2ba1996'}
                 dataWId1={'793bb4d5-773e-085c-ab14-3a78a2ba19a0'}
                 dataWId2={'793bb4d5-773e-085c-ab14-3a78a2ba19aa'}
@@ -97,7 +100,7 @@ const Contacts = () => {
                 dataWId4={'793bb4d5-773e-085c-ab14-3a78a2ba19c0'}
               />
               <MessagingsidebarcardsItem />
-              <MessagingsidebarcardsItem139 />
+              <MessagingsidebarcardsItem_61a76bb7 />
             </div>
             <div
               data-current={'Tab 1'}
@@ -110,26 +113,31 @@ const Contacts = () => {
                 <a
                   data-w-tab={'Tab 1'}
                   className={
-                    'contactdetails-tablink w-inline-block w-tab-link w--current'
+                    `contactdetails-tablink w-inline-block w-tab-link ${activeContactDetailsTab == 'conversations' && 'w--current'} `
                   }
+                  onClick={() => watcher.contactDetailsTabChange('conversations')}
                 >
                   <div>Conversations</div>
                   <ContactdetailstablinkcountItem />
                 </a>
-                <ContactdetailstablinkItem95
+                <ContactdetailstablinkItem_8f6eaf6f
                   dataWTab={'Tab 5'}
                   divText={'Sentiment'}
+                  isActive={activeContactDetailsTab == 'sentiment'}
+                  onClick={() => watcher.contactDetailsTabChange('sentiment')}
                 />
                 <a
                   data-w-tab={'Tab 2'}
-                  className={'contactdetails-tablink w-inline-block w-tab-link'}
+                  className={`contactdetails-tablink w-inline-block w-tab-link' ${activeContactDetailsTab == 'conversations' && 'w--current'}`}
                 >
                   <div>Notes</div>
                   <ContactdetailstablinkcountItem />
                 </a>
-                <ContactdetailstablinkItem95
+                <ContactdetailstablinkItem_8f6eaf6f
                   dataWTab={'Tab 3'}
                   divText={'Activity'}
+                  isActive={activeContactDetailsTab == 'activity'}
+                  onClick={() => watcher.contactDetailsTabChange('activity')}
                 />
               </div>
               <div className={'contactdetails-tabscontent w-tab-content'}>

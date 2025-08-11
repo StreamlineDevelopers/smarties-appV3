@@ -1,15 +1,15 @@
 import React from 'react';
-import MaincontentLayout57 from '../components/MaincontentLayout57';
+import MaincontentLayout_29d0d65b from '../components/MaincontentLayout_29d0d65b';
 import SidebarLayout from '../components/SidebarLayout';
-import TopbarLayout56 from '../components/TopbarLayout56';
+import TopbarLayout_2b52f9af from '../components/TopbarLayout_2b52f9af';
 
 const Billing = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout57 />
+        <MaincontentLayout_29d0d65b />
         <SidebarLayout />
-        <TopbarLayout56 />
+        <TopbarLayout_2b52f9af />
       </div>
     </>
   );

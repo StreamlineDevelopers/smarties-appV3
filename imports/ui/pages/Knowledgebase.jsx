@@ -1,11 +1,11 @@
 import React from 'react';
-import MaincontentLayout279 from '../components/MaincontentLayout279';
+import MaincontentLayout_6dce4f2a from '../components/MaincontentLayout_6dce4f2a';
 import SidebarLayout from '../components/SidebarLayout';
-import TopbarLayout278 from '../components/TopbarLayout278';
-import SearchformblockItem275 from '../components/SearchformblockItem275';
+import TopbarLayout_b45b1468 from '../components/TopbarLayout_b45b1468';
+import SearchformblockItem_a5d80477 from '../components/SearchformblockItem_a5d80477';
 import TableheaderItem from '../components/TableheaderItem';
-import TablerowItem277 from '../components/TablerowItem277';
-import FormbtncontainerItem274 from '../components/FormbtncontainerItem274';
+import TablerowItem_1df8defc from '../components/TablerowItem_1df8defc';
+import FormbtncontainerItem_4eee0c8f from '../components/FormbtncontainerItem_4eee0c8f';
 import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
 
@@ -13,14 +13,14 @@ const Knowledgebase = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout279 />
+        <MaincontentLayout_6dce4f2a />
         <SidebarLayout />
-        <TopbarLayout278 />
+        <TopbarLayout_b45b1468 />
         <div className={'popup-addfile'}>
           <div className={'popup-card _w-50'}>
             <div className={'card-settings-hd-div'}>
               <div className={'card-settings-hd'}>Add File</div>
-              <SearchformblockItem275 />
+              <SearchformblockItem_a5d80477 />
             </div>
             <div className={'w-form'}>
               <form
@@ -35,25 +35,25 @@ const Knowledgebase = () => {
                   <div className={'table-main mb-20'}>
                     <TableheaderItem divText={'Size'} divText1={'Modified'} />
                     <div className={'table-content'}>
-                      <TablerowItem277
+                      <TablerowItem_1df8defc
                         name={'check-add-file'}
                         id={'check-add-file'}
                         dataName={'check add file'}
                         htmlFor={'check-add-file'}
                       />
-                      <TablerowItem277
+                      <TablerowItem_1df8defc
                         name={'check-add-file-2'}
                         id={'check-add-file-2'}
                         dataName={'Check Add File 2'}
                         htmlFor={'check-add-file-2'}
                       />
-                      <TablerowItem277
+                      <TablerowItem_1df8defc
                         name={'check-add-file-2'}
                         id={'check-add-file-2'}
                         dataName={'Check Add File 2'}
                         htmlFor={'check-add-file-2'}
                       />
-                      <TablerowItem277
+                      <TablerowItem_1df8defc
                         name={'check-add-file-2'}
                         id={'check-add-file-2'}
                         dataName={'Check Add File 2'}
@@ -74,7 +74,7 @@ const Knowledgebase = () => {
                       the files you want to assign.
                     </div>
                   </div>
-                  <FormbtncontainerItem274 divText={'Add'} />
+                  <FormbtncontainerItem_4eee0c8f divText={'Add'} />
                 </div>
               </form>
               <WformdoneItem />
@@ -117,7 +117,7 @@ const Knowledgebase = () => {
                       />
                     </div>
                   </div>
-                  <FormbtncontainerItem274 divText={'Create'} />
+                  <FormbtncontainerItem_4eee0c8f divText={'Create'} />
                 </div>
               </form>
               <WformdoneItem />

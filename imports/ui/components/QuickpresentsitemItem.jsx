@@ -1,12 +1,12 @@
 import React from 'react';
 import QuickpresentsitemleftItem from './QuickpresentsitemleftItem';
-import QuickpresentsitemleftItem322 from './QuickpresentsitemleftItem322';
+import QuickpresentsitemleftItem_36a3311e from './QuickpresentsitemleftItem_36a3311e';
 
 const QuickpresentsitemItem = ({ itemText }) => {
   return (
     <a href={'#'} target={'_blank'} className={'quickpresents-item'}>
       <QuickpresentsitemleftItem itemText={'Limited-time discount'} />
-      <QuickpresentsitemleftItem322 />
+      <QuickpresentsitemleftItem_36a3311e />
     </a>
   );
 };

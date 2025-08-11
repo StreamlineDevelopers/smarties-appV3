@@ -1,6 +1,6 @@
 import React from 'react';
 import HeadlineitemtopItem from './HeadlineitemtopItem';
-import HeadlinedurationItem417 from './HeadlinedurationItem417';
+import HeadlinedurationItem_bd48dc60 from './HeadlinedurationItem_bd48dc60';
 
 const HeadlineradiocardItem = ({ label, divText, divText1, divText2 }) => {
   return (
@@ -13,7 +13,7 @@ const HeadlineradiocardItem = ({ label, divText, divText1, divText2 }) => {
         {divText1 ||
           'Explore the latest AI tools and techniques that are revolutionizing how marketers connect with their audience.'}
       </div>
-      <HeadlinedurationItem417 divText={'5 min read'} />
+      <HeadlinedurationItem_bd48dc60 divText={'5 min read'} />
     </div>
   );
 };

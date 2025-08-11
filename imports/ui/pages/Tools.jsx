@@ -1,18 +1,18 @@
 import React from 'react';
-import MaincontentLayout400 from '../components/MaincontentLayout400';
+import MaincontentLayout_0b240d64 from '../components/MaincontentLayout_0b240d64';
 import SidebarLayout from '../components/SidebarLayout';
-import TopbarLayout398 from '../components/TopbarLayout398';
-import FormrowItem385 from '../components/FormrowItem385';
-import FormrowItem386 from '../components/FormrowItem386';
-import FormrowItem389 from '../components/FormrowItem389';
-import PopupformhddivItem393 from '../components/PopupformhddivItem393';
+import TopbarLayout_b82cb3b4 from '../components/TopbarLayout_b82cb3b4';
+import FormrowItem_6c8184ec from '../components/FormrowItem_6c8184ec';
+import FormrowItem_e7b693eb from '../components/FormrowItem_e7b693eb';
+import FormrowItem_447d1c8c from '../components/FormrowItem_447d1c8c';
+import PopupformhddivItem_5f63f8c3 from '../components/PopupformhddivItem_5f63f8c3';
 import Noticedivstyle2Item from '../components/Noticedivstyle2Item';
 import PropertylistItem from '../components/PropertylistItem';
 import PropertydivItem from '../components/PropertydivItem';
-import FormrowItem392 from '../components/FormrowItem392';
+import FormrowItem_28bc7af8 from '../components/FormrowItem_28bc7af8';
 import HeaderlistItem from '../components/HeaderlistItem';
 import MessagedivItem from '../components/MessagedivItem';
-import Btnstyle1Item378 from '../components/Btnstyle1Item378';
+import Btnstyle1Item_6c79aff5 from '../components/Btnstyle1Item_6c79aff5';
 import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
 
@@ -20,9 +20,9 @@ const Tools = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout400 />
+        <MaincontentLayout_0b240d64 />
         <SidebarLayout />
-        <TopbarLayout398 />
+        <TopbarLayout_b82cb3b4 />
         <div className={'popup-create-tool'}>
           <div className={'popup-card _w-50'}>
             <div className={'card-settings-hd-div'}>
@@ -38,20 +38,20 @@ const Tools = () => {
                 data-wf-element-id={'4a1ac76e-9d23-6e8a-fa81-b7af8845bfe2'}
               >
                 <div className={'form-body'}>
-                  <FormrowItem385
+                  <FormrowItem_6c8184ec
                     label={'Tool Name'}
                     name={'tool-name'}
                     dataName={'tool name'}
                     type={'text'}
                     id={'tool-name'}
                   />
-                  <FormrowItem386
+                  <FormrowItem_e7b693eb
                     label={'Tool Description'}
                     id={'tool-description'}
                     name={'tool-description'}
                     dataName={'tool description'}
                   />
-                  <FormrowItem389
+                  <FormrowItem_447d1c8c
                     name={'check-async'}
                     id={'check-async'}
                     dataName={'check async'}
@@ -63,7 +63,7 @@ const Tools = () => {
                   />
                   <div className={'form-row'}>
                     <div className={'form-control'}>
-                      <PopupformhddivItem393
+                      <PopupformhddivItem_5f63f8c3
                         label={'Parameters'}
                         dataWId={'5d5b0e1b-d041-c3a2-4aae-d2d218c8b916'}
                         label1={'Add Property'}
@@ -97,14 +97,14 @@ const Tools = () => {
                       />
                     </div>
                   </div>
-                  <FormrowItem385
+                  <FormrowItem_6c8184ec
                     label={'Server URL'}
                     name={'server-url'}
                     dataName={'server url'}
                     type={'url'}
                     id={'server-url'}
                   />
-                  <FormrowItem392
+                  <FormrowItem_28bc7af8
                     htmlFor={'secret-token'}
                     name={'secret-token'}
                     dataName={'secret token'}
@@ -116,7 +116,7 @@ const Tools = () => {
                   />
                   <div className={'form-row'}>
                     <div className={'form-control'}>
-                      <PopupformhddivItem393
+                      <PopupformhddivItem_5f63f8c3
                         label={'HTTP Headers'}
                         dataWId={'bc828a3c-f17a-4ef9-7308-6b5473ce977d'}
                         label1={'Add Header'}
@@ -138,7 +138,7 @@ const Tools = () => {
                   </div>
                   <div className={'form-row'}>
                     <div className={'form-control'}>
-                      <PopupformhddivItem393
+                      <PopupformhddivItem_5f63f8c3
                         label={'Messages'}
                         dataWId={'7529e335-786c-b4d4-9e50-b56416b0c584'}
                         label1={'Add Message'}
@@ -161,7 +161,7 @@ const Tools = () => {
                     <a href={'#'} className={'btn-style1 outline'}>
                       <div>Cancel</div>
                     </a>
-                    <Btnstyle1Item378 divText={'Submit'} />
+                    <Btnstyle1Item_6c79aff5 divText={'Submit'} />
                   </div>
                 </div>
               </form>

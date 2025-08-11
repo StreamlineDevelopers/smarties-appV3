@@ -1,7 +1,7 @@
 import React from 'react';
 import FormbodyItem from './FormbodyItem';
 
-const WfformsearchformItem = ({ handleSearch }) => {
+const WfformsearchformItem = ({}) => {
   return (
     <form
       id={'wf-form-search-form'}
@@ -11,7 +11,7 @@ const WfformsearchformItem = ({ handleSearch }) => {
       data-wf-page-id={'688b61ee631f6165f14725ce'}
       data-wf-element-id={'9aaf37b2-a011-864e-493e-ccb9979ed0bd'}
     >
-      <FormbodyItem handleSearch={handleSearch} />
+      <FormbodyItem />
     </form>
   );
 };

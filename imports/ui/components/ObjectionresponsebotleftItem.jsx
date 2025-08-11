@@ -1,12 +1,12 @@
 import React from 'react';
 import SocialcontentbtnItem from './SocialcontentbtnItem';
-import SocialcontentbtnItem323 from './SocialcontentbtnItem323';
+import SocialcontentbtnItem_c2f2aba7 from './SocialcontentbtnItem_c2f2aba7';
 
 const ObjectionresponsebotleftItem = ({}) => {
   return (
     <div className={'objection-response-botleft'}>
       <SocialcontentbtnItem />
-      <SocialcontentbtnItem323 />
+      <SocialcontentbtnItem_c2f2aba7 />
     </div>
   );
 };

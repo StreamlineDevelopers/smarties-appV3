@@ -1,10 +1,10 @@
 import React from 'react';
-import ReusableItem183 from './ReusableItem183';
+import ReusableItem_34046ad7 from './ReusableItem_34046ad7';
 
 const SocialtopictooltipItem = ({}) => {
   return (
     <div className={'social-topic-tooltip'}>
-      <ReusableItem183 />
+      <ReusableItem_34046ad7 />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import WcheckboxItem from './WcheckboxItem';
-import WcheckboxItem16 from './WcheckboxItem16';
+import WcheckboxItem_8bfbe4f9 from './WcheckboxItem_8bfbe4f9';
 
 const Divblock9Item = ({}) => {
   return (
@@ -15,7 +15,7 @@ const Divblock9Item = ({}) => {
         />
       </div>
       <div className={'div-block-7'}>
-        <WcheckboxItem16 />
+        <WcheckboxItem_8bfbe4f9 />
       </div>
     </div>
   );

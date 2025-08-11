@@ -12,7 +12,12 @@ Adapter.Accounts = Accounts;
 
 export const POPUP = {
     FILTER_CONTACTS: "filterContactsPopup",
+    CONTACT_DETAILS: "contactDetailsPopup"
 };
+
+export const TAB = {
+    CONTACT_DETAILS: "contactDetailsTab",
+}
 
 class ContactWatcher extends Watcher2 {
     #data
@@ -33,8 +38,14 @@ class ContactWatcher extends Watcher2 {
 
     setSelectedContact(contact) {
         console.log("Selected contact:", contact);
+    }
 
-        // Implement logic to handle contact selection
+    toggleContactDetailsPopup() {
+        this.setValue(POPUP.CONTACT_DETAILS, !this.getValue(POPUP.CONTACT_DETAILS));
+    }
+
+    contactDetailsTabChange(tab = 'conversation') {
+        this.setValue(TAB.CONTACT_DETAILS, tab);
     }
 }
 
