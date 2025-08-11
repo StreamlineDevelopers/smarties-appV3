@@ -1,10 +1,10 @@
 import React from 'react';
-import IconseoItem_23f814d0 from './IconseoItem_23f814d0';
+import IconseoItem_d39978a8 from './IconseoItem_d39978a8';
 
 const SeotagItem = ({ divText }) => {
   return (
     <div className={'seo-tag'}>
-      <IconseoItem_23f814d0 />
+      <IconseoItem_d39978a8 />
       <div>{divText || 'SEO: 92'}</div>
     </div>
   );

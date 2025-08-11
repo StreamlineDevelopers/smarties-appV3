@@ -1,6 +1,6 @@
 import React from 'react';
 import TopbarLayout_743bbf1f from '../components/TopbarLayout_743bbf1f';
-import MaincontentLayout_28fabc6c from '../components/MaincontentLayout_28fabc6c';
+import MaincontentLayout_d4cde16b from '../components/MaincontentLayout_d4cde16b';
 import SidebarLayout from '../components/SidebarLayout';
 
 const Createpodcast = () => {
@@ -8,7 +8,7 @@ const Createpodcast = () => {
     <>
       <div className={'page-wrap'}>
         <TopbarLayout_743bbf1f />
-        <MaincontentLayout_28fabc6c />
+        <MaincontentLayout_d4cde16b />
         <SidebarLayout />
       </div>
     </>

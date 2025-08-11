@@ -1,5 +1,5 @@
 import React from 'react';
-import MaincontentLayout_2510bfe4 from '../components/MaincontentLayout_2510bfe4';
+import MaincontentLayout_4f0b5f18 from '../components/MaincontentLayout_4f0b5f18';
 import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout_2b63db81 from '../components/TopbarLayout_2b63db81';
 import TablecelldivItem from '../components/TablecelldivItem';
@@ -15,7 +15,7 @@ const Objectionfeed = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout_2510bfe4 />
+        <MaincontentLayout_4f0b5f18 />
         <SidebarLayout />
         <TopbarLayout_2b63db81 />
         <div className={'popup-dataenrichment'}>

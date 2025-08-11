@@ -219,6 +219,7 @@ const Index = () => {
             <div
               data-w-id={'85855c31-c03d-5480-b4ae-bfcf12bbf66a'}
               className={'popup-close'}
+              onClick={() => watcher.setRecordVoicePopup(false)}
             >
               <img src={'images/smarties-x.svg'} loading={'lazy'} alt={''} />
             </div>

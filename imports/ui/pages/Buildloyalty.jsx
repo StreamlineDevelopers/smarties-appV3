@@ -1,6 +1,6 @@
 import React from 'react';
 import TopbarLayout_eae2bb4b from '../components/TopbarLayout_eae2bb4b';
-import MaincontentLayout_7ea23732 from '../components/MaincontentLayout_7ea23732';
+import MaincontentLayout_afeed9cd from '../components/MaincontentLayout_afeed9cd';
 import SidebarLayout from '../components/SidebarLayout';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
 import FormrowItem_ce4d5db1 from '../components/FormrowItem_ce4d5db1';
@@ -16,7 +16,7 @@ const Buildloyalty = () => {
     <>
       <div className={'page-wrap'}>
         <TopbarLayout_eae2bb4b />
-        <MaincontentLayout_7ea23732 />
+        <MaincontentLayout_afeed9cd />
         <SidebarLayout />
         <div className={'popup-upload-document'}>
           <div className={'popup-card'}>

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import MaincontentLayout_053c4465 from '../components/MaincontentLayout_053c4465';
+import MaincontentLayout_a982a330 from '../components/MaincontentLayout_a982a330';
 import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout_c643a255 from '../components/TopbarLayout_c643a255';
 import MessagingsidebarhddivItem from '../components/MessagingsidebarhddivItem';
@@ -24,7 +24,7 @@ const Contacts = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout_053c4465 />
+        <MaincontentLayout_a982a330 />
         <SidebarLayout />
         <TopbarLayout_c643a255 />
         <div className={'popup-contactdetails'} style={{ display: isContactDetailsPopupOpen ? 'flex' : 'none' }}>
