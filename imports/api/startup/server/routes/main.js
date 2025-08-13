@@ -26,3 +26,8 @@ RouterManager.setUploadRoute(Picker, (/*rm, file, err*/) => {
 RouterManager.setDownloadRoute(Picker, (/*rm, file, err*/) => {
     // console.log(file, err);
 });
+Picker.route("/api/sessions", (params, req, res) => {
+    console.log(params, req.body);
+    res.statusCode = 200;
+    res.end(JSON.stringify({ message: "Hello World" }));
+});
