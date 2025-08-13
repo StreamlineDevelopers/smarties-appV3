@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import FiltergroupItem_0045d701 from './FiltergroupItem_0045d701';
 import FiltergroupItem_26f64ca4 from './FiltergroupItem_26f64ca4';
 import FiltergroupItem_308e054b from './FiltergroupItem_308e054b';
@@ -44,18 +44,26 @@ import RowdatacollectionItem from './RowdatacollectionItem';
 import RowenrichmentItem from './RowenrichmentItem';
 import RowenrichmentItem_f2bca9a4 from './RowenrichmentItem_f2bca9a4';
 import RowenrichmentItem_074d9266 from './RowenrichmentItem_074d9266';
-import MessagingWatcher, { POPUP, TAB, TOGGLE } from '../../api/client/watchers/MessagingWatcher';
+import MessagingWatcher, { INBOX, POPUP, TAB, TOGGLE } from '../../api/client/watchers/MessagingWatcher';
 import { useWatcher } from '../../api/client/Watcher2';
 
 const MaincontentLayout_70481141 = ({ }) => {
   const watcher = useRef(MessagingWatcher).current;
   useWatcher(watcher);
 
+  useEffect(() => {
+    watcher.fetchMessages();
+    return () => {
+      watcher.clear();
+    };
+  }, []);
+
   const isSmartiesAssistantToggled = watcher.getValue(TOGGLE.SMARTIES_ASSISTANT);
   const isScriptInjectionPopupOpen = watcher.getValue(POPUP.SCRIPT_INJECTION);
   const activeMessageTab = watcher.getValue(TAB.MESSAGES);
   const activeCustomerInformationTab = watcher.getValue(TAB.CUSTOMER_INFORMATION);
   const isMessageFilterPopupOpen = watcher.getValue(POPUP.MESSAGES_FILTER);
+  const messageList = watcher.getValue(INBOX.MESSAGES);
 
   return (
     <div
@@ -631,241 +639,52 @@ const MaincontentLayout_70481141 = ({ }) => {
                         <div className={'messaging-handling-agent-bg'} style={{ display: isSmartiesAssistantToggled ? 'block' : 'none' }}></div>
                       </div>
                     </div>
-                    <div className={'messaging-main-conversation-div'}>
-                      <div className={'convo-inbound'}>
-                        <div className={'convo-inbound-avatar'}>
-                          <img
-                            loading={'lazy'}
-                            src={
-                              'images/smarties-avatar-01_1smarties-avatar-01.png'
-                            }
-                            alt={''}
-                          />
-                        </div>
-                        <div className={'convo-bubble-inbound'}>
-                          <div>
-                            {
-                              "Hi there! I'm interested in learning more about your AI platform."
-                            }
-                          </div>
-                        </div>
-                        <ConvoinbounddurationItem
-                          dataWId={'d2601b0f-93ed-ec78-d431-297ce3d04872'}
-                          divText={'10:30 AM'}
-                        />
-                      </div>
-                      <div className={'convo-outbound'}>
-                        <ConvoinbounddurationItem
-                          dataWId={'40de4617-1996-b595-f7c8-2ed436404f34'}
-                          divText={'2:35 PM • AI'}
-                        />
-                        <div className={'convo-bubble-outbound'}>
-                          <div>
-                            {
-                              "Hi John, I'm SMARTIES from the solutions team. I'd be happy to schedule a personalized demo to show you our customer support features in action."
-                            }
-                          </div>
-                        </div>
-                        <div className={'convo-bot-avatar'}>
-                          <img
-                            loading={'lazy'}
-                            src={'images/smarties-head.png'}
-                            alt={''}
-                          />
-                        </div>
-                      </div>
-                      <div className={'convo-inbound'}>
-                        <div className={'convo-inbound-avatar'}>
-                          <img
-                            loading={'lazy'}
-                            src={
-                              'images/smarties-avatar-01_1smarties-avatar-01.png'
-                            }
-                            alt={''}
-                          />
-                        </div>
-                        <div className={'convo-bubble-inbound audio'}>
-                          <div className={'message-player'}>
-                            <div className={'btn-play'}>
-                              <img
-                                loading={'lazy'}
-                                src={'images/smarties-icon-play.svg'}
-                                alt={''}
+                    <div className="messaging-main-conversation-div">
+                      {messageList.map((data, index) => {
+                        if (data.direction === "inbound") {
+                          return (
+                            <div key={index} className="convo-inbound">
+                              <div className="convo-inbound-avatar">
+                                <img
+                                  loading="lazy"
+                                  src="images/smarties-avatar-01_1smarties-avatar-01.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="convo-bubble-inbound">
+                                <div>
+                                  {data.message}
+                                </div>
+                              </div>
+                              <ConvoinbounddurationItem
+                                dataWId="d2601b0f-93ed-ec78-d431-297ce3d04872"
+                                divText={data.timestamp}
                               />
                             </div>
-                            <div className={'player-main'}>
-                              <div className={'player-bar'}>
-                                <div className={'player-active'}></div>
-                              </div>
-                              <div className={'player'}>
-                                <div>{'0:15'}</div>
-                                <div>{'/'}</div>
-                                <div>{'0:32'}</div>
-                              </div>
-                            </div>
-                            <div className={'btn-transcript-div'}>
-                              <div
-                                data-w-id={
-                                  'ae3dc1d9-8baa-fe66-a02c-6c234151c942'
-                                }
-                                className={'btn-transcript hide'}
-                              >
-                                <div>{'Hide transcript'}</div>
-                                <div className={'icon-arrow-orange'}>
-                                  <img
-                                    loading={'lazy'}
-                                    src={
-                                      'images/smarties-icon-arrow-orange.svg'
-                                    }
-                                    alt={''}
-                                  />
+                          );
+                        } else {
+                          return (
+                            <div key={index} className="convo-outbound">
+                              <ConvoinbounddurationItem
+                                dataWId="40de4617-1996-b595-f7c8-2ed436404f34"
+                                divText={data.timestamp}
+                              />
+                              <div className="convo-bubble-outbound">
+                                <div>
+                                  {data.message}
                                 </div>
                               </div>
-                              <div
-                                data-w-id={
-                                  'ae3dc1d9-8baa-fe66-a02c-6c234151c947'
-                                }
-                                className={'btn-transcript show'}
-                              >
-                                <div>{'Show transcript'}</div>
-                                <div className={'icon-arrow-orange rotate'}>
-                                  <img
-                                    loading={'lazy'}
-                                    src={
-                                      'images/smarties-icon-arrow-orange.svg'
-                                    }
-                                    alt={''}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className={'text-transcript-container'}>
-                            <div className={'text-transcript'}>
-                              <p className={'p-bubble'}>
-                                <span className={'transcript-read'}>
-                                  {
-                                    'Thank you so much for helping me with this issue. I really really'
-                                  }
-                                </span>
-                                {
-                                  ' truly appreciate your quick response. When can I expect to see the full amount refund in my account?'
-                                }
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <ConvoinbounddurationItem
-                          dataWId={'93f67aaf-f609-5ec2-4225-fef0c0d178f8'}
-                          divText={'10:30 AM'}
-                        />
-                      </div>
-                      <div className={'convo-inbound'}>
-                        <div className={'convo-inbound-avatar'}>
-                          <img
-                            loading={'lazy'}
-                            src={
-                              'images/smarties-avatar-01_1smarties-avatar-01.png'
-                            }
-                            alt={''}
-                          />
-                        </div>
-                        <div className={'convo-bubble-inbound attachment'}>
-                          <div className={'message-attachment-div'}>
-                            <div className={'attachments-image first'}>
-                              <div className={'attachment-lmage-info-block'}>
-                                <AttachmentimagenameinfowrapItem />
-                                <div>{'2.4 MB'}</div>
-                              </div>
-                              <div className={'attachment-lmage-info-icon'}>
-                                <div className={'icon_i'}>
-                                  <img
-                                    loading={'lazy'}
-                                    src={
-                                      'https://uploads-ssl.webflow.com/63086fbe0343fac5859fb3d5/630f1e623053b90c78b63dcf_a_media_43.svg'
-                                    }
-                                    alt={''}
-                                  />
-                                </div>
-                                <SmsattachmentpopupItem
-                                  header={'SampleFilename.jpg'}
-                                />
-                              </div>
-                            </div>
-                            <div className={'attachments-video'}>
-                              <div className={'attachment-video-time'}>
-                                <div>{'3:15'}</div>
-                              </div>
-                              <div className={'video-play'}>
+                              <div className="convo-bot-avatar">
                                 <img
-                                  loading={'lazy'}
-                                  src={
-                                    'https://uploads-ssl.webflow.com/625d3aea722faf41988e5366/625d3aea722fafb8638e54fa_Asset%202260.svg'
-                                  }
-                                  alt={''}
-                                />
-                              </div>
-                              <div className={'attachment-video-info-block'}>
-                                <AttachmentimagenameinfowrapItem />
-                                <div>{'2.4 MB'}</div>
-                              </div>
-                              <div className={'attachment-video-info-icon'}>
-                                <div className={'icon_i'}>
-                                  <img
-                                    loading={'lazy'}
-                                    src={
-                                      'https://uploads-ssl.webflow.com/63086fbe0343fac5859fb3d5/630f1e623053b90c78b63dcf_a_media_43.svg'
-                                    }
-                                    alt={''}
-                                  />
-                                </div>
-                                <SmsattachmentpopupItem
-                                  header={'SampleFilename.mp4'}
+                                  loading="lazy"
+                                  src="images/smarties-head.png"
+                                  alt=""
                                 />
                               </div>
                             </div>
-                            <AttachmentsnopreviewItem
-                              src={'images/smarties-icon-asset2.svg'}
-                              title={'sample.txt'}
-                            />
-                            <AttachmentsnopreviewItem
-                              src={'images/smarties-icon-asset3.svg'}
-                              title={'sample.csv'}
-                            />
-                          </div>
-                        </div>
-                        <ConvoinbounddurationItem
-                          dataWId={'7ad83e97-3523-a6ad-70cc-a20192b63609'}
-                          divText={'10:30 AM'}
-                        />
-                      </div>
-                      <div className={'convo-divider'}>
-                        <div className={'convo-divider-line'}></div>
-                        <div>{'You are now chatting'}</div>
-                        <div className={'convo-divider-line'}></div>
-                      </div>
-                      <div className={'convo-outbound'}>
-                        <ConvoinbounddurationItem
-                          dataWId={'b55c4f16-b574-6278-f347-60679bfb0642'}
-                          divText={'2:35 PM • Anima'}
-                        />
-                        <div className={'convo-bubble-outbound bg-blue'}>
-                          <div>
-                            {
-                              'We have excellent customer support solutions! Our platform can handle ticket classification, routine inquiries, and even integrate with your existing CRM systems.'
-                            }
-                          </div>
-                        </div>
-                        <div className={'convo-bot-avatar'}>
-                          <img
-                            loading={'lazy'}
-                            src={
-                              'images/smarties_account_avatar_1smarties_account_avatar.png'
-                            }
-                            alt={''}
-                          />
-                        </div>
-                      </div>
+                          );
+                        }
+                      })}
                     </div>
                   </div>
                   <div className={'messaging-main-bot'}>
@@ -965,6 +784,11 @@ const MaincontentLayout_70481141 = ({ }) => {
                           placeholder={'Type your message'}
                           type={'url'}
                           id={'reply-input'}
+                          value={watcher.getValue(INBOX.MESSAGE_TEXT)}
+                          onChange={(e) => {
+                            watcher.setValue(INBOX.MESSAGE_TEXT, e.target.value)
+
+                          }}
                         />
                         <div className={'reply-btn-container'}>
                           <div className={'reply-btn-icon-white'}>
@@ -997,6 +821,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                               loading={'lazy'}
                               src={'images/smarties-inbox-icon-send.svg'}
                               alt={''}
+                              onClick={() => watcher.sendMessage()}
                             />
                           </div>
                           <div className={'popup-scriptinjection'} style={{ display: isScriptInjectionPopupOpen ? 'flex' : 'none' }}>
