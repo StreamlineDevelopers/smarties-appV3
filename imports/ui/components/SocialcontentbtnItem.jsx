@@ -11,7 +11,7 @@ const SocialcontentbtnItem = ({}) => {
         alt={''}
         className={'socialcontent-fav-icon'}
       />
-      <div>Edit</div>
+      <div>{'Edit'}</div>
     </a>
   );
 };

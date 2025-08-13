@@ -6,7 +6,7 @@ const ResponseconversionratedivItem = ({}) => {
     <div className={'response-conversion-rate-div'}>
       <ResponseconversionratedtarsdivItem />
       <div className={'response-conversion-rate-text'}>
-        4.0/5 conversion rate
+        {'4.0/5 conversion rate'}
       </div>
     </div>
   );

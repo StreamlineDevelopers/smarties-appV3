@@ -1,5 +1,5 @@
 import React from 'react';
-import MaincontentLayout_0b240d64 from '../components/MaincontentLayout_0b240d64';
+import MaincontentLayout_d40c6329 from '../components/MaincontentLayout_d40c6329';
 import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout_b82cb3b4 from '../components/TopbarLayout_b82cb3b4';
 import FormrowItem_6c8184ec from '../components/FormrowItem_6c8184ec';
@@ -20,13 +20,13 @@ const Tools = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout_0b240d64 />
+        <MaincontentLayout_d40c6329 />
         <SidebarLayout />
         <TopbarLayout_b82cb3b4 />
         <div className={'popup-create-tool'}>
           <div className={'popup-card _w-50'}>
             <div className={'card-settings-hd-div'}>
-              <div className={'card-settings-hd'}>Create Tool</div>
+              <div className={'card-settings-hd'}>{'Create Tool'}</div>
             </div>
             <div className={'w-form'}>
               <form
@@ -159,7 +159,7 @@ const Tools = () => {
                   </div>
                   <div className={'form-btn-container'}>
                     <a href={'#'} className={'btn-style1 outline'}>
-                      <div>Cancel</div>
+                      <div>{'Cancel'}</div>
                     </a>
                     <Btnstyle1Item_6c79aff5 divText={'Submit'} />
                   </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import MaincontentLayout_8acf32ed from '../components/MaincontentLayout_8acf32ed';
+import MaincontentLayout_58305b11 from '../components/MaincontentLayout_58305b11';
 import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout_f63a6461 from '../components/TopbarLayout_f63a6461';
 import WformdoneItem from '../components/WformdoneItem';
@@ -9,13 +9,13 @@ const Assistant = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout_8acf32ed />
+        <MaincontentLayout_58305b11 />
         <SidebarLayout />
         <TopbarLayout_f63a6461 />
         <div className={'popup-createphonenumber'}>
           <div className={'popup-card _w-50'}>
             <div className={'card-settings-hd-div'}>
-              <div className={'card-settings-hd'}>Create Phone Number</div>
+              <div className={'card-settings-hd'}>{'Create Phone Number'}</div>
             </div>
             <div className={'w-form'}>
               <form
@@ -48,16 +48,17 @@ const Assistant = () => {
                       />
                     </div>
                     <div className={'notice-text'}>
-                      SMARTIES Phone Numbers are free of charge, and limited to
-                      10 numbers per wallet.
+                      {
+                        'SMARTIES Phone Numbers are free of charge, and limited to 10 numbers per wallet.'
+                      }
                     </div>
                   </div>
                   <div className={'form-btn-container mb-20'}>
                     <a href={'#'} className={'btn-style1 outline'}>
-                      <div>Cancel</div>
+                      <div>{'Cancel'}</div>
                     </a>
                     <a href={'#'} className={'btn-style1'}>
-                      <div>Create</div>
+                      <div>{'Create'}</div>
                     </a>
                   </div>
                   <div className={'notice-div bg-blue'}>
@@ -69,9 +70,9 @@ const Assistant = () => {
                       />
                     </div>
                     <div className={'notice-text'}>
-                      Functionality to create Vapi phone numbers is only
-                      available for the US. For phone numbers from other
-                      regions, please use the Import Phone Numbers feature.
+                      {
+                        'Functionality to create Vapi phone numbers is only available for the US. For phone numbers from other regions, please use the Import Phone Numbers feature.'
+                      }
                     </div>
                   </div>
                 </div>
@@ -113,7 +114,9 @@ const Assistant = () => {
           </div>
           <div className={'chat-main'}>
             <div className={'chat-main-top'}>
-              <div className={'text-assistant-name smaller'}>Assistant 1</div>
+              <div className={'text-assistant-name smaller'}>
+                {'Assistant 1'}
+              </div>
               <div
                 data-w-id={'e7c02759-5e85-ca82-bed6-e0d41ef45c4d'}
                 className={'chat-close'}
@@ -130,18 +133,20 @@ const Assistant = () => {
                 <div className={'smarties-avatar-small'}></div>
                 <div>
                   <div className={'smartie-bubble'}>
-                    <div>Hello! How can we help you today?</div>
+                    <div>{'Hello! How can we help you today?'}</div>
                   </div>
-                  <div className={'chat-time'}>12:59:09 PM</div>
+                  <div className={'chat-time'}>{'12:59:09 PM'}</div>
                 </div>
               </div>
               <div className={'user-bubble-container'}>
                 <div className={'user-bubble'}>
                   <div>
-                    Tell me about your company and what does your product do.
+                    {
+                      'Tell me about your company and what does your product do.'
+                    }
                   </div>
                 </div>
-                <div className={'chat-time'}>12:59:09 PM</div>
+                <div className={'chat-time'}>{'12:59:09 PM'}</div>
               </div>
             </div>
             <div className={'write-chat'}>

@@ -1,12 +1,12 @@
 import React from 'react';
-import Btnstyle1Item_e8aefb47 from './Btnstyle1Item_e8aefb47';
-import Btnstyle1Item_c4291a31 from './Btnstyle1Item_c4291a31';
+import Btnstyle1Item_d16c9e1a from './Btnstyle1Item_d16c9e1a';
+import Btnstyle1Item_a9903b39 from './Btnstyle1Item_a9903b39';
 
 const ObjectionresponsebotrightItem = ({}) => {
   return (
     <div className={'objection-response-botright'}>
-      <Btnstyle1Item_e8aefb47 />
-      <Btnstyle1Item_c4291a31 />
+      <Btnstyle1Item_d16c9e1a />
+      <Btnstyle1Item_a9903b39 />
     </div>
   );
 };

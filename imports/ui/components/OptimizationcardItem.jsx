@@ -9,7 +9,7 @@ const OptimizationcardItem = ({ title }) => {
         title={'Title is optimized'}
       />
       <a href={'#'} className={'optimzation-link'}>
-        Edit
+        {'Edit'}
       </a>
     </div>
   );

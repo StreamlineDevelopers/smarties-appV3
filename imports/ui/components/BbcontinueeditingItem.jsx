@@ -11,7 +11,7 @@ const BbcontinueeditingItem = ({}) => {
         alt={''}
         className={'bb-icon-edit'}
       />
-      <div>Continue</div>
+      <div>{'Continue'}</div>
     </div>
   );
 };

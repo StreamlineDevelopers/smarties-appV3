@@ -3,7 +3,8 @@ import React from 'react';
 const DbcardtitleItem = ({}) => {
   return (
     <div className={'db-card-title'}>
-      <strong>New tweet</strong> scheduled for Thursday
+      <strong>{'New tweet'}</strong>
+      {' scheduled for Thursday'}
     </div>
   );
 };

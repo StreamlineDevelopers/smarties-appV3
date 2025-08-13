@@ -7,10 +7,11 @@ const Forgotpassword = () => {
         <div className={'reset-center'}>
           <div className={'forgot-password'}>
             <div className={'sign-hd-div'}>
-              <div className={'signin-hd'}>Forgot your password?</div>
+              <div className={'signin-hd'}>{'Forgot your password?'}</div>
               <div className={'signup-cta-text'}>
-                Enter your email address and we'll send you a link to reset your
-                password.
+                {
+                  "Enter your email address and we'll send you a link to reset your password."
+                }
               </div>
             </div>
             <div className={'siginin-div'}>
@@ -25,7 +26,7 @@ const Forgotpassword = () => {
                 >
                   <div className={'form-row'}>
                     <div className={'form-control'}>
-                      <div className={'form-label'}>Email</div>
+                      <div className={'form-label'}>{'Email'}</div>
                       <input
                         className={'textfield w-input'}
                         maxlength={'256'}
@@ -43,24 +44,24 @@ const Forgotpassword = () => {
                       href={'#'}
                       className={'btn-style1 w-inline-block'}
                     >
-                      <div>Send Reset Link</div>
+                      <div>{'Send Reset Link'}</div>
                     </a>
                   </div>
                   <div className={'form-row-small'}>
                     <div className={'signup-cta-text'}>
-                      Remember your password?
+                      {'Remember your password?'}
                     </div>
                     <a href={'login.html'} className={'link-style2'}>
-                      Sign In
+                      {'Sign In'}
                     </a>
                   </div>
                 </form>
                 <div className={'w-form-done'}>
-                  <div>Thank you! Your submission has been received!</div>
+                  <div>{'Thank you! Your submission has been received!'}</div>
                 </div>
                 <div className={'w-form-fail'}>
                   <div>
-                    Oops! Something went wrong while submitting the form.
+                    {'Oops! Something went wrong while submitting the form.'}
                   </div>
                 </div>
               </div>
@@ -76,13 +77,14 @@ const Forgotpassword = () => {
                   className={'image-100'}
                 />
               </div>
-              <div className={'signin-hd'}>Check your email</div>
+              <div className={'signin-hd'}>{'Check your email'}</div>
               <div className={'signup-cta-text'}>
-                We've sent a password reset link to{' '}
-                <strong>your@email.com</strong>.
+                {"We've sent a password reset link to "}
+                <strong>{'your@email.com'}</strong>
+                {'.'}
               </div>
               <div className={'signup-cta-text'}>
-                The link will expire in 30 minutes.
+                {'The link will expire in 30 minutes.'}
               </div>
             </div>
             <div className={'siginin-div'}>
@@ -91,7 +93,7 @@ const Forgotpassword = () => {
                   href={'reset-password.html'}
                   className={'btn-style1 w-inline-block'}
                 >
-                  <div>Resend Email</div>
+                  <div>{'Resend Email'}</div>
                 </a>
               </div>
             </div>

@@ -4,7 +4,7 @@ import StepnumbercontainerItem from './StepnumbercontainerItem';
 const StepItem_cedaccbd = ({ divText, description }) => {
   return (
     <div className={'step'}>
-      <StepnumbercontainerItem divText={'4'} />
+      <StepnumbercontainerItem divText={divText} />
       <div className={'step-description'}>
         {description || 'Preview & Publish'}
       </div>

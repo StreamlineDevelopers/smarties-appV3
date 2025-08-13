@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import TopbarLayout_031042b8 from '../components/TopbarLayout_031042b8';
-import MaincontentLayout_91d34823 from '../components/MaincontentLayout_91d34823';
+import MaincontentLayout_313ccf67 from '../components/MaincontentLayout_313ccf67';
 import SidebarLayout from '../components/SidebarLayout';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
-import FormrowItem_ce4d5db1 from '../components/FormrowItem_ce4d5db1';
-import FormrowItem_55033cc5 from '../components/FormrowItem_55033cc5';
+import FormrowItem_afdd09ef from '../components/FormrowItem_afdd09ef';
+import FormrowItem_7e32d29e from '../components/FormrowItem_7e32d29e';
 import FormcontrolItem_a3540037 from '../components/FormcontrolItem_a3540037';
 import FormbtncontainerItem from '../components/FormbtncontainerItem';
 import WformdoneItem from '../components/WformdoneItem';
@@ -25,7 +25,7 @@ const Index = () => {
     <>
       <div className={'page-wrap'}>
         <TopbarLayout_031042b8 />
-        <MaincontentLayout_91d34823 />
+        <MaincontentLayout_313ccf67 />
         <SidebarLayout />
         <div className={'popup-upload-document'} style={{ display: isUploadDocumentPopupOpen ? 'flex' : 'none' }}>
           <div className={'popup-card'}>
@@ -40,8 +40,8 @@ const Index = () => {
                 data-wf-element-id={'1de059f2-77c2-8d93-3a9c-b53409cc6a0f'}
               >
                 <div className={'form-body'}>
-                  <FormrowItem_ce4d5db1 id={'assistant-name'} value={watcher.getValue(ASSISTANT_FORM.NAME)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.NAME, e.target.value)} />
-                  <FormrowItem_55033cc5 id={'assistant-description'} value={watcher.getValue(ASSISTANT_FORM.DESCRIPTION)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.DESCRIPTION, e.target.value)} />
+                  <FormrowItem_afdd09ef id={'assistant-name'} value={watcher.getValue(ASSISTANT_FORM.NAME)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.NAME, e.target.value)} />
+                  <FormrowItem_7e32d29e id={'assistant-description'} value={watcher.getValue(ASSISTANT_FORM.DESCRIPTION)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.DESCRIPTION, e.target.value)} />
                   <div className={'form-row'}>
                     <FormcontrolItem_a3540037 label={'Upload Documents'} />
                     <div className={'file-upload-base'}>
@@ -61,12 +61,12 @@ const Index = () => {
                         <div className={'file-upload-texts'}>
                           <div className={'fileupload-label'}>
                             <a href={'#'} className={'spanlink-upload'}>
-                              Click to upload
-                            </a>{' '}
-                            or drag and drop
+                              {'Click to upload'}
+                            </a>
+                            {' or drag and drop\n                      '}
                           </div>
                           <div className={'fileupload-sublabel'}>
-                            SVG, PNG, JPG or GIF (max. 800x400px)
+                            {'SVG, PNG, JPG or GIF (max. 800x400px)'}
                           </div>
                         </div>
                       </div>
@@ -85,14 +85,18 @@ const Index = () => {
                       <div className={'uploadeditem-content'}>
                         <div className={'uploadeditem-left'}>
                           <div className={'uploadeditem-title'}>
-                            Dashboard prototype recording.mp4
+                            {'Dashboard prototype recording.mp4'}
                           </div>
-                          <div className={'uploadeditem-filesize'}>16 MB</div>
+                          <div className={'uploadeditem-filesize'}>
+                            {'16 MB'}
+                          </div>
                           <div className={'progressbar-div'}>
                             <div className={'progress-bar-container'}>
                               <div className={'progress-bar _w-40'}></div>
                             </div>
-                            <div className={'progress-percent-text'}>40%</div>
+                            <div className={'progress-percent-text'}>
+                              {'40%'}
+                            </div>
                           </div>
                         </div>
                         <div className={'uploadeditem-right'}>
@@ -116,8 +120,9 @@ const Index = () => {
                       />
                     </div>
                     <div className={'notice-text'}>
-                      Training time depends on the amount of content. Larger
-                      documents may take longer to process.
+                      {
+                        'Training time depends on the amount of content. Larger documents may take longer to process.'
+                      }
                     </div>
                   </div>
                   <FormbtncontainerItem handleSubmit={() => watcher.SubmitUploadDocumentForm()} handleCancel={() => watcher.setUploadDocumentPopup(false)} />
@@ -148,8 +153,8 @@ const Index = () => {
                 data-wf-element-id={'85855c31-c03d-5480-b4ae-bfcf12bbf628'}
               >
                 <div className={'form-body'}>
-                  <FormrowItem_ce4d5db1 id={'assistant-name-2'} value={watcher.getValue(ASSISTANT_FORM.NAME)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.NAME, e.target.value)} />
-                  <FormrowItem_55033cc5 id={'assistant-description-2'} value={watcher.getValue(ASSISTANT_FORM.DESCRIPTION)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.DESCRIPTION, e.target.value)} />
+                  <FormrowItem_afdd09ef id={'assistant-name-2'} value={watcher.getValue(ASSISTANT_FORM.NAME)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.NAME, e.target.value)} />
+                  <FormrowItem_7e32d29e id={'assistant-description-2'} value={watcher.getValue(ASSISTANT_FORM.DESCRIPTION)} onChange={(e) => watcher.setValue(ASSISTANT_FORM.DESCRIPTION, e.target.value)} />
                   <div className={'form-row'}>
                     <div className={'recordvoice-maindiv'}>
                       <div className={'mic-button'}>
@@ -166,10 +171,10 @@ const Index = () => {
                       </div>
                       <div className={'recordvoice-textcontent'}>
                         <div className={'recordvoice-label'}>
-                          Start Recording
+                          {'Start Recording'}
                         </div>
                         <div className={'recordvoice-sublabel'}>
-                          Click the button to begin
+                          {'Click the button to begin'}
                         </div>
                       </div>
                     </div>
@@ -206,8 +211,9 @@ const Index = () => {
                       />
                     </div>
                     <div className={'notice-text'}>
-                      You can also upload pre-recorded audio files instead of
-                      recording new ones.
+                      {
+                        'You can also upload pre-recorded audio files instead of recording new ones.'
+                      }
                     </div>
                   </div>
                   <FormbtncontainerItem handleSubmit={() => watcher.SubmitRecordVoiceForm()} handleCancel={() => watcher.setRecordVoicePopup(false)} />

@@ -22,7 +22,7 @@ const PodcasttopicitemItem = ({ label, dataWId }) => {
         dataWId={'183aca65-1bf9-f04d-110c-920eb3d9fda9'}
       />
       <span className={'radio-button-label-2 w-form-label'} htmlFor={'radio'}>
-        Radio
+        {'Radio'}
       </span>
     </label>
   );

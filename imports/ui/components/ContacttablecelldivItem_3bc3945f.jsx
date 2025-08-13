@@ -1,0 +1,11 @@
+import React from 'react';
+
+const ContacttablecelldivItem_3bc3945f = ({}) => {
+  return (
+    <div className={'contact-table-cell-div _w-8 status'}>
+      <div className={'messaging-inbox-status-tag'}>{'Active'}</div>
+    </div>
+  );
+};
+
+export default ContacttablecelldivItem_3bc3945f;

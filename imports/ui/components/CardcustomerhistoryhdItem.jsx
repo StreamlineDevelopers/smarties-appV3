@@ -5,7 +5,7 @@ const CardcustomerhistoryhdItem = ({}) => {
   return (
     <div className={'card-customer-history-hd'}>
       <CardcustomerhistoryhdleftItem />
-      <div>Dec 15, 2024</div>
+      <div>{'Dec 15, 2024'}</div>
     </div>
   );
 };

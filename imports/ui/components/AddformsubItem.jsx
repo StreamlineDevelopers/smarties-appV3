@@ -12,7 +12,7 @@ const AddformsubItem = ({}) => {
         }
         loading={'lazy'}
       />
-      <div className={'text-18'}>Create New Tool</div>
+      <div className={'text-18'}>{'Create New Tool'}</div>
     </div>
   );
 };

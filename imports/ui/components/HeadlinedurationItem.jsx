@@ -11,7 +11,7 @@ const HeadlinedurationItem = ({}) => {
         alt={''}
         className={'bb-icon-edit'}
       />
-      <div>~18 min</div>
+      <div>{'~18 min'}</div>
     </div>
   );
 };

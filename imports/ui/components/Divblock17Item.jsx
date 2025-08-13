@@ -5,7 +5,7 @@ const Divblock17Item = ({}) => {
   return (
     <div className={'div-block-17'}>
       <DatacollectiontagItem />
-      <div className={'activityhistory-duration'}>Dec 15, 2024</div>
+      <div className={'activityhistory-duration'}>{'Dec 15, 2024'}</div>
     </div>
   );
 };

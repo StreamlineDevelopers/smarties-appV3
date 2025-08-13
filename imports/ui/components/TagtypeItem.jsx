@@ -6,7 +6,7 @@ const TagtypeItem = ({}) => {
       <div className={'tag-type-icon'}>
         <img loading={'lazy'} src={'images/smarties-icon-agent.svg'} alt={''} />
       </div>
-      <div>Agent</div>
+      <div>{'Agent'}</div>
     </div>
   );
 };

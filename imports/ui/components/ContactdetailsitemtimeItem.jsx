@@ -11,7 +11,7 @@ const ContactdetailsitemtimeItem = ({}) => {
         loading={'lazy'}
         className={'contactdetails-icon-time'}
       />
-      <div>Just Now</div>
+      <div>{'Just Now'}</div>
     </div>
   );
 };

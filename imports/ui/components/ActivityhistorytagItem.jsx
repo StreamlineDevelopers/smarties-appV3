@@ -5,7 +5,7 @@ const ActivityhistorytagItem = ({}) => {
   return (
     <div className={'activityhistory-tag'}>
       <DivElementItem_f08dbb1f />
-      <div className={'text-35'}>Bot</div>
+      <div className={'text-35'}>{'Bot'}</div>
     </div>
   );
 };

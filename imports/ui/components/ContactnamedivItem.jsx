@@ -1,6 +1,6 @@
 import React from 'react';
 import ContactnameavatarItem from './ContactnameavatarItem';
-import ReusableItem_2589998c from './ReusableItem_2589998c';
+import ReusableItem_c2043d9a from './ReusableItem_c2043d9a';
 
 const ContactnamedivItem = ({ src, divText }) => {
   return (
@@ -8,7 +8,7 @@ const ContactnamedivItem = ({ src, divText }) => {
       <ContactnameavatarItem
         src={'../images/smarties-avatar-02_1smarties-avatar-02.png'}
       />
-      <ReusableItem_2589998c divText={'Sarah Johnson'} />
+      <ReusableItem_c2043d9a divText={'Sarah Johnson'} />
     </div>
   );
 };

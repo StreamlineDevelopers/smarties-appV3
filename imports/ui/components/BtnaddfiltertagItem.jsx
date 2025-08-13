@@ -6,7 +6,7 @@ const BtnaddfiltertagItem = ({}) => {
       <div className={'filter-title-tags-close'}>
         <img src={'images/smarties-filter-add.svg'} loading={'lazy'} alt={''} />
       </div>
-      <div>Add</div>
+      <div>{'Add'}</div>
     </div>
   );
 };

@@ -26,7 +26,7 @@ const SocialcontentitemItem = ({ divText, divText1, divText2, divText3 }) => {
         divText3={'Professional'}
       />
       <span className={'radio-button-label-2 w-form-label'} htmlFor={'radio'}>
-        Radio
+        {'Radio'}
       </span>
     </label>
   );

@@ -1,8 +1,8 @@
 import React from 'react';
-import FormrowItem_e438ab9e from './FormrowItem_e438ab9e';
+import FormrowItem_d9037b86 from './FormrowItem_d9037b86';
 import FormrowItem_e7b693eb from './FormrowItem_e7b693eb';
 import WcheckboxItem_75945490 from './WcheckboxItem_75945490';
-import FormbtncontainerItem_71346157 from './FormbtncontainerItem_71346157';
+import FormbtncontainerItem_20e86d5a from './FormbtncontainerItem_20e86d5a';
 
 const PropertydivItem = ({
   htmlFor,
@@ -25,7 +25,7 @@ const PropertydivItem = ({
 }) => {
   return (
     <div className={'property-div'}>
-      <FormrowItem_e438ab9e
+      <FormrowItem_d9037b86
         htmlFor={'parameter-name-2'}
         name={'parameter-name-2'}
         dataName={'Parameter Name 2'}
@@ -50,7 +50,7 @@ const PropertydivItem = ({
           label={'Required'}
         />
       </div>
-      <FormbtncontainerItem_71346157
+      <FormbtncontainerItem_20e86d5a
         dataWId={'1849b75f-9350-98c1-3481-367f0109f9c5'}
         dataWId1={'1849b75f-9350-98c1-3481-367f0109f9c8'}
       />

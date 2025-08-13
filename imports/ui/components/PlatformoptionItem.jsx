@@ -22,7 +22,7 @@ const PlatformoptionItem = ({ iconSrc, label }) => {
         label={'Email'}
       />
       <span className={'radio-button-label-2 w-form-label'} htmlFor={'radio'}>
-        Radio
+        {'Radio'}
       </span>
     </label>
   );

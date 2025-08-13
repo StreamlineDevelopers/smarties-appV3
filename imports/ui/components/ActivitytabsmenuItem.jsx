@@ -1,12 +1,12 @@
 import React from 'react';
-import ContactdetailstablinkItem_86ea6a01 from './ContactdetailstablinkItem_86ea6a01';
-import ContactdetailstablinkItem_a24a32e4 from './ContactdetailstablinkItem_a24a32e4';
+import ContactdetailstablinkItem_4e277b26 from './ContactdetailstablinkItem_4e277b26';
+import ContactdetailstablinkItem_615c6e00 from './ContactdetailstablinkItem_615c6e00';
 
 const ActivitytabsmenuItem = ({}) => {
   return (
     <div className={'activity-tabsmenu w-tab-menu'}>
-      <ContactdetailstablinkItem_86ea6a01 />
-      <ContactdetailstablinkItem_a24a32e4 />
+      <ContactdetailstablinkItem_4e277b26 />
+      <ContactdetailstablinkItem_615c6e00 />
     </div>
   );
 };

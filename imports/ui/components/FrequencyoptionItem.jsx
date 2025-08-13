@@ -22,7 +22,7 @@ const FrequencyoptionItem = ({ title, iconSrc }) => {
         iconSrc={'/svgs/icon-462e6e1d6679c32391924fe86b535d52.svg'}
       />
       <span className={'radio-button-label-2 w-form-label'} htmlFor={'radio'}>
-        Radio
+        {'Radio'}
       </span>
     </label>
   );

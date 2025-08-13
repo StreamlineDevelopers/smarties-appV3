@@ -1,0 +1,669 @@
+import React from 'react';
+import WformdoneItem from './WformdoneItem';
+import WformfailItem from './WformfailItem';
+import MessagingtablinkItem from './MessagingtablinkItem';
+import FilterdropdownItem from './FilterdropdownItem';
+import MessaginginboxitemleftItem from './MessaginginboxitemleftItem';
+import LeadlistitemItem from './LeadlistitemItem';
+import CustomerinfotextcontentItem from './CustomerinfotextcontentItem';
+import MenuitemItem_6b295b9a from './MenuitemItem_6b295b9a';
+import TonebtnItem from './TonebtnItem';
+import Btnstyle1Item from './Btnstyle1Item';
+import EditorbtnItem from './EditorbtnItem';
+import IconembedItem from './IconembedItem';
+import PlatformoptionItem from './PlatformoptionItem';
+import FrequencyoptionItem from './FrequencyoptionItem';
+import EnrichmentusagecardItem from './EnrichmentusagecardItem';
+import MessaginginboxtextcontenttopItem from './MessaginginboxtextcontenttopItem';
+import SidebaracctdetailsrowItem from './SidebaracctdetailsrowItem';
+
+const MaincontentLayout_0630e942 = ({}) => {
+  return (
+    <div
+      id={'w-node-_4d31c1a9-ef5a-abec-5af1-44ae70d7f13a-f14725d6'}
+      className={'main-content'}
+    >
+      <div className={'scroll-content'}>
+        <div className={'hd-div'}>
+          <div>
+            <div className={'page-header-text'}>{'Attract New Shoppers'}</div>
+            <div className={'db-quickaction-text'}>
+              {'Compose and launch personalized AI-powered outreach messages'}
+            </div>
+          </div>
+        </div>
+        <div className={'detectedlead-card'}>
+          <div className={'detectedlead-cardleft'}>
+            <div className={'detectedlead-icon'}>
+              <img
+                src={'../images/Vector.svg'}
+                loading={'lazy'}
+                width={'23.33760643005371'}
+                height={'29.9991455078125'}
+                alt={''}
+                className={'vector'}
+              />
+            </div>
+            <div className={'detectedlead-textcontent'}>
+              <div className={'detectedlead-card-title'}>
+                {'AI Interest Detected: 8 Hot Leads Found'}
+              </div>
+              <div className={'detectedlead-card-description'}>
+                {
+                  'Our AI has identified customers showing strong purchase intent based on recent behavior.'
+                }
+              </div>
+            </div>
+          </div>
+          <div className={'detectedlead-card-icon-close'}>
+            <img
+              src={'../images/Vector_1.svg'}
+              loading={'lazy'}
+              width={'10'}
+              height={'10'}
+              alt={''}
+              className={'vector-2'}
+            />
+          </div>
+        </div>
+        <div className={'mainwidth-control messaging'}>
+          <div className={'sidebar-temp messaging'}>
+            <div className={'messaging-sidebar-h1'}>{'Lead List'}</div>
+            <div className={'search-formblock w-form'}>
+              <form
+                id={'wf-form-search-form'}
+                name={'wf-form-search-form'}
+                data-name={'search form'}
+                method={'get'}
+                data-wf-page-id={'688b61ee631f6165f14725d6'}
+                data-wf-element-id={'9aaf37b2-a011-864e-493e-ccb9979ed0bd'}
+              >
+                <div className={'form-body'}>
+                  <div className={'form-row mb-0'}>
+                    <input
+                      className={'inbox-search w-input'}
+                      maxlength={'256'}
+                      name={'search-2'}
+                      data-name={'Search 2'}
+                      placeholder={'Search'}
+                      type={'text'}
+                      id={'search-2'}
+                      required
+                    />
+                  </div>
+                </div>
+              </form>
+              <WformdoneItem />
+              <WformfailItem />
+            </div>
+            <div
+              data-current={'Tab 1'}
+              data-easing={'ease'}
+              data-duration-in={'300'}
+              data-duration-out={'100'}
+              className={'messaging-tabs w-tabs'}
+            >
+              <div className={'messaging-tabsmenu w-tab-menu'}>
+                <a
+                  data-w-tab={'Tab 1'}
+                  className={
+                    'messaging-tablink w-inline-block w-tab-link w--current'
+                  }
+                >
+                  <div>{'All'}</div>
+                </a>
+                <MessagingtablinkItem dataWTab={'Tab 2'} divText={'New'} />
+                <MessagingtablinkItem dataWTab={'Tab 3'} divText={'Warm'} />
+                <MessagingtablinkItem dataWTab={'Tab 4'} divText={'Hot'} />
+              </div>
+              <div className={'messaging-inbox-tabscontent w-tab-content'}>
+                <div
+                  data-w-tab={'Tab 1'}
+                  className={'w-tab-pane w--tab-active'}
+                >
+                  <div className={'messaging-tabpane-div'}>
+                    <div className={'filter-row gap-10'}>
+                      <FilterdropdownItem divText={'Assigned to Me'} />
+                      <FilterdropdownItem divText={'Newest'} />
+                    </div>
+                    <div className={'inbox-list gap-5'}>
+                      <a
+                        href={'#'}
+                        className={'leadlist-item active w-inline-block'}
+                      >
+                        <MessaginginboxitemleftItem
+                          src={
+                            '../images/smarties-avatar-01_1smarties-avatar-01.png'
+                          }
+                          divText={'Michael Chen'}
+                          divText1={'johnsmith@email.com'}
+                        />
+                      </a>
+                      <LeadlistitemItem
+                        src={
+                          '../images/smarties-avatar-02_1smarties-avatar-02.png'
+                        }
+                        divText={'Emma Wilson'}
+                        divText1={'emmaw@email.com'}
+                      />
+                      <LeadlistitemItem
+                        src={
+                          '../images/smarties-avatar-03_1smarties-avatar-03.png'
+                        }
+                        divText={'Marcus Chen'}
+                        divText1={'mchen@email.com'}
+                      />
+                      <LeadlistitemItem
+                        src={
+                          '../images/smarties-avatar-04_1smarties-avatar-04.png'
+                        }
+                        divText={'Priya Sharma'}
+                        divText1={'priyas@email.com'}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div data-w-tab={'Tab 2'} className={'w-tab-pane'}></div>
+                <div data-w-tab={'Tab 3'} className={'w-tab-pane'}></div>
+                <div data-w-tab={'Tab 4'} className={'w-tab-pane'}></div>
+              </div>
+            </div>
+          </div>
+          <div className={'messaging-maincol outline'}>
+            <div className={'w-form'}>
+              <form
+                id={'wf-form-tool-form'}
+                name={'wf-form-tool-form'}
+                data-name={'tool form'}
+                method={'get'}
+                data-wf-page-id={'688b61ee631f6165f14725d6'}
+                data-wf-element-id={'4d31c1a9-ef5a-abec-5af1-44ae70d7f1f8'}
+              >
+                <div className={'form-body'}>
+                  <div className={'messaging-main-top newshoppers'}>
+                    <div className={'messaging-main-topleft'}>
+                      <div className={'messaging-inbox-avatar-top'}>
+                        <img
+                          src={
+                            '../images/smarties-avatar-01_1smarties-avatar-01.png'
+                          }
+                          loading={'lazy'}
+                          alt={''}
+                        />
+                      </div>
+                      <div className={'messaging-inbox-toptextcontent'}>
+                        <div className={'messaging-top-name'}>
+                          {'Michael Chen'}
+                        </div>
+                        <div className={'customer-info-row'}>
+                          <div className={'customer-info'}>
+                            <div className={'customer-info-icon'}>
+                              <img
+                                src={'../images/Frame_41.svg'}
+                                loading={'lazy'}
+                                width={'16'}
+                                height={'16'}
+                                alt={''}
+                                className={'frame-style-25'}
+                              />
+                            </div>
+                            <CustomerinfotextcontentItem
+                              divText={'michael.chen@email.com'}
+                            />
+                          </div>
+                          <div className={'customer-info'}>
+                            <img
+                              src={'../images/gridiconstime.svg'}
+                              loading={'lazy'}
+                              width={'18'}
+                              height={'18'}
+                              alt={''}
+                              className={'frame-style-25'}
+                            />
+                            <CustomerinfotextcontentItem
+                              divText={'First visit: 14 days ago'}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className={'messaging-main-topright'}>
+                      <div className={'newshopper-stat-wrapper'}>
+                        <div className={'newshopper-stat-div'}>
+                          <div className={'stat-title small'}>
+                            {'Interest Score'}
+                          </div>
+                          <div className={'db-stat-value-contain'}>
+                            <div className={'stat-value smaller'}>{'12'}</div>
+                            <div className={'db-stat-tag'}>
+                              <img
+                                src={
+                                  'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccf5ef19e13e52bd7f0_db-stat-arrow.svg'
+                                }
+                                loading={'lazy'}
+                                width={'7'}
+                                height={'5'}
+                                alt={''}
+                                className={'db-stat-tag-chevron'}
+                              />
+                              <div className={'db-stat-percent'}>{'12%'}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className={'newshopper-stat-div'}>
+                          <div className={'stat-title small'}>
+                            {'Interactions'}
+                          </div>
+                          <div className={'db-stat-value-contain'}>
+                            <div className={'stat-value smaller'}>{'7'}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className={'messaging-mainbtns-div'}>
+                        <div className={'button-fullprofile'}>
+                          <div>{'View Full Profile'}</div>
+                        </div>
+                        <div className={'assistant-menu'}>
+                          <div
+                            data-w-id={'4d31c1a9-ef5a-abec-5af1-44ae70d7f227'}
+                            className={'button-options'}
+                          >
+                            <img
+                              width={'15'}
+                              height={'15'}
+                              alt={''}
+                              src={
+                                'https://cdn.prod.website-files.com/681bd50cca2b1f41b87287dc/681cae0a45e15d21303356de_smarties-icon-menu.svg'
+                              }
+                              loading={'lazy'}
+                              className={'smarties-icon-menu'}
+                            />
+                          </div>
+                          <div className={'menu-dropdown'}>
+                            <MenuitemItem_6b295b9a
+                              src={'../images/smarties-icon-version.svg'}
+                              divText={'Version History'}
+                            />
+                            <MenuitemItem_6b295b9a
+                              src={'../images/smarties-icon-document.svg'}
+                              divText={'Call Logs'}
+                            />
+                            <MenuitemItem_6b295b9a
+                              src={'../images/smarties-icon-duplicate.svg'}
+                              divText={'Duplicate'}
+                            />
+                            <MenuitemItem_6b295b9a
+                              src={'../images/smarties-icon-delete_outline.svg'}
+                              divText={'Delete'}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={'lead-body'}>
+                    <div className={'tone-row'}>
+                      <div className={'tone-text'}>{'Tone:'}</div>
+                      <div className={'tone-btn-container'}>
+                        <div className={'tone-btn active'}>
+                          <div>{'Friendly'}</div>
+                        </div>
+                        <TonebtnItem divText={'Informative'} />
+                        <TonebtnItem divText={'Casual'} />
+                        <TonebtnItem divText={'Professional'} />
+                      </div>
+                    </div>
+                    <div className={'smart-tip-div'}>
+                      <div className={'smart-tip-icon'}>
+                        <div className={'smart-tip-icon-contain'}>
+                          <img
+                            src={'../images/Vector_2.svg'}
+                            loading={'lazy'}
+                            width={'18'}
+                            height={'18'}
+                            alt={''}
+                            className={'vector'}
+                          />
+                        </div>
+                      </div>
+                      <div className={'smarttip-textcontent'}>
+                        <div className={'smarttip-title'}>{'Smart Tip'}</div>
+                        <div className={'smartip-description'}>
+                          {
+                            'Michael has viewed your pricing page multiple times. Consider highlighting your value proposition and offering a limited-time discount.'
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <div className={'emailpreview-div'}>
+                      <div className={'emailpreview-top'}>
+                        <div className={'emailpreview-topleft'}>
+                          <div className={'emailpreview-icon'}>
+                            <img
+                              src={'../images/Frame_42.svg'}
+                              loading={'lazy'}
+                              width={'16'}
+                              height={'16'}
+                              alt={''}
+                              className={'frame-style-26'}
+                            />
+                          </div>
+                          <div className={'emailpreview-title'}>
+                            {'Email Preview'}
+                          </div>
+                        </div>
+                        <div className={'podcast-item-controldiv-right'}>
+                          <Btnstyle1Item
+                            iconSrc={
+                              '/svgs/icon-a276247ca9d3bf079b48aff4d0922437.svg'
+                            }
+                            divText={'Regenerate'}
+                          />
+                          <Btnstyle1Item
+                            iconSrc={
+                              '/svgs/icon-10a956130b68adb35d99b0efe98daf14.svg'
+                            }
+                            divText={'Copy'}
+                          />
+                        </div>
+                      </div>
+                      <div className={'headline-list'}>
+                        <input
+                          className={'title-textfield w-input'}
+                          maxlength={'256'}
+                          name={'field'}
+                          data-name={'Field'}
+                          placeholder={
+                            'Ready to take the next step with our Premium Plan, Michael?'
+                          }
+                          type={'text'}
+                          id={'field'}
+                          required
+                        />
+                        <div className={'content-editor-div'}>
+                          <div className={'content-editor-controls-div'}>
+                            <div className={'content-editor-controls-div-left'}>
+                              <EditorbtnItem
+                                src={'../images/Frame_7.svg'}
+                                width={'14'}
+                              />
+                              <EditorbtnItem
+                                src={'../images/Frame_10.svg'}
+                                width={'12'}
+                              />
+                              <EditorbtnItem
+                                src={'../images/Frame_15.svg'}
+                                width={'12'}
+                              />
+                              <EditorbtnItem
+                                src={'../images/Frame_14.svg'}
+                                width={'16'}
+                              />
+                              <EditorbtnItem
+                                src={'../images/Frame_8.svg'}
+                                width={'16'}
+                              />
+                              <EditorbtnItem
+                                src={'../images/Frame_6.svg'}
+                                width={'20'}
+                              />
+                              <EditorbtnItem
+                                src={'../images/Frame_12.svg'}
+                                width={'16'}
+                              />
+                            </div>
+                          </div>
+                          <div className={'content-editor-body'}>
+                            <div className={'content-paragraph'}>
+                              {'Hi {FirstName},'}
+                              <br />
+                              <br />
+                              {
+                                "I noticed you've been exploring our pricing options recently. Our Premium Plan seems to align perfectly with your interests in scaling your business efficiently."
+                              }
+                              <br />
+                              <br />
+                              {
+                                'I saw you spent some time on our {LastVisitedPage} page. Many of our customers find that our advanced analytics features help them achieve 40% better conversion rates within the first month.'
+                              }
+                              <br />
+                              <br />
+                              {
+                                "Would you be interested in a personalized demo focused specifically on {TopInterest}? I'd be happy to walk you through how our platform can address your specific needs."
+                              }
+                              <br />
+                              <br />
+                              {
+                                'As a token of appreciation for your interest, I can offer you a 15% discount if you decide to subscribe within the next 7 days.'
+                              }
+                              <br />
+                              <br />
+                              {
+                                'Looking forward to helping you grow your business!'
+                              }
+                              <br />
+                              <br />
+                              {'Best regards, '}
+                              <br />
+                              {'The BrightPilot Team'}
+                            </div>
+                            <textarea
+                              placeholder={'Continue editing your email...'}
+                              maxlength={'5000'}
+                              id={'field-3'}
+                              name={'field-3'}
+                              data-name={'Field 3'}
+                              className={'content-textarea w-input'}
+                            ></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className={'variables-row'}>
+                      <div className={'variables-row-left'}>
+                        <div className={'variables-body-text'}>
+                          {'Variables:'}
+                        </div>
+                        <div className={'variables-datatext'}>
+                          {'{FirstName}'}
+                        </div>
+                        <div className={'variables-body-text'}>{','}</div>
+                        <div className={'variables-datatext'}>
+                          {'{LastVisitedPage}'}
+                        </div>
+                        <div className={'variables-body-text'}>{','}</div>
+                        <div className={'variables-datatext'}>
+                          {'{TopInterest}'}
+                        </div>
+                      </div>
+                      <div className={'variables-row-right'}>
+                        <div className={'variables-body-text'}>
+                          {'Reading time: ~45 seconds'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={'form-btn-container'}>
+                    <div className={'btn-container-left'}>
+                      <a
+                        href={'#'}
+                        className={'btn-style1 outline w-inline-block'}
+                      >
+                        <IconembedItem
+                          iconSrc={
+                            '/svgs/icon-6771f953cd3c41132adad98d9ef65dda.svg'
+                          }
+                        />
+                        <div>{'Save as Draft'}</div>
+                      </a>
+                      <a href={'#'} className={'btn-style1 w-inline-block'}>
+                        <div>{'Approve & Send'}</div>
+                        <IconembedItem
+                          iconSrc={
+                            '/svgs/icon-82dfc22af723b921299055dcb27f509e.svg'
+                          }
+                        />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <WformdoneItem />
+              <WformfailItem />
+            </div>
+          </div>
+          <div className={'delivery-settings-sidebar'}>
+            <div className={'messaging-sidebar-hd-div align-inbetween'}>
+              <div className={'messaging-sidebar-h1'}>
+                {'Delivery Settings'}
+              </div>
+              <div
+                data-w-id={'80d4ab52-3779-10b7-8a3d-8361d7fd7080'}
+                className={'sidebar-close'}
+              >
+                <img src={'../images/Frame_5.svg'} loading={'lazy'} alt={''} />
+              </div>
+            </div>
+            <div className={'step-formblock w-form'}>
+              <form
+                id={'email-form'}
+                name={'email-form'}
+                data-name={'Email Form'}
+                method={'get'}
+                data-wf-page-id={'688b61ee631f6165f14725d6'}
+                data-wf-element-id={'a2a78fd5-0c11-2eb3-9845-7fd19fd3994e'}
+              >
+                <div className={'sidebar-contact-body gap-20'}>
+                  <div className={'delivery-settings-group'}>
+                    <div className={'messaging-sidebar-h2-style2'}>
+                      {'Channel Selector'}
+                    </div>
+                    <div className={'blog-topic-option-div p-0'}>
+                      <PlatformoptionItem
+                        iconSrc={
+                          '/svgs/icon-6ab1f2e32174e1b4097c9d765cc80c69.svg'
+                        }
+                        label={'Email'}
+                      />
+                      <PlatformoptionItem
+                        iconSrc={
+                          '/svgs/icon-af5d3f4072872379a42b84a5c2925050.svg'
+                        }
+                        label={'Twitter DM'}
+                      />
+                      <PlatformoptionItem
+                        iconSrc={
+                          '/svgs/icon-78a68c8c4729b3c79502804d382d37be.svg'
+                        }
+                        label={'Push'}
+                      />
+                    </div>
+                  </div>
+                  <div className={'delivery-settings-group'}>
+                    <div className={'messaging-sidebar-h2-style2'}>
+                      {'Schedule Options'}
+                    </div>
+                    <div className={'frequency-option-div p-0'}>
+                      <FrequencyoptionItem
+                        title={'Send Now'}
+                        iconSrc={
+                          '/svgs/icon-462e6e1d6679c32391924fe86b535d52.svg'
+                        }
+                      />
+                      <FrequencyoptionItem
+                        title={'Schedule for Later'}
+                        iconSrc={
+                          '/svgs/icon-836e190d1220731d99a2375f19e30d0e.svg'
+                        }
+                      />
+                      <FrequencyoptionItem
+                        title={'Auto-Trigger Based on Behavior'}
+                        iconSrc={
+                          '/svgs/icon-cf27245afa933cfde0e6f1c3f67e31a7.svg'
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className={'delivery-settings-group'}>
+                    <div className={'messaging-sidebar-h2-style2'}>
+                      {'Performance Preview'}
+                    </div>
+                    <div className={'contact-row-container'}>
+                      <EnrichmentusagecardItem
+                        label={'Estimated Open Rate:'}
+                        divText={'38-52%'}
+                        label1={'Industry avg: 22%'}
+                        divText1={'Your best: 58%'}
+                      />
+                      <EnrichmentusagecardItem
+                        label={'Estimated Click Rate:'}
+                        divText={'12–18%'}
+                        label1={'Industry avg: 7%'}
+                        divText1={'Your best: 21%'}
+                      />
+                    </div>
+                  </div>
+                  <div className={'delivery-settings-group'}>
+                    <div className={'messaging-sidebar-h2-style2'}>
+                      {'Lead Information'}
+                    </div>
+                    <div className={'messaging-sidebar-cards'}>
+                      <div className={'lead-information-main'}>
+                        <div className={'messaging-inbox-item-left'}>
+                          <div className={'messaging-inbox-avatar-col'}>
+                            <div className={'messaging-inbox-avatar'}>
+                              <img
+                                loading={'lazy'}
+                                src={
+                                  '../images/smarties-avatar-01_1smarties-avatar-01.png'
+                                }
+                                alt={''}
+                              />
+                            </div>
+                          </div>
+                          <div className={'messaging-inbox-textcontent'}>
+                            <MessaginginboxtextcontenttopItem
+                              divText={'Michael Chen'}
+                              divText1={'johnsmith@email.com'}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className={'sidebar-contact-body'}>
+                        <div className={'sidebar-acctdetails-body'}>
+                          <SidebaracctdetailsrowItem
+                            label={'Last active:'}
+                            divText={'2 hours ago'}
+                          />
+                          <SidebaracctdetailsrowItem
+                            label={'Total sessions:'}
+                            divText={'12'}
+                          />
+                          <SidebaracctdetailsrowItem
+                            label={'Device:'}
+                            divText={'Desktop (Chrome)'}
+                          />
+                          <SidebaracctdetailsrowItem
+                            label={'Location:'}
+                            divText={'San Francisco, CA'}
+                          />
+                          <a href={'#'} className={'link-style2 small'}>
+                            {'View Full Profile'}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <WformdoneItem />
+              <WformfailItem />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MaincontentLayout_0630e942;
