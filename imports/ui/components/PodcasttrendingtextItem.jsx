@@ -11,7 +11,7 @@ const PodcasttrendingtextItem = ({}) => {
         alt={''}
         className={'bb-icon-edit'}
       />
-      <div>Trending: 85%</div>
+      <div>{'Trending: 85%'}</div>
     </div>
   );
 };

@@ -26,7 +26,7 @@ const HeadlineitemItem = ({ label, divText, divText1, divText2 }) => {
         divText2={'5 min read'}
       />
       <span className={'radio-button-label-2 w-form-label'} htmlFor={'radio'}>
-        Radio
+        {'Radio'}
       </span>
     </label>
   );

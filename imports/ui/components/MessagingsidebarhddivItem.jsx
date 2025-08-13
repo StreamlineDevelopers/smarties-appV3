@@ -10,10 +10,11 @@ const MessagingsidebarhddivItem = ({ divText, dataWId, onClick = () => { } }) =>
         data-w-id={dataWId || 'd40e6ff1-a7b5-c151-b08f-dd8db3b3dda2'}
         className={'sidebar-close'}
         onClick={onClick}
+        style={{ cursor: 'pointer' }}
       >
         <img src={'images/Frame_5.svg'} loading={'lazy'} alt={''} />
       </div>
-    </div>
+    </div >
   );
 };
 

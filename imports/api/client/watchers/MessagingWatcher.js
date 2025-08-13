@@ -25,6 +25,12 @@ export const TAB = {
     CUSTOMER_INFORMATION: "customerInformationTab"
 }
 
+export const INBOX = {
+    LOADING: "loading",
+    MESSAGE_TEXT: 'text',
+    MESSAGES: "messages",
+}
+
 class MessagingWatcher extends Watcher2 {
     #data
     #lastBasis = null;
@@ -35,6 +41,8 @@ class MessagingWatcher extends Watcher2 {
         this.setValue(TAB.MESSAGES, 'all');
         this.setValue(TAB.CUSTOMER_INFORMATION, 'profile');
         this.setValue(POPUP.MESSAGES_FILTER, false);
+        this.setValue(INBOX.MESSAGES, []);
+        this.setValue(INBOX.MESSAGE_TEXT, '');
     }
 
 
@@ -50,8 +58,39 @@ class MessagingWatcher extends Watcher2 {
         this.setValue(TAB.MESSAGES, tab);
     }
 
+    fetchMessages() {
+        this.setValue(INBOX.LOADING, true);
+        this.setValue(INBOX.MESSAGES, [
+            {
+                id: "1",
+                sender: "User",
+                direction: "inbound",
+                message: "I need assistance with my order.",
+                timestamp: new Date().toLocaleTimeString(),
+            },
+            {
+                id: "2",
+                direction: "outbound",
+                sender: "Agent",
+                message: "Hello, how can I help you?",
+                timestamp: new Date().toLocaleTimeString(),
+            },
+        ]);
+        this.setValue(INBOX.LOADING, false);
+    }
+
     sendMessage() {
-        console.log(this.getValue('messageText'))
+        this.setValue(INBOX.MESSAGES, [
+            ...this.getValue(INBOX.MESSAGES),
+            {
+                id: String(Date.now()),
+                sender: "User",
+                direction: "inbound",
+                message: this.getValue(INBOX.MESSAGE_TEXT),
+                timestamp: new Date().toLocaleTimeString(),
+            },
+        ]);
+        this.setValue(INBOX.MESSAGE_TEXT, '');
     }
 
     uploadDocumentFile() { }

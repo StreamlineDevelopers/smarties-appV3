@@ -1,6 +1,6 @@
 import React from 'react';
 import WcheckboxItem_36de37cd from './WcheckboxItem_36de37cd';
-import WcheckboxItem_ce038a3c from './WcheckboxItem_ce038a3c';
+import WcheckboxItem_ca89d1e7 from './WcheckboxItem_ca89d1e7';
 
 const ChannelsubItem = ({}) => {
   return (
@@ -24,7 +24,7 @@ const ChannelsubItem = ({}) => {
         />
       </div>
       <div className={'filter-group_row'}>
-        <WcheckboxItem_ce038a3c />
+        <WcheckboxItem_ca89d1e7 />
       </div>
     </div>
   );

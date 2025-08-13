@@ -6,7 +6,7 @@ const DatanerichmentdivItem = ({ dataWId }) => {
     <div className={'datanerichment-div'}>
       <BtndataenrichmentItem dataWId={'170a6bed-e932-1987-cb24-7f7bc570b353'} />
       <div className={'dataenrichment-description'}>
-        Auto-populate missing fields with external data
+        {'Auto-populate missing fields with external data'}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ const BtndataenrichmentleftItem = ({}) => {
   return (
     <div className={'btn-dataenrichment-left'}>
       <DivElementItem />
-      <div>Data Enrichment</div>
+      <div>{'Data Enrichment'}</div>
     </div>
   );
 };

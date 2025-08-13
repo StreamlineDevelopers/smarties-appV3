@@ -1,6 +1,6 @@
 import React from 'react';
 import FormrowItem_ca5d0667 from './FormrowItem_ca5d0667';
-import FormbtncontainerItem_9278c7c8 from './FormbtncontainerItem_9278c7c8';
+import FormbtncontainerItem_874ab7a9 from './FormbtncontainerItem_874ab7a9';
 
 const DomaindivItem = ({ id, dataWId, dataWId1 }) => {
   return (
@@ -12,7 +12,7 @@ const DomaindivItem = ({ id, dataWId, dataWId1 }) => {
         type={'url'}
         id={'domain-name-2'}
       />
-      <FormbtncontainerItem_9278c7c8
+      <FormbtncontainerItem_874ab7a9
         dataWId={'5cefa7b3-c9ea-0bf4-45d3-c9b1b57787ca'}
         dataWId1={'5cefa7b3-c9ea-0bf4-45d3-c9b1b57787cd'}
       />

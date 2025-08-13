@@ -10,7 +10,7 @@ const TabledoctitleItem = ({}) => {
           alt={''}
         />
       </div>
-      <div className={'table-doctitle-text'}>sample.txt</div>
+      <div className={'table-doctitle-text'}>{'sample.txt'}</div>
     </div>
   );
 };

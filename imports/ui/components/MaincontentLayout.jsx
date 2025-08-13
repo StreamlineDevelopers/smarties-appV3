@@ -14,7 +14,7 @@ const MaincontentLayout = ({}) => {
       <div className={'scroll-content'}>
         <div className={'hd-div'}>
           <div>
-            <div className={'page-header-text'}>Account</div>
+            <div className={'page-header-text'}>{'Account'}</div>
           </div>
         </div>
         <div className={'mainwidth-control horizontal'}>
@@ -34,15 +34,15 @@ const MaincontentLayout = ({}) => {
                   />
                 </div>
                 <div className={'account_profpic-textcontain'}>
-                  <div className={'profpic-label'}>Profile Picture</div>
+                  <div className={'profpic-label'}>{'Profile Picture'}</div>
                   <div className={'profpic-description'}>
-                    PNG, JPEG under 15MB
+                    {'PNG, JPEG under 15MB'}
                   </div>
                 </div>
               </div>
               <div className={'account_profpic-right'}>
                 <a href={'#'} className={'btn-style1 outline w-inline-block'}>
-                  <div>Upload New Picture</div>
+                  <div>{'Upload New Picture'}</div>
                 </a>
               </div>
             </div>

@@ -9,9 +9,9 @@ const MessagepopupfilterselectItem = ({ optionText }) => {
       className={'messagepopup-filterselect w-select'}
     >
       <option value={''}>{optionText || 'Script Author'}</option>
-      <option value={'First'}>First choice</option>
-      <option value={'Second'}>Second choice</option>
-      <option value={'Third'}>Third choice</option>
+      <option value={'First'}>{'First choice'}</option>
+      <option value={'Second'}>{'Second choice'}</option>
+      <option value={'Third'}>{'Third choice'}</option>
     </select>
   );
 };

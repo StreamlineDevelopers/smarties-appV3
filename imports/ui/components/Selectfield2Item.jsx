@@ -9,9 +9,9 @@ const Selectfield2Item = ({ optionText }) => {
       className={'select-field-2 w-select'}
     >
       <option value={''}>{optionText || 'All Status'}</option>
-      <option value={'First'}>First choice</option>
-      <option value={'Second'}>Second choice</option>
-      <option value={'Third'}>Third choice</option>
+      <option value={'First'}>{'First choice'}</option>
+      <option value={'Second'}>{'Second choice'}</option>
+      <option value={'Third'}>{'Third choice'}</option>
     </select>
   );
 };

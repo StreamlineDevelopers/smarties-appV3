@@ -3,7 +3,7 @@ import React from 'react';
 const CountdowncardcoloncolItem = ({}) => {
   return (
     <div className={'countdown-card-colon-col'}>
-      <div className={'text-75'}>:</div>
+      <div className={'text-75'}>{':'}</div>
     </div>
   );
 };

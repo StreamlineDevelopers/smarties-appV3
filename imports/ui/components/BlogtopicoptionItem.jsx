@@ -22,7 +22,7 @@ const BlogtopicoptionItem = ({ itemText, label }) => {
         label={'AI Ethics in Business'}
       />
       <span className={'radio-button-label-2 w-form-label'} htmlFor={'radio'}>
-        Radio
+        {'Radio'}
       </span>
     </label>
   );

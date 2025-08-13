@@ -1,6 +1,6 @@
 import React from 'react';
 import TopbarLayout_051e974c from '../components/TopbarLayout_051e974c';
-import MaincontentLayout_602f8252 from '../components/MaincontentLayout_602f8252';
+import MaincontentLayout_97bae701 from '../components/MaincontentLayout_97bae701';
 import SidebarLayout from '../components/SidebarLayout';
 
 const Writeblog = () => {
@@ -8,7 +8,7 @@ const Writeblog = () => {
     <>
       <div className={'page-wrap'}>
         <TopbarLayout_051e974c />
-        <MaincontentLayout_602f8252 />
+        <MaincontentLayout_97bae701 />
         <SidebarLayout />
       </div>
     </>

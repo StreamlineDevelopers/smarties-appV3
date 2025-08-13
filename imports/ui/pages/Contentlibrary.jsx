@@ -1,10 +1,10 @@
 import React from 'react';
 import TopbarLayout_461ecc7a from '../components/TopbarLayout_461ecc7a';
-import MaincontentLayout_4000db05 from '../components/MaincontentLayout_4000db05';
+import MaincontentLayout_cd6434c3 from '../components/MaincontentLayout_cd6434c3';
 import SidebarLayout from '../components/SidebarLayout';
 import CardsettingshddivItem from '../components/CardsettingshddivItem';
-import FormrowItem_ce4d5db1 from '../components/FormrowItem_ce4d5db1';
-import FormrowItem_55033cc5 from '../components/FormrowItem_55033cc5';
+import FormrowItem_afdd09ef from '../components/FormrowItem_afdd09ef';
+import FormrowItem_7e32d29e from '../components/FormrowItem_7e32d29e';
 import FormcontrolItem_a3540037 from '../components/FormcontrolItem_a3540037';
 import FormbtncontainerItem from '../components/FormbtncontainerItem';
 import WformdoneItem from '../components/WformdoneItem';
@@ -16,7 +16,7 @@ const Contentlibrary = () => {
     <>
       <div className={'page-wrap'}>
         <TopbarLayout_461ecc7a />
-        <MaincontentLayout_4000db05 />
+        <MaincontentLayout_cd6434c3 />
         <SidebarLayout />
         <div className={'popup-upload-document'}>
           <div className={'popup-card'}>
@@ -31,8 +31,8 @@ const Contentlibrary = () => {
                 data-wf-element-id={'edc52c55-d0f6-4c51-06f6-d16cbc8f4581'}
               >
                 <div className={'form-body'}>
-                  <FormrowItem_ce4d5db1 id={'assistant-name'} />
-                  <FormrowItem_55033cc5 id={'assistant-description'} />
+                  <FormrowItem_afdd09ef id={'assistant-name'} />
+                  <FormrowItem_7e32d29e id={'assistant-description'} />
                   <div className={'form-row'}>
                     <FormcontrolItem_a3540037 label={'Upload Documents'} />
                     <div className={'file-upload-base'}>
@@ -52,12 +52,12 @@ const Contentlibrary = () => {
                         <div className={'file-upload-texts'}>
                           <div className={'fileupload-label'}>
                             <a href={'#'} className={'spanlink-upload'}>
-                              Click to upload
-                            </a>{' '}
-                            or drag and drop
+                              {'Click to upload'}
+                            </a>
+                            {' or drag and drop\n                      '}
                           </div>
                           <div className={'fileupload-sublabel'}>
-                            SVG, PNG, JPG or GIF (max. 800x400px)
+                            {'SVG, PNG, JPG or GIF (max. 800x400px)'}
                           </div>
                         </div>
                       </div>
@@ -76,14 +76,18 @@ const Contentlibrary = () => {
                       <div className={'uploadeditem-content'}>
                         <div className={'uploadeditem-left'}>
                           <div className={'uploadeditem-title'}>
-                            Dashboard prototype recording.mp4
+                            {'Dashboard prototype recording.mp4'}
                           </div>
-                          <div className={'uploadeditem-filesize'}>16 MB</div>
+                          <div className={'uploadeditem-filesize'}>
+                            {'16 MB'}
+                          </div>
                           <div className={'progressbar-div'}>
                             <div className={'progress-bar-container'}>
                               <div className={'progress-bar _w-40'}></div>
                             </div>
-                            <div className={'progress-percent-text'}>40%</div>
+                            <div className={'progress-percent-text'}>
+                              {'40%'}
+                            </div>
                           </div>
                         </div>
                         <div className={'uploadeditem-right'}>
@@ -107,8 +111,9 @@ const Contentlibrary = () => {
                       />
                     </div>
                     <div className={'notice-text'}>
-                      Training time depends on the amount of content. Larger
-                      documents may take longer to process.
+                      {
+                        'Training time depends on the amount of content. Larger documents may take longer to process.'
+                      }
                     </div>
                   </div>
                   <FormbtncontainerItem />
@@ -138,8 +143,8 @@ const Contentlibrary = () => {
                 data-wf-element-id={'edc52c55-d0f6-4c51-06f6-d16cbc8f45cb'}
               >
                 <div className={'form-body'}>
-                  <FormrowItem_ce4d5db1 id={'assistant-name-2'} />
-                  <FormrowItem_55033cc5 id={'assistant-description-2'} />
+                  <FormrowItem_afdd09ef id={'assistant-name-2'} />
+                  <FormrowItem_7e32d29e id={'assistant-description-2'} />
                   <div className={'form-row'}>
                     <div className={'recordvoice-maindiv'}>
                       <div className={'mic-button'}>
@@ -156,10 +161,10 @@ const Contentlibrary = () => {
                       </div>
                       <div className={'recordvoice-textcontent'}>
                         <div className={'recordvoice-label'}>
-                          Start Recording
+                          {'Start Recording'}
                         </div>
                         <div className={'recordvoice-sublabel'}>
-                          Click the button to begin
+                          {'Click the button to begin'}
                         </div>
                       </div>
                     </div>
@@ -196,8 +201,9 @@ const Contentlibrary = () => {
                       />
                     </div>
                     <div className={'notice-text'}>
-                      You can also upload pre-recorded audio files instead of
-                      recording new ones.
+                      {
+                        'You can also upload pre-recorded audio files instead of recording new ones.'
+                      }
                     </div>
                   </div>
                   <FormbtncontainerItem />

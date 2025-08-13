@@ -11,7 +11,7 @@ const ActivityhistoryhandlerItem = ({ src, width }) => {
         alt={''}
         className={'img-style'}
       />
-      <div className={'activityhistory-duration'}>Handled by Bot</div>
+      <div className={'activityhistory-duration'}>{'Handled by Bot'}</div>
     </div>
   );
 };

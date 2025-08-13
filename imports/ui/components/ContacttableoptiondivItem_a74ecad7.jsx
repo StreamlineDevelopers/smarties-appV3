@@ -6,7 +6,7 @@ const ContacttableoptiondivItem_a74ecad7 = ({ dataWId, onShowContactDetails }) =
       <div
         data-w-id={dataWId || 'd9d41f7f-0057-93a0-759a-4f4719e2e394'}
         className={'contact-table-option'}
-        onClick={(onShowContactDetails)}
+        onClick={onShowContactDetails}
       >
         <img
           src={'images/smarties-tableicon-eye.svg'}

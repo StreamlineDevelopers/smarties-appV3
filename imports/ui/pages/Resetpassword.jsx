@@ -8,9 +8,9 @@ const Resetpassword = () => {
         <div className={'reset-center'}>
           <div className={'reset-password'}>
             <div className={'sign-hd-div'}>
-              <div className={'signin-hd'}>Reset password</div>
+              <div className={'signin-hd'}>{'Reset password'}</div>
               <div className={'signup-cta-text'}>
-                Please create a new secure password for your account.
+                {'Please create a new secure password for your account.'}
               </div>
             </div>
             <div className={'siginin-div'}>
@@ -41,16 +41,16 @@ const Resetpassword = () => {
                       href={'#'}
                       className={'btn-style1 w-inline-block'}
                     >
-                      <div>Reset Password</div>
+                      <div>{'Reset Password'}</div>
                     </a>
                   </div>
                 </form>
                 <div className={'w-form-done'}>
-                  <div>Thank you! Your submission has been received!</div>
+                  <div>{'Thank you! Your submission has been received!'}</div>
                 </div>
                 <div className={'w-form-fail'}>
                   <div>
-                    Oops! Something went wrong while submitting the form.
+                    {'Oops! Something went wrong while submitting the form.'}
                   </div>
                 </div>
               </div>
@@ -66,15 +66,15 @@ const Resetpassword = () => {
                   className={'image-100'}
                 />
               </div>
-              <div className={'signin-hd'}>Password Changed!</div>
+              <div className={'signin-hd'}>{'Password Changed!'}</div>
               <div className={'signup-cta-text'}>
-                Your password has been changed successfully.
+                {'Your password has been changed successfully.'}
               </div>
             </div>
             <div className={'siginin-div'}>
               <div className={'signin-formbtn-div'}>
                 <a href={'login.html'} className={'btn-style1 w-inline-block'}>
-                  <div>Back to Login</div>
+                  <div>{'Back to Login'}</div>
                 </a>
               </div>
             </div>

@@ -13,7 +13,7 @@ const TabledownloadbtnItem = ({}) => {
         alt={''}
         className={'icon-download'}
       />
-      <div className={'table-download-text'}>Download</div>
+      <div className={'table-download-text'}>{'Download'}</div>
     </a>
   );
 };

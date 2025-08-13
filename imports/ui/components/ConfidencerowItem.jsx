@@ -5,7 +5,7 @@ const ConfidencerowItem = ({}) => {
   return (
     <div className={'confidence-row'}>
       <ConfidencepercentageItem />
-      <div className={'confidence-percent-text'}>75%</div>
+      <div className={'confidence-percent-text'}>{'75%'}</div>
     </div>
   );
 };

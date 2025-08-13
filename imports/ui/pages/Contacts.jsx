@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
-import MaincontentLayout_a982a330 from '../components/MaincontentLayout_a982a330';
+import MaincontentLayout_fe6c8f8b from '../components/MaincontentLayout_fe6c8f8b';
 import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout_c643a255 from '../components/TopbarLayout_c643a255';
 import MessagingsidebarhddivItem from '../components/MessagingsidebarhddivItem';
 import Btnstyle1Item_f9f58207 from '../components/Btnstyle1Item_f9f58207';
 import MenuitemItem_c64440ab from '../components/MenuitemItem_c64440ab';
 import DatanerichmentdivItem from '../components/DatanerichmentdivItem';
-import MessagingsidebarcardsItem_bc6eb4f7 from '../components/MessagingsidebarcardsItem_bc6eb4f7';
+import MessagingsidebarcardsItem_3d7a602e from '../components/MessagingsidebarcardsItem_3d7a602e';
 import MessagingsidebarcardsItem from '../components/MessagingsidebarcardsItem';
 import MessagingsidebarcardsItem_61a76bb7 from '../components/MessagingsidebarcardsItem_61a76bb7';
 import ContactdetailstablinkcountItem from '../components/ContactdetailstablinkcountItem';
@@ -21,10 +21,11 @@ const Contacts = () => {
 
   const isContactDetailsPopupOpen = watcher.getValue(POPUP.CONTACT_DETAILS);
   const activeContactDetailsTab = watcher.getValue(TAB.CONTACT_DETAILS);
+
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout_a982a330 />
+        <MaincontentLayout_fe6c8f8b />
         <SidebarLayout />
         <TopbarLayout_c643a255 />
         <div className={'popup-contactdetails'} style={{ display: isContactDetailsPopupOpen ? 'flex' : 'none' }}>
@@ -36,12 +37,12 @@ const Contacts = () => {
           <div className={'contact-details-top'}>
             <div className={'contact-details-topleft'}>
               <div className={'sidebar-contact-avatar'}>
-                <div>JS</div>
+                <div>{'JS'}</div>
               </div>
               <div>
-                <div className={'messaging-top-name'}>John Smith</div>
+                <div className={'messaging-top-name'}>{'John Smith'}</div>
                 <div className={'messaging-top-subtext'}>
-                  Marketing Director • Orbital Inc.
+                  {'Marketing Director • Orbital Inc.'}
                 </div>
               </div>
             </div>
@@ -92,7 +93,7 @@ const Contacts = () => {
               <DatanerichmentdivItem
                 dataWId={'793bb4d5-773e-085c-ab14-3a78a2ba1983'}
               />
-              <MessagingsidebarcardsItem_bc6eb4f7
+              <MessagingsidebarcardsItem_3d7a602e
                 dataWId={'793bb4d5-773e-085c-ab14-3a78a2ba1996'}
                 dataWId1={'793bb4d5-773e-085c-ab14-3a78a2ba19a0'}
                 dataWId2={'793bb4d5-773e-085c-ab14-3a78a2ba19aa'}
@@ -122,15 +123,17 @@ const Contacts = () => {
                 </a>
                 <ContactdetailstablinkItem_8f6eaf6f
                   dataWTab={'Tab 5'}
-                  divText={'Sentiment'}
                   isActive={activeContactDetailsTab == 'sentiment'}
+                  divText={'Sentiment'}
                   onClick={() => watcher.contactDetailsTabChange('sentiment')}
                 />
                 <a
                   data-w-tab={'Tab 2'}
-                  className={`contactdetails-tablink w-inline-block w-tab-link' ${activeContactDetailsTab == 'conversations' && 'w--current'}`}
+                  className={`contactdetails-tablink w-inline-block w-tab-link' ${activeContactDetailsTab == 'notes' && 'w--current'}`}
+                  onClick={() => watcher.contactDetailsTabChange('notes')}
+                  style={{ cursor: 'pointer' }}
                 >
-                  <div>Notes</div>
+                  <div>{'Notes'}</div>
                   <ContactdetailstablinkcountItem />
                 </a>
                 <ContactdetailstablinkItem_8f6eaf6f
@@ -161,7 +164,7 @@ const Contacts = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };

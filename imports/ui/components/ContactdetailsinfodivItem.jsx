@@ -9,7 +9,9 @@ const ContactdetailsinfodivItem = ({ dataWId }) => {
       >
         <img loading={'lazy'} src={'images/smarties-icon-info.svg'} alt={''} />
       </div>
-      <div className={'tooltip long'}>Upgrade to see full enrichment data.</div>
+      <div className={'tooltip long'}>
+        {'Upgrade to see full enrichment data.'}
+      </div>
     </div>
   );
 };

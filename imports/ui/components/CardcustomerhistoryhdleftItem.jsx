@@ -4,7 +4,7 @@ import TagtypeItem from './TagtypeItem';
 const CardcustomerhistoryhdleftItem = ({}) => {
   return (
     <div className={'card-customer-history-hd-left'}>
-      <div className={'tag-status'}>active</div>
+      <div className={'tag-status'}>{'active'}</div>
       <TagtypeItem />
     </div>
   );

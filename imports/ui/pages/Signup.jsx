@@ -15,7 +15,7 @@ const Signup = () => {
             />
           </a>
           <div className={'sign-hd-div'}>
-            <div className={'signin-hd'}>Registration</div>
+            <div className={'signin-hd'}>{'Registration'}</div>
           </div>
           <div className={'siginin-div'}>
             <div className={'signin-formblock w-form'}>
@@ -48,7 +48,7 @@ const Signup = () => {
                     href={'index.html'}
                     className={'btn-style1 w-inline-block'}
                   >
-                    <div>Sign In</div>
+                    <div>{'Sign In'}</div>
                   </a>
                   <a href={'#'} className={'btn-style1 google w-inline-block'}>
                     <div className={'icon-google'}>
@@ -63,7 +63,7 @@ const Signup = () => {
                         className={'social-icon'}
                       />
                     </div>
-                    <div>Sign in with Google</div>
+                    <div>{'Sign in with Google'}</div>
                   </a>
                   <div className={'upgrade-divblock'}>
                     <div className={'upgrade-left'}>
@@ -80,31 +80,34 @@ const Signup = () => {
                         />
                       </div>
                       <div className={'btn-text-style1'}>
-                        Pro users enjoy voice AI automation, custom Smarties,
-                        and analytics.
+                        {
+                          'Pro users enjoy voice AI automation, custom Smarties, and analytics.'
+                        }
                       </div>
                     </div>
                     <div className={'upgrade-right'}>
                       <a href={'#'} className={'link-style2'}>
-                        Upgrade after Login
+                        {'Upgrade after Login'}
                       </a>
                     </div>
                   </div>
                 </div>
                 <div className={'form-row-small'}>
                   <div className={'signup-cta-text'}>
-                    Already have an account?
+                    {'Already have an account?'}
                   </div>
                   <a href={'login.html'} className={'link-style2'}>
-                    Sign In
+                    {'Sign In'}
                   </a>
                 </div>
               </form>
               <div className={'w-form-done'}>
-                <div>Thank you! Your submission has been received!</div>
+                <div>{'Thank you! Your submission has been received!'}</div>
               </div>
               <div className={'w-form-fail'}>
-                <div>Oops! Something went wrong while submitting the form.</div>
+                <div>
+                  {'Oops! Something went wrong while submitting the form.'}
+                </div>
               </div>
             </div>
           </div>

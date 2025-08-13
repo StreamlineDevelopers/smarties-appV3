@@ -6,7 +6,7 @@ const ContactjobcompanydivItem = ({ divText }) => {
       <div className={'contact-positiontext'}>
         {divText || 'VP of Marketing'}
       </div>
-      <div className={'contact-company-text'}>TechCorp Inc.</div>
+      <div className={'contact-company-text'}>{'TechCorp Inc.'}</div>
     </div>
   );
 };

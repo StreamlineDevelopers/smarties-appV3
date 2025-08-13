@@ -10,7 +10,7 @@ const TagpremiumItem = ({}) => {
           alt={''}
         />
       </div>
-      <div>Premium</div>
+      <div>{'Premium'}</div>
     </div>
   );
 };

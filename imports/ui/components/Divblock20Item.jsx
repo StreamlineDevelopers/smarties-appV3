@@ -7,7 +7,7 @@ const Divblock20Item = ({ label }) => {
         {label || 'Birthday Surprise Sent'}
       </div>
       <div className={'sidebar-journey-card-duration'}>
-        June 12, 2023 • 2:45 PM
+        {'June 12, 2023 • 2:45 PM'}
       </div>
     </div>
   );

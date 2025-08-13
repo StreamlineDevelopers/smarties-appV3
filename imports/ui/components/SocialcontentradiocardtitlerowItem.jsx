@@ -11,8 +11,8 @@ const SocialcontentradiocardtitlerowItem = ({}) => {
         alt={''}
         className={'social-content-avatar'}
       />
-      <div className={'socialcontent-name'}>John Smith</div>
-      <div className={'social-content-handle'}>@johnsmith</div>
+      <div className={'socialcontent-name'}>{'John Smith'}</div>
+      <div className={'social-content-handle'}>{'@johnsmith'}</div>
     </div>
   );
 };

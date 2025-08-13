@@ -12,7 +12,7 @@ const CreatefunctionItem = ({}) => {
           alt={''}
         />
       </div>
-      <div>Create a new function</div>
+      <div>{'Create a new function'}</div>
     </div>
   );
 };

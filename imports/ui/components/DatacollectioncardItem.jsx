@@ -5,7 +5,7 @@ const DatacollectioncardItem = ({ src, width }) => {
   return (
     <div className={'datacollection-card'}>
       <div className={'datacollection-text'}>
-        Customer requested a refund for the invoice discrepancy
+        {'Customer requested a refund for the invoice discrepancy'}
       </div>
       <ActivityhistorycardtopItem_68f81b4c
         src={'images/smarties-head.png'}

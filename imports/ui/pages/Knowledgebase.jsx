@@ -1,11 +1,11 @@
 import React from 'react';
-import MaincontentLayout_6dce4f2a from '../components/MaincontentLayout_6dce4f2a';
+import MaincontentLayout_2d6d6a9b from '../components/MaincontentLayout_2d6d6a9b';
 import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout_b45b1468 from '../components/TopbarLayout_b45b1468';
 import SearchformblockItem_a5d80477 from '../components/SearchformblockItem_a5d80477';
 import TableheaderItem from '../components/TableheaderItem';
-import TablerowItem_1df8defc from '../components/TablerowItem_1df8defc';
-import FormbtncontainerItem_4eee0c8f from '../components/FormbtncontainerItem_4eee0c8f';
+import TablerowItem_52032fc6 from '../components/TablerowItem_52032fc6';
+import FormbtncontainerItem_739a54af from '../components/FormbtncontainerItem_739a54af';
 import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
 
@@ -13,13 +13,13 @@ const Knowledgebase = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout_6dce4f2a />
+        <MaincontentLayout_2d6d6a9b />
         <SidebarLayout />
         <TopbarLayout_b45b1468 />
         <div className={'popup-addfile'}>
           <div className={'popup-card _w-50'}>
             <div className={'card-settings-hd-div'}>
-              <div className={'card-settings-hd'}>Add File</div>
+              <div className={'card-settings-hd'}>{'Add File'}</div>
               <SearchformblockItem_a5d80477 />
             </div>
             <div className={'w-form'}>
@@ -35,25 +35,25 @@ const Knowledgebase = () => {
                   <div className={'table-main mb-20'}>
                     <TableheaderItem divText={'Size'} divText1={'Modified'} />
                     <div className={'table-content'}>
-                      <TablerowItem_1df8defc
+                      <TablerowItem_52032fc6
                         name={'check-add-file'}
                         id={'check-add-file'}
                         dataName={'check add file'}
                         htmlFor={'check-add-file'}
                       />
-                      <TablerowItem_1df8defc
+                      <TablerowItem_52032fc6
                         name={'check-add-file-2'}
                         id={'check-add-file-2'}
                         dataName={'Check Add File 2'}
                         htmlFor={'check-add-file-2'}
                       />
-                      <TablerowItem_1df8defc
+                      <TablerowItem_52032fc6
                         name={'check-add-file-2'}
                         id={'check-add-file-2'}
                         dataName={'Check Add File 2'}
                         htmlFor={'check-add-file-2'}
                       />
-                      <TablerowItem_1df8defc
+                      <TablerowItem_52032fc6
                         name={'check-add-file-2'}
                         id={'check-add-file-2'}
                         dataName={'Check Add File 2'}
@@ -70,11 +70,12 @@ const Knowledgebase = () => {
                       />
                     </div>
                     <div className={'notice-text'}>
-                      You can assign files to your knowledge base. Please select
-                      the files you want to assign.
+                      {
+                        'You can assign files to your knowledge base. Please select the files you want to assign.'
+                      }
                     </div>
                   </div>
-                  <FormbtncontainerItem_4eee0c8f divText={'Add'} />
+                  <FormbtncontainerItem_739a54af divText={'Add'} />
                 </div>
               </form>
               <WformdoneItem />
@@ -91,7 +92,9 @@ const Knowledgebase = () => {
         <div className={'popup-knowledgebase'}>
           <div className={'popup-card'}>
             <div className={'card-settings-hd-div'}>
-              <div className={'card-settings-hd'}>Create Knowledge Base</div>
+              <div className={'card-settings-hd'}>
+                {'Create Knowledge Base'}
+              </div>
             </div>
             <div className={'w-form'}>
               <form
@@ -105,7 +108,9 @@ const Knowledgebase = () => {
                 <div className={'form-body'}>
                   <div className={'form-row'}>
                     <div className={'form-control'}>
-                      <div className={'form-label'}>Knowledge Base Name</div>
+                      <div className={'form-label'}>
+                        {'Knowledge Base Name'}
+                      </div>
                       <input
                         className={'form-input w-input'}
                         maxlength={'256'}
@@ -117,7 +122,7 @@ const Knowledgebase = () => {
                       />
                     </div>
                   </div>
-                  <FormbtncontainerItem_4eee0c8f divText={'Create'} />
+                  <FormbtncontainerItem_739a54af divText={'Create'} />
                 </div>
               </form>
               <WformdoneItem />

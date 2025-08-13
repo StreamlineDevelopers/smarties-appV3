@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ContactdetailstablinkItem_8f6eaf6f = ({ dataWTab, divText, isActive, onClick = () => { } }) => {
+const ContactdetailstablinkItem_8f6eaf6f = ({ dataWTab, divText, isActive = false, onClick = () => { } }) => {
   return (
     <a
       data-w-tab={dataWTab || 'Tab 5'}

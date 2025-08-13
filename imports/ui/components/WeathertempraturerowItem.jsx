@@ -10,7 +10,7 @@ const WeathertempraturerowItem = ({}) => {
           alt={''}
         />
       </div>
-      <div className={'file-info-data'}>62°F, Cloudy</div>
+      <div className={'file-info-data'}>{'62°F, Cloudy'}</div>
     </div>
   );
 };

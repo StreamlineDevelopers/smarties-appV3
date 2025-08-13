@@ -3,7 +3,7 @@ import React from 'react';
 const NoticeactionlinkItem = ({}) => {
   return (
     <div className={'notice-actionlink'}>
-      <div>Create</div>
+      <div>{'Create'}</div>
       <div className={'notice-actionlink-icon'}>
         <img
           loading={'lazy'}

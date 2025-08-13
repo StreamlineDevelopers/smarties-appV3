@@ -15,9 +15,9 @@ const Login = () => {
             />
           </a>
           <div className={'sign-hd-div'}>
-            <div className={'signin-hd'}>Login</div>
+            <div className={'signin-hd'}>{'Login'}</div>
             <div className={'sign-subhd'}>
-              Welcome back! Please enter your details.
+              {'Welcome back! Please enter your details.'}
             </div>
           </div>
           <div className={'siginin-div'}>
@@ -59,11 +59,11 @@ const Login = () => {
                       className={'checkbox-text w-form-label'}
                       htmlFor={'check-remember-account'}
                     >
-                      Remember for 30 days
+                      {'Remember for 30 days'}
                     </span>
                   </label>
                   <a href={'forgot-password.html'} className={'link-style2'}>
-                    Forgot Password
+                    {'Forgot Password'}
                   </a>
                 </div>
                 <div className={'signin-formbtn-div'}>
@@ -71,7 +71,7 @@ const Login = () => {
                     href={'index.html'}
                     className={'btn-style1 w-inline-block'}
                   >
-                    <div>Sign In</div>
+                    <div>{'Sign In'}</div>
                   </a>
                   <a href={'#'} className={'btn-style1 google w-inline-block'}>
                     <div className={'icon-google'}>
@@ -86,12 +86,14 @@ const Login = () => {
                         className={'social-icon'}
                       />
                     </div>
-                    <div>Sign in with Google</div>
+                    <div>{'Sign in with Google'}</div>
                   </a>
                   <a href={'#'} className={'btn-trypro w-inline-block'}>
                     <div className={'btn-center'}>
-                      <div className={'btn-text-style1'}>Already on Lite? </div>
-                      <div className={'btn-text-style2'}>Try Pro</div>
+                      <div className={'btn-text-style1'}>
+                        {'Already on Lite? '}
+                      </div>
+                      <div className={'btn-text-style2'}>{'Try Pro'}</div>
                       <div className={'icon-pro-div'}>
                         <img
                           width={'16'}
@@ -109,18 +111,20 @@ const Login = () => {
                 </div>
                 <div className={'form-row-small'}>
                   <div className={'signup-cta-text'}>
-                    Don't have an account?
+                    {"Don't have an account?"}
                   </div>
                   <a href={'signup.html'} className={'link-style2'}>
-                    Sign Up
+                    {'Sign Up'}
                   </a>
                 </div>
               </form>
               <div className={'w-form-done'}>
-                <div>Thank you! Your submission has been received!</div>
+                <div>{'Thank you! Your submission has been received!'}</div>
               </div>
               <div className={'w-form-fail'}>
-                <div>Oops! Something went wrong while submitting the form.</div>
+                <div>
+                  {'Oops! Something went wrong while submitting the form.'}
+                </div>
               </div>
             </div>
           </div>

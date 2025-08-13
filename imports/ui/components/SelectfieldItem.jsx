@@ -17,8 +17,8 @@ const SelectfieldItem = ({
     >
       <option value={''}>{optionText1 || 'Select one...'}</option>
       <option value={value || 'openai'}>{optionText || 'openai'}</option>
-      <option value={'Second'}>Second choice</option>
-      <option value={'Third'}>Third choice</option>
+      <option value={'Second'}>{'Second choice'}</option>
+      <option value={'Third'}>{'Third choice'}</option>
     </select>
   );
 };
