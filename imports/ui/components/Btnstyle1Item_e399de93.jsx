@@ -1,12 +1,14 @@
 import React from 'react';
 import IconembedItem from './IconembedItem';
 
-const Btnstyle1Item_e399de93 = ({ dataWId, iconSrc }) => {
+const Btnstyle1Item_e399de93 = ({ dataWId, iconSrc, onClick = () => { } }) => {
   return (
     <a
       data-w-id={dataWId || '270b5de8-bb36-3b21-78eb-7d7220321045'}
-      href={'#'}
+      // href={'#'}
       className={'btn-style1 w-inline-block'}
+      onClick={onClick}
+      style={{ cursor: 'pointer' }}
     >
       <div>Continue</div>
       <IconembedItem

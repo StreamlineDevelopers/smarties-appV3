@@ -30,8 +30,10 @@ import IconseoItem from './IconseoItem';
 import PodcasttopicitemItem from './PodcasttopicitemItem';
 import Btnstyle1Item_a024d649 from './Btnstyle1Item_a024d649';
 import SeopanelrowItem from './SeopanelrowItem';
+import { useNavigate } from "react-router-dom";
 
-const MaincontentLayout_d4cde16b = ({}) => {
+const MaincontentLayout_d4cde16b = ({ }) => {
+  const navigate = useNavigate();
   return (
     <div
       id={'w-node-_98753808-e275-e32e-af64-4fd652691d7b-f14725d5'}
@@ -41,7 +43,11 @@ const MaincontentLayout_d4cde16b = ({}) => {
         <div className={'hd-div'}>
           <div className={'bb-hd'}>
             <a
-              href={'../journey/buzz-builder-hub.html'}
+              // href={'../journey/buzz-builder-hub.html'}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(-1);
+              }}
               className={'link-return w-inline-block'}
             >
               <img

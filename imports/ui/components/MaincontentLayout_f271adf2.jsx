@@ -29,8 +29,10 @@ import PlatformoptionItem_22755cca from './PlatformoptionItem_22755cca';
 import FrequencyoptionItem_1611de02 from './FrequencyoptionItem_1611de02';
 import DbquickactiontextcontentItem_90c6701f from './DbquickactiontextcontentItem_90c6701f';
 import SeopanelrowItem from './SeopanelrowItem';
+import { useNavigate } from "react-router-dom";
 
-const MaincontentLayout_f271adf2 = ({}) => {
+const MaincontentLayout_f271adf2 = ({ }) => {
+  const navigate = useNavigate();
   return (
     <div
       id={'w-node-_56a22ee8-48a6-d322-7d35-b57347bcd2ce-f14725d4'}
@@ -40,7 +42,11 @@ const MaincontentLayout_f271adf2 = ({}) => {
         <div className={'hd-div'}>
           <div className={'bb-hd'}>
             <a
-              href={'../journey/buzz-builder-hub.html'}
+              // href={'../journey/buzz-builder-hub.html'}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(-1);
+              }}
               className={'link-return w-inline-block'}
             >
               <img

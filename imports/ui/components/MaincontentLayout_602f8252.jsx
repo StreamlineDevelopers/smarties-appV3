@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import DashboardheadertextItem_95ccbf9e from './DashboardheadertextItem_95ccbf9e';
 import DbtrendingtopichdItem from './DbtrendingtopichdItem';
 import StepItem from './StepItem';
@@ -22,8 +22,18 @@ import ContactdetailstablinkItem_d67219bc from './ContactdetailstablinkItem_d672
 import BlogtopicoptionItem from './BlogtopicoptionItem';
 import DbquickactiontextcontentItem_90c6701f from './DbquickactiontextcontentItem_90c6701f';
 import SeopanelrowItem from './SeopanelrowItem';
+import { useNavigate } from "react-router-dom";
+import BlogWatcher, { STEPS } from '../../api/client/watchers/BlogWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
 
-const MaincontentLayout_602f8252 = ({}) => {
+const MaincontentLayout_602f8252 = ({ }) => {
+  const navigate = useNavigate();
+  const watcher = useRef(BlogWatcher).current;
+  useWatcher(watcher);
+
+  const currentPosition = watcher.getValue(STEPS.CURRENT_POSITION);
+  console.log('Current Position:', currentPosition);
+
   return (
     <div
       id={'w-node-_41be6f9a-0cfa-526f-14e2-c94005c94866-f14725d3'}
@@ -33,7 +43,11 @@ const MaincontentLayout_602f8252 = ({}) => {
         <div className={'hd-div'}>
           <div className={'bb-hd'}>
             <a
-              href={'../journey/buzz-builder-hub.html'}
+              // href={'../journey/buzz-builder-hub.html'}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(-1);
+              }}
               className={'link-return w-inline-block'}
             >
               <img
@@ -81,7 +95,7 @@ const MaincontentLayout_602f8252 = ({}) => {
             </div>
           </div>
           <div className={'mainwidth-control journey'}>
-            <div className={'writeblog-step4'}>
+            <div className={'writeblog-step4'} style={{ display: currentPosition === 3 ? 'flex' : 'none' }}>
               <div className={'steps-container'}>
                 <StepItem description={'Select Topic'} />
                 <div className={'step-divider'}></div>
@@ -170,6 +184,7 @@ const MaincontentLayout_602f8252 = ({}) => {
                       <div className={'form-btn-container inbetween'}>
                         <Btnstyle1Item_428901ed
                           dataWId={'af78a5e9-3d00-bcbe-5687-6bc6c1c501ed'}
+                          onClick={() => watcher.goPrevious()}
                         />
                         <div className={'btn-container-left'}>
                           <Btnstyle1Item_29dce583
@@ -201,7 +216,7 @@ const MaincontentLayout_602f8252 = ({}) => {
                 </div>
               </div>
             </div>
-            <div className={'writeblog-step3'}>
+            <div className={'writeblog-step3'} style={{ display: currentPosition === 2 ? 'flex' : 'none' }}>
               <div className={'steps-container'}>
                 <StepItem description={'Select Topic'} />
                 <div className={'step-divider'}></div>
@@ -348,6 +363,7 @@ const MaincontentLayout_602f8252 = ({}) => {
                       <div className={'form-btn-container inbetween'}>
                         <Btnstyle1Item_428901ed
                           dataWId={'270b5de8-bb36-3b21-78eb-7d7220321040'}
+                          onClick={() => watcher.goPrevious()}
                         />
                         <div className={'btn-container-left'}>
                           <Btnstyle1Item_e399de93
@@ -355,6 +371,7 @@ const MaincontentLayout_602f8252 = ({}) => {
                             iconSrc={
                               '/svgs/icon-05e60be02362b63346cf645f41bc4094.svg'
                             }
+                            onClick={() => watcher.goPrevious()}
                           />
                         </div>
                       </div>
@@ -365,7 +382,7 @@ const MaincontentLayout_602f8252 = ({}) => {
                 </div>
               </div>
             </div>
-            <div className={'writeblog-step2'}>
+            <div className={'writeblog-step2'} style={{ display: currentPosition === 1 ? 'flex' : 'none' }}>
               <div className={'steps-container'}>
                 <StepItem description={'Select Topic'} />
                 <div className={'step-divider'}></div>
@@ -470,6 +487,7 @@ const MaincontentLayout_602f8252 = ({}) => {
                       <div className={'form-btn-container inbetween'}>
                         <Btnstyle1Item_428901ed
                           dataWId={'cca59dbc-9ea1-4fc2-3e20-038f6c075182'}
+                          onClick={() => watcher.goPrevious()}
                         />
                         <div className={'btn-container-left'}>
                           <Btnstyle1Item_29dce583
@@ -483,6 +501,7 @@ const MaincontentLayout_602f8252 = ({}) => {
                             iconSrc={
                               '/svgs/icon-05e60be02362b63346cf645f41bc4094.svg'
                             }
+                            onClick={() => watcher.goNext()}
                           />
                         </div>
                       </div>
@@ -493,7 +512,7 @@ const MaincontentLayout_602f8252 = ({}) => {
                 </div>
               </div>
             </div>
-            <div className={'writeblog-step1'}>
+            <div className={'writeblog-step1'} style={{ display: currentPosition === 0 ? 'flex' : 'none' }}>
               <div className={'steps-container'}>
                 <StepItem_cedaccbd divText={'1'} description={'Select Topic'} />
                 <div className={'step-divider inactive'}></div>
@@ -641,6 +660,7 @@ const MaincontentLayout_602f8252 = ({}) => {
                           iconSrc={
                             '/svgs/icon-8845fc47c482664a4fba81a990230b3c.svg'
                           }
+                          onClick={() => watcher.goNext()}
                         />
                       </div>
                     </div>

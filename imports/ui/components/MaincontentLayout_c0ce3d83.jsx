@@ -10,8 +10,9 @@ import DurationcontainerItem from './DurationcontainerItem';
 import ContactdetailsitemtopItem from './ContactdetailsitemtopItem';
 import DbtrendingtopichdItem from './DbtrendingtopichdItem';
 import SuggestedideasitemItem from './SuggestedideasitemItem';
+import { Link } from "react-router-dom";
 
-const MaincontentLayout_c0ce3d83 = ({}) => {
+const MaincontentLayout_c0ce3d83 = ({ }) => {
   return (
     <div
       id={'w-node-a68109ff-67f4-f404-77cb-19f0c68b3f4a-f14725d2'}
@@ -70,8 +71,9 @@ const MaincontentLayout_c0ce3d83 = ({}) => {
             <div className={'dashboard-group'}>
               <DashboardheadertextItem title={'create new content'} />
               <div className={'dashboard-quickactions-div'}>
-                <a
-                  href={'../journey/write-blog.html'}
+                <Link
+                  // href={'../journey/write-blog.html'}
+                  to={'/journey/write-blog'}
                   className={'content-action-card w-inline-block'}
                 >
                   <div className={'card-icon bg-blue'}>
@@ -95,9 +97,10 @@ const MaincontentLayout_c0ce3d83 = ({}) => {
                       <ContenticonembedItem />
                     </div>
                   </div>
-                </a>
-                <a
-                  href={'../journey/post-to-social.html'}
+                </Link>
+                <Link
+                  // href={'../journey/post-to-social.html'}
+                  to={'/journey/post-to-social'}
                   className={'content-action-card bg-orange w-inline-block'}
                 >
                   <div className={'card-icon bg-orange'}>
@@ -121,9 +124,10 @@ const MaincontentLayout_c0ce3d83 = ({}) => {
                       <ContenticonembedItem />
                     </div>
                   </div>
-                </a>
-                <a
-                  href={'../journey/create-podcast.html'}
+                </Link>
+                <Link
+                  // href={'../journey/create-podcast.html'}
+                  to={'/journey/create-podcast'}
                   className={'content-action-card bg-green w-inline-block'}
                 >
                   <div className={'card-icon bg-green'}>
@@ -147,7 +151,7 @@ const MaincontentLayout_c0ce3d83 = ({}) => {
                       <ContenticonembedItem />
                     </div>
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
             <div className={'dashboard-col-group'}>

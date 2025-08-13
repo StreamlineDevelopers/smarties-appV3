@@ -24,6 +24,9 @@ import Contentlibrary from "./ui/pages/Contentlibrary";
 import Objectionfeed from "./ui/pages/Objectionfeed";
 import Customermemorycenter from "./ui/pages/Customermemorycenter";
 import Dataenrichment from "./ui/pages/Dataenrichment";
+import Writeblog from "./ui/pages/Writeblog";
+import Posttosocial from "./ui/pages/Posttosocial";
+import Createpodcast from "./ui/pages/Createpodcast";
 
 export default function Router() {
     return (
@@ -56,6 +59,18 @@ export default function Router() {
                 <Route
                     path='/journey/buzz-builder-hub'
                     element={<PrivateRoute><Buzzbuilderhub /></PrivateRoute>}
+                />
+                <Route
+                    path='/journey/write-blog'
+                    element={<PrivateRoute><Writeblog /></PrivateRoute>}
+                />
+                <Route
+                    path='/journey/post-to-social'
+                    element={<PrivateRoute><Posttosocial /></PrivateRoute>}
+                />
+                <Route
+                    path='/journey/create-podcast'
+                    element={<PrivateRoute><Createpodcast /></PrivateRoute>}
                 />
                 <Route
                     path='/journey/attract-shoppers'
