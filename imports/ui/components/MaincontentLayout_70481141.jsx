@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import FiltergroupItem_0045d701 from './FiltergroupItem_0045d701';
 import FiltergroupItem_26f64ca4 from './FiltergroupItem_26f64ca4';
 import FiltergroupItem_308e054b from './FiltergroupItem_308e054b';
@@ -49,10 +49,52 @@ import { useWatcher } from '../../api/client/Watcher2';
 
 const MaincontentLayout_70481141 = ({ }) => {
   const watcher = useRef(MessagingWatcher).current;
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [error, setError] = useState(null);
+  const [inbox, setInbox] = useState([]);
   useWatcher(watcher);
 
   useEffect(() => {
-    watcher.fetchInbox();
+
+    // watcher.fetchInbox();
+    async function setupWatcher() {
+      try {
+        // Initialize watcher (this connects to RedisVent)
+        await watcher.initialize();
+
+        // Fetch initial data from backend
+        watcher.fetchInbox();
+
+        // Get data from local minimongo
+        const data = await watcher.getAll();
+        watcher.setValue(INTERACTION.INBOX, data);
+        // setTodos(data);
+        // setLoading(false);
+
+        // Start listening for real-time updates
+        watcher.inboxListen();
+
+        // Subscribe to local changes
+        const unsubscribe = watcher.DB.onChange(async () => {
+          const updatedTodos = await watcher.getAll();
+          watcher.setValue(INTERACTION.INBOX, updatedTodos);
+          // setTodos(updatedTodos);
+        });
+
+        return unsubscribe;
+      } catch (err) {
+        console.log(err);
+        // setError(err.message);
+        // setLoading(false);
+      }
+    }
+
+    const cleanupPromise = setupWatcher();
+
+    return () => {
+      cleanupPromise.then(cleanup => cleanup?.());
+      watcher.stopListening();
+    };
   }, []);
 
   const isSmartiesAssistantToggled = watcher.getValue(TOGGLE.SMARTIES_ASSISTANT);
