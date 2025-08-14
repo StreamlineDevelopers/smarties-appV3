@@ -5,7 +5,7 @@ import { WebApp } from "meteor/webapp";
 import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import RedisVentService from "./classes/events/RedisVentService";
-import { RedisVentServer } from 'redisvent-module/src/index.js';
+import { RedisVentServer } from 'redisvent-module';
 
 Adapter.Meteor = Meteor;
 Adapter.Mongo = Mongo;

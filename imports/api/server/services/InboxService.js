@@ -46,26 +46,29 @@ export default {
             response.total_count = inboxEntries.length;
             response.error_message = "";
 
-            // Transform each inbox entry to protobuf message
-            response.inboxes = inboxEntries.map(entry => {
-                const inboxMsg = new InboxMsg();
-                inboxMsg.id = entry._id._str;
-                inboxMsg.business_id = entry.businessId ? entry.businessId._str : "";
-                inboxMsg.consumer_id = entry.consumerId ? entry.consumerId._str : "";
-                inboxMsg.channel_id = entry.channelId ? entry.channelId._str : "";
-                inboxMsg.status = entry.status || "";
-                inboxMsg.assignee_id = entry.assigneeId ? entry.assigneeId._str : "";
-                inboxMsg.locked_at = entry.lockedAt || 0;
-                inboxMsg.unread_for_assignee = entry.unreadForAssignee || 0;
-                inboxMsg.latest_interaction_id = entry.latestInteractionId ? entry.latestInteractionId._str : "";
-                inboxMsg.latest_snippet = entry.latestSnippet || "";
-                inboxMsg.latest_at = entry.latestAt || 0;
-                inboxMsg.latest_direction = entry.latestDirection || "";
-                inboxMsg.created_at = entry.createdAt || 0;
-                return inboxMsg;
-            });
-
-            ServerInstance.RedisVentServer.triggers.insert('inboxapp', 'inbox', request.business_id, inboxEntries, { uniqueId: 'user12' });
+            if (inboxEntries.length === 0) {
+                response.inboxes = [];
+            } else {
+                // Transform each inbox entry to protobuf message
+                response.inboxes = inboxEntries.map(entry => {
+                    const inboxMsg = new InboxMsg();
+                    inboxMsg.id = entry._id._str;
+                    inboxMsg.business_id = entry.businessId ? entry.businessId._str : "";
+                    inboxMsg.consumer_id = entry.consumerId ? entry.consumerId._str : "";
+                    inboxMsg.channel_id = entry.channelId ? entry.channelId._str : "";
+                    inboxMsg.status = entry.status || "";
+                    inboxMsg.assignee_id = entry.assigneeId ? entry.assigneeId._str : "";
+                    inboxMsg.locked_at = entry.lockedAt || 0;
+                    inboxMsg.unread_for_assignee = entry.unreadForAssignee || 0;
+                    inboxMsg.latest_interaction_id = entry.latestInteractionId ? entry.latestInteractionId._str : "";
+                    inboxMsg.latest_snippet = entry.latestSnippet || "";
+                    inboxMsg.latest_at = entry.latestAt || 0;
+                    inboxMsg.latest_direction = entry.latestDirection || "";
+                    inboxMsg.created_at = entry.createdAt || 0;
+                    return inboxMsg;
+                });
+            }
+            // ServerInstance.RedisVentServer.triggers.insert('inboxapp', 'inbox', request.business_id, inboxEntries, { uniqueId: 'user12' });
 
             Logger.showDebug("InboxService.GetInbox: Found %d entries", inboxEntries.length);
             callback(null, response);
