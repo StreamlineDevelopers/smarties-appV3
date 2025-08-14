@@ -53,6 +53,7 @@ const MaincontentLayout_70481141 = ({ }) => {
   const [error, setError] = useState(null);
   const [inbox, setInbox] = useState([]);
   useWatcher(watcher);
+  const isInboxActive = watcher.getValue("inboxActive") ?? false;
 
   useEffect(() => {
 
@@ -96,6 +97,44 @@ const MaincontentLayout_70481141 = ({ }) => {
       watcher.stopListening();
     };
   }, []);
+
+  useEffect(() => {
+    if (isInboxActive) {
+      async function setupInteractionWatcher() {
+        try {
+          // Get data from local minimongo
+          const data = await watcher.getAllInteraction();
+          watcher.setValue(INTERACTION.MESSAGES, data);
+          // setTodos(data);
+          // setLoading(false);
+
+          // Start listening for real-time updates
+          watcher.interactionListen();
+
+          // Subscribe to local changes
+          const unsubscribe = watcher.DBInteraction.onChange(async () => {
+            const updatedTodos = await watcher.getAllInteraction();
+            watcher.setValue(INTERACTION.MESSAGES, updatedTodos);
+            // setTodos(updatedTodos);
+          });
+
+          return unsubscribe;
+        } catch (err) {
+          console.log(err);
+          watcher.setValue("inboxActive", false);
+          // setError(err.message);
+          // setLoading(false);
+        }
+      }
+
+      const cleanupPromise = setupInteractionWatcher();
+
+      return () => {
+        cleanupPromise.then(cleanup => cleanup?.());
+        watcher.stopInteractionListening();
+      };
+    }
+  }, [isInboxActive]);
 
   const isSmartiesAssistantToggled = watcher.getValue(TOGGLE.SMARTIES_ASSISTANT);
   const isScriptInjectionPopupOpen = watcher.getValue(POPUP.SCRIPT_INJECTION);
