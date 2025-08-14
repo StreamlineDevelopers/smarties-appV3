@@ -5,6 +5,7 @@ import { WebApp } from "meteor/webapp";
 import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
 import RedisVentService from "./classes/events/RedisVentService";
+import { RedisVentServer } from 'redisvent-module/src/index.js';
 
 Adapter.Meteor = Meteor;
 Adapter.Mongo = Mongo;
@@ -15,6 +16,8 @@ Adapter.Vent = Vent;
 
 
 class Server extends Core {
+    #redisVentServer = null;
+    #isInitialized = false;
     constructor(settings) {
         super(settings);
         // this.settings = settings;
@@ -22,9 +25,38 @@ class Server extends Core {
         this.onLogin((user) => {
             console.log("onLogin", user);
         });
+
+        this.#redisVentServer = new RedisVentServer();
+
     }
 
-    startRedis() {
+    get RedisVentServer() {
+        return this.#redisVentServer;
+    }
+
+    get IsRedisVentInitialized() {
+        return this.#isInitialized;
+    }
+
+
+    async startRedis() {
+        if (this.#isInitialized) return;
+
+        try {
+            await this.#redisVentServer.initialize({
+                redis: {
+                    host: 'localhost',
+                    port: 6379
+                },
+                wsPort: 3502,
+                debug: true
+            });
+            this.#isInitialized = true;
+            console.log('✓ RedisVent server initialized');
+        } catch (error) {
+            console.error('Failed to initialize RedisVent:', error);
+            throw error; // Don't exit in Meteor, throw instead
+        }
         return super.startRedis().then(() => {
             RedisVentService.publish(["sayHello", "INBOX", "INTERACTION", "TRANSCRIPT"], true); // register custom events here
             this.assignRedisVent(RedisVentService); // assign RedisVentService to Core
