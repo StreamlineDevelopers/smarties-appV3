@@ -245,7 +245,7 @@ class MessagingWatcher extends Watcher2 {
         this.setValue(INTERACTION.LOADING_MESSAGE, true);
         this.setValue(INTERACTION.CURRENT, inboxData);
         this.setValue("inboxActive", true);
-
+        this.interactionListen(inboxData._id);
         try {
             // Create request for InteractionService.GetInteractions
             const req = new proto.tmq.GetInteractionsRequest();
@@ -431,7 +431,7 @@ class MessagingWatcher extends Watcher2 {
         this.listening = true;
     }
 
-    interactionListen() {
+    interactionListen(inboxId) {
         // Stop existing interaction subscription if any
         if (this.interactionSubscription) {
             this.interactionSubscription.stop();
@@ -442,7 +442,7 @@ class MessagingWatcher extends Watcher2 {
         this.interactionSubscription = subscriptionManager.listen(
             'interactionapp',
             'interaction',
-            "user12",
+            inboxId,
             async (change) => {
                 // Handle real-time updates
                 switch (change.type) {
