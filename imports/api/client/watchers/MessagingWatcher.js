@@ -111,6 +111,7 @@ class MessagingWatcher extends Watcher2 {
     #lastBasis = null;
     #processes = {};
     #listen = null;
+    #interactionData = null;
     constructor(parent) {
         super(parent);
         this.setValue(TAB.MESSAGES, 'all');
@@ -123,11 +124,19 @@ class MessagingWatcher extends Watcher2 {
             syncEnabled: false  // We'll handle sync manually
         });
 
+        this.#interactionData = collectionManager.getCollection('interactionapp', 'interaction', {
+            syncEnabled: false  // We'll handle sync manually
+        });
+
         this.listening = false;
         this.initialized = false;
     }
     get DB() {
         return this.#data;
+    }
+
+    get DBInteraction() {
+        return this.#interactionData;
     }
 
     async initialize() {
@@ -142,6 +151,10 @@ class MessagingWatcher extends Watcher2 {
 
     async getAll() {
         return await this.#data.find({}).fetch();
+    }
+
+    async getAllInteraction() {
+        return await this.#interactionData.find({}).fetch();
     }
     // Messages
     searchMessages(value) {
@@ -231,6 +244,7 @@ class MessagingWatcher extends Watcher2 {
     async fetchMessages(inboxData) {
         this.setValue(INTERACTION.LOADING_MESSAGE, true);
         this.setValue(INTERACTION.CURRENT, inboxData);
+        this.setValue("inboxActive", true);
 
         try {
             // Create request for InteractionService.GetInteractions
@@ -272,6 +286,14 @@ class MessagingWatcher extends Watcher2 {
                     // UI specific fields for compatibility with existing components
                     sender: interaction.direction === 'inbound' ? 'User' : 'Agent'
                 }));
+
+                const existing = await this.#interactionData.find({}).fetch();
+                for (const doc of existing) {
+                    await this.#interactionData.remove(doc._id);
+                }
+                for (const interaction of transformedMessages) {
+                    await this.#interactionData.insert(interaction);
+                }
 
                 this.setValue(INTERACTION.MESSAGES, transformedMessages);
             } else {
@@ -360,8 +382,9 @@ class MessagingWatcher extends Watcher2 {
                     case 'insert':
                         // Check if already exists
                         const exists = await this.#data.findOne({ _id: change.id });
-
                         if (!exists) {
+                            console.log("insert", change.data);
+
                             const data = {
                                 _id: change.data._id._str,
                                 businessId: change.data.businessId._str,
@@ -379,17 +402,18 @@ class MessagingWatcher extends Watcher2 {
                             }
                             await this.#data.insert(data);
                         }
-                        console.log('Todo added:', change.data);
+                        console.log('Inbox added:', change.data);
                         break;
 
                     case 'update':
+                        if (change.data._id) delete change.data._id;
                         await this.#data.update(change.id, change.data);
-                        console.log('Todo updated:', change.data);
+                        console.log('Inbox updated:', change.data);
                         break;
 
                     case 'remove':
                         await this.#data.remove(change.id);
-                        console.log('Todo removed:', change.id);
+                        console.log('Inbox removed:', change.id);
                         break;
 
                     case 'custom':
@@ -407,10 +431,86 @@ class MessagingWatcher extends Watcher2 {
         this.listening = true;
     }
 
+    interactionListen() {
+        // Stop existing interaction subscription if any
+        if (this.interactionSubscription) {
+            this.interactionSubscription.stop();
+            this.interactionListening = false;
+        }
+
+        // Subscribe to real-time changes
+        this.interactionSubscription = subscriptionManager.listen(
+            'interactionapp',
+            'interaction',
+            "user12",
+            async (change) => {
+                // Handle real-time updates
+                switch (change.type) {
+                    case 'initial':
+                        // Initial data - already in minimongo from fetch
+                        console.log('Initial data received');
+                        break;
+
+                    case 'insert':
+                        // Check if already exists
+                        const exists = await this.#interactionData.findOne({ _id: change.id });
+
+                        if (!exists) {
+                            const data = {
+                                _id: change.data._id._str,
+                                businessId: change.data.businessId._str,
+                                inboxId: change.data.inboxId._str,
+                                channelId: change.data.channelId._str,
+                                consumerId: change.data.consumerId._str,
+                                userId: change.data.userId,
+                                medium: change.data.medium,
+                                direction: change.data.direction,
+                                message: change.data.payload?.text || '',
+                                attachments: change.data.payload?.attachmentsList || [],
+                                status: change.data.status,
+                                timestamp: change.data.createdAt,
+                                attributes: change.data.attributesList || [],
+                                sender: change.data.direction === 'inbound' ? 'User' : 'Agent'
+                            }
+                            await this.#interactionData.insert(data);
+                        }
+                        console.log('Interaction added:', change.data);
+                        break;
+
+                    case 'update':
+                        await this.#interactionData.update(change.id, change.data);
+                        console.log('Interaction updated:', change.data);
+                        break;
+
+                    case 'remove':
+                        await this.#interactionData.remove(change.id);
+                        console.log('Interaction removed:', change.id);
+                        break;
+
+                    default:
+                        console.log('Unknown event:', change.type);
+                }
+            }
+        );
+
+        this.interactionListening = true;
+    }
+
     stopListening() {
         if (this.subscription) {
             this.subscription.stop();
             this.listening = false;
+        }
+        // if (this.interactionSubscription) {
+        //     this.interactionSubscription.stop();
+        //     this.interactionListening = false;
+        // }
+    }
+
+    stopInteractionListening() {
+        if (this.interactionSubscription) {
+            this.interactionSubscription.stop();
+            this.interactionListening = false;
         }
     }
 }
