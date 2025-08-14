@@ -5,6 +5,7 @@ import { LogLevel, Logger } from "@tmq/logger";
 
 import SchemaErrorHandler from '../../../server/utils/schemaErrorHandler.js';
 import InteractionManager from '../../../server/classes/interactions/InteractionManager.js';
+import Server from '../../../server/Server.js';
 
 Logger.setLogLevel(LogLevel.DEBUG);
 
@@ -41,7 +42,7 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
 
             const channel = await InteractionManager.resolveChannel({ businessId: biz._id, type, identifier, provider, metadata: req.body?.meta });
             const consumer = await InteractionManager.resolveOrCreateConsumer({ businessId: biz._id, externalId });
-            const inbox = await InteractionManager.ensureInbox({ businessId: biz._id, consumerId: consumer._id, channelId: channel._id });
+            const { inbox, isNew: isNewInbox } = await InteractionManager.ensureInbox({ businessId: biz._id, consumerId: consumer._id, channelId: channel._id });
 
             const interaction = await InteractionManager.recordInteraction({
                 businessId: biz._id,
@@ -56,6 +57,15 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
             });
 
             await InteractionManager.updateInboxLatest({ inboxId: inbox._id, interaction, incrementUnread: true });
+            let businessId = biz._id._str || biz._id.toString();
+            const inboxid = inbox._id._str || inbox._id.toString();
+            const interactionid = interaction._id._str || interaction._id.toString();
+            if (isNewInbox) {
+                Server.RedisVentServer.triggers.insert('inboxapp', 'inbox', businessId, inboxid, inbox);
+            } else {
+                Server.RedisVentServer.triggers.update('inboxapp', 'inbox', businessId, inboxid, inbox);
+            }
+            Server.RedisVentServer.triggers.insert('interactionapp', 'interaction', inboxid, interactionid, interaction);
 
             InteractionManager.ok(res, {
                 businessId: biz._id,
@@ -63,6 +73,7 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
                 consumerId: consumer._id,
                 inboxId: inbox._id,
                 interactionId: interaction._id,
+                // isNewInbox: isNewInbox,
             });
         } catch (err) {
             // Enhanced error handling with schema validation details
@@ -96,7 +107,7 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
 
             // Ensure consumer + inbox
             const consumer = await InteractionManager.resolveOrCreateConsumer({ businessId: biz._id, externalId: to });
-            const inbox = await InteractionManager.ensureInbox({ businessId: biz._id, consumerId: consumer._id, channelId: channel._id });
+            const { inbox, isNew: isNewInbox } = await InteractionManager.ensureInbox({ businessId: biz._id, consumerId: consumer._id, channelId: channel._id });
 
             // Provider handoff (mock)
             const adapter = Providers[provider] || Providers.sms;
@@ -117,6 +128,15 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
             });
 
             await InteractionManager.updateInboxLatest({ inboxId: inbox._id, interaction, incrementUnread: false });
+            let businessId = biz._id._str || biz._id.toString();
+            const inboxid = inbox._id._str || inbox._id.toString();
+            const interactionid = interaction._id._str || interaction._id.toString();
+            if (isNewInbox) {
+                Server.RedisVentServer.triggers.insert('inboxapp', 'inbox', businessId, inboxid, inbox);
+            } else {
+                Server.RedisVentServer.triggers.update('inboxapp', 'inbox', businessId, inboxid, inbox);
+            }
+            Server.RedisVentServer.triggers.insert('interactionapp', 'interaction', inboxid, interactionid, interaction);
 
             InteractionManager.ok(res, {
                 businessId: biz._id,

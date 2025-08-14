@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package tmq;
+
+// Request message to get inbox entries by business ID
+message GetInboxRequest {
+  string business_id = 1;  // ObjectId as string
+}
+
+// Individual inbox entry
+message Inbox {
+  string id = 1;             // MongoDB _id as string
+  string business_id = 2;    // ObjectId as string
+  string consumer_id = 3;    // ObjectId as string
+  string channel_id = 4;     // ObjectId as string
+  string status = 5;
+  string assignee_id = 6;    // ObjectId as string (optional)
+  double locked_at = 7;      // Timestamp as double (optional)
+  int32 unread_for_assignee = 8;
+  string latest_interaction_id = 9;  // ObjectId as string (optional)
+  string latest_snippet = 10;       // (optional)
+  double latest_at = 11;             // Timestamp as double (optional)
+  string latest_direction = 12;      // (optional)
+  double created_at = 13;            // Timestamp as double
+}
+
+// Response message containing list of inbox entries
+message GetInboxResponse {
+  repeated Inbox inboxes = 1;
+  int32 total_count = 2;      // Total number of entries
+  bool success = 3;
+  string error_message = 4;   // Error message if success is false
+}
+
+// Service definition for inbox operations
+service InboxService {
+  // Get inbox entries by business ID
+  rpc GetInbox(GetInboxRequest) returns (GetInboxResponse);
+}

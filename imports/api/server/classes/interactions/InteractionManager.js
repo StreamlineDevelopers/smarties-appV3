@@ -93,13 +93,15 @@ class InteractionManager {
      * @param {string} businessId 
      * @param {string} consumerId 
      * @param {string} channelId 
-     * @returns {Promise<Inbox>}
+     * @returns {Promise<{inbox: Inbox, isNew: boolean}>}
      */
     static async ensureInbox({ businessId, consumerId, channelId }) {
         // Try to find existing inbox
         let inbox = await Inbox.findByBusinessIdAndConsumerIdAndChannelId(businessId, consumerId, channelId);
+        let isNew = false;
 
         if (!inbox) {
+            isNew = true;
             const inboxData = new Inbox({
                 businessId: businessId,
                 consumerId: consumerId,
@@ -111,7 +113,7 @@ class InteractionManager {
             const _id = await inboxData.save();
             inbox = await Inbox.findById(_id);
         }
-        return inbox;
+        return { inbox, isNew };
     }
 
     /**
@@ -199,7 +201,7 @@ class InteractionManager {
         // try common fields first; adapt per provider if needed
         const provider = (reqBody.provider || reqBody.meta?.provider || 'sms').toLowerCase();
         const type = reqBody.type || 'messaging';
-        const identifier = reqBody.to || reqBody.destination || reqBody.channel || 'default';
+        const identifier = reqBody.identifier || 'default';
         const externalId = reqBody.from || reqBody.externalId || reqBody.sender;
         const text = reqBody.text ?? reqBody.message ?? '';
         const attachments = Array.isArray(reqBody.attachments) ? reqBody.attachments : [];

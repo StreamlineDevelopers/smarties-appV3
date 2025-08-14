@@ -59,6 +59,8 @@
 0xe5b8fd92		SpeechService.Speech2Text
 0x44eee41		SpeechService.GetSpeechVoices
 0x88c8ce27		HelloWorldService.SayHello
+0x2686675b		InboxService.GetInbox
+0x7626071f		InteractionService.GetInteractions
 
 
  -- Subscriptions --
