@@ -14,7 +14,7 @@ import {
     collectionManager,
     syncManager,
     subscriptionManager
-} from 'redisvent-module/src/client/index';
+} from 'redisvent-module';
 
 const messageData = [
     {
@@ -174,7 +174,7 @@ class MessagingWatcher extends Watcher2 {
         try {
             // Create request for InboxService.GetInbox
             const req = new proto.tmq.GetInboxRequest();
-            req.setBusinessId("3ed129481cf7ee676e174993");
+            req.setBusinessId("d06aab075f7f6e9cb85adbc6");
 
             // Call InboxService.GetInbox - 0x2686675b
             const { err, result } = await this.Parent.callFunc(0x2686675b, req);
@@ -370,7 +370,7 @@ class MessagingWatcher extends Watcher2 {
         this.subscription = subscriptionManager.listen(
             'inboxapp',
             'inbox',
-            "user12",
+            "d06aab075f7f6e9cb85adbc6", // businessId 
             async (change) => {
                 // Handle real-time updates
                 switch (change.type) {
@@ -383,7 +383,6 @@ class MessagingWatcher extends Watcher2 {
                         // Check if already exists
                         const exists = await this.#data.findOne({ _id: change.id });
                         if (!exists) {
-                            console.log("insert", change.data);
 
                             const data = {
                                 _id: change.data._id._str,
