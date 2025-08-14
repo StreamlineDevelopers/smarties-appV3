@@ -109,7 +109,7 @@ const MaincontentLayout_70481141 = ({ }) => {
           // setLoading(false);
 
           // Start listening for real-time updates
-          watcher.interactionListen();
+          // watcher.interactionListen(watcher.getValue("currentInboxId"));
 
           // Subscribe to local changes
           const unsubscribe = watcher.DBInteraction.onChange(async () => {
