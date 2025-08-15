@@ -10,6 +10,7 @@ import TablecelldivItem_32fbc566 from '../components/TablecelldivItem_32fbc566';
 import TablecelldivItem_131c18fd from '../components/TablecelldivItem_131c18fd';
 import TablecelldivItem_36735cb6 from '../components/TablecelldivItem_36735cb6';
 import TablecelldivItem_5d77e023 from '../components/TablecelldivItem_5d77e023';
+import { Toaster } from 'sonner';
 
 const Messaging = () => {
   return (
@@ -213,6 +214,7 @@ const Messaging = () => {
           </div>
         </div>
       </div>
+      <Toaster closeButton />
     </>
   );
 };

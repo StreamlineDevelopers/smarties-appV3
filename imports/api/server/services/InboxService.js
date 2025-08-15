@@ -38,7 +38,11 @@ export default {
             }
 
             // Query inbox entries by business ID
-            const inboxEntries = await Inbox.findByBusinessId(request.business_id);
+            const inboxEntries = await Inbox.findByBusinessId(request.business_id, {
+                sort: {
+                    latestAt: -1
+                }
+            });
 
             // Convert to protobuf format
             const response = new GetInboxResponse();
