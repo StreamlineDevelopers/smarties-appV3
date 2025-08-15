@@ -15,6 +15,7 @@ import {
     syncManager,
     subscriptionManager
 } from 'redisvent-module';
+import axios from "axios";
 
 const messageData = [
     {
@@ -150,7 +151,7 @@ class MessagingWatcher extends Watcher2 {
     }
 
     async getAll() {
-        return await this.#data.find({}).fetch();
+        return await this.#data.find({}, { sort: { latestAt: -1 } }).fetch();
     }
 
     async getAllInteraction() {
@@ -174,7 +175,7 @@ class MessagingWatcher extends Watcher2 {
         try {
             // Create request for InboxService.GetInbox
             const req = new proto.tmq.GetInboxRequest();
-            req.setBusinessId("d06aab075f7f6e9cb85adbc6");
+            req.setBusinessId("63b81a722f8146be93163e3e");
 
             // Call InboxService.GetInbox - 0x2686675b
             const { err, result } = await this.Parent.callFunc(0x2686675b, req);
@@ -220,8 +221,9 @@ class MessagingWatcher extends Watcher2 {
                     await this.#data.insert(inbox);
                 }
 
-
-                this.setValue(INTERACTION.INBOX, transformedInbox);
+                // Get sorted data from minimongo to ensure proper order
+                const sortedInbox = await this.#data.find({}, { sort: { latestAt: -1 } }).fetch();
+                this.setValue(INTERACTION.INBOX, sortedInbox);
             } else {
                 console.error("Server error:", responseObj.errorMessage);
                 toast.error(responseObj.errorMessage || "Failed to fetch inbox", TOAST_STYLE);
@@ -317,18 +319,38 @@ class MessagingWatcher extends Watcher2 {
      *  
      * @param {string} message - The message text to send.
      */
-    sendMessage() {
-        this.setValue(INTERACTION.MESSAGES, [
-            ...this.getValue(INTERACTION.MESSAGES),
-            {
-                id: String(Date.now()),
-                sender: "User",
-                direction: "inbound",
-                message: this.getValue(INTERACTION.MESSAGE_TEXT),
-                timestamp: new Date().toLocaleTimeString(),
-            },
-        ]);
-        this.setValue(INTERACTION.MESSAGE_TEXT, '');
+    async sendMessage() {
+        // this.setValue(INTERACTION.MESSAGES, [
+        //     ...this.getValue(INTERACTION.MESSAGES),
+        //     {
+        //         id: String(Date.now()),
+        //         sender: "User",
+        //         direction: "inbound",
+        //         message: this.getValue(INTERACTION.MESSAGE_TEXT),
+        //         timestamp: new Date().toLocaleTimeString(),
+        //     },
+        // ]);
+        // this.setValue(INTERACTION.MESSAGE_TEXT, '');
+        const res = await axios.post(`/api/b/smarties-test/channels/messages/outbound`, {
+            "provider": "smarty",
+            "type": "chat",
+            "from": "smarty-chat-main",
+            "to": "customer_1755201392732",
+            "text": this.getValue(INTERACTION.MESSAGE_TEXT),
+            "meta": {
+                "agentId": "agent_001",
+                "agentName": "Support Agent",
+                "priority": "normal",
+                "responseTime": Date.now()
+            }
+        })
+
+        if (res.data.ok) {
+            this.setValue(INTERACTION.MESSAGE_TEXT, '');
+            toast.success("Message sent successfully", TOAST_STYLE.SUCCESS);
+        } else {
+            toast.error("Failed to send message", TOAST_STYLE.ERROR);
+        }
     }
 
     uploadDocumentFile() { }
@@ -360,7 +382,8 @@ class MessagingWatcher extends Watcher2 {
     }
 
     toggleSmartiesAssistant() {
-        this.setValue(TOGGLE.SMARTIES_ASSISTANT, !this.getValue(TOGGLE.SMARTIES_ASSISTANT));
+        const value = this.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? true;
+        this.setValue(TOGGLE.SMARTIES_ASSISTANT, !value);
     }
 
     inboxListen() {
@@ -370,9 +393,26 @@ class MessagingWatcher extends Watcher2 {
         this.subscription = subscriptionManager.listen(
             'inboxapp',
             'inbox',
-            "d06aab075f7f6e9cb85adbc6", // businessId 
+            "63b81a722f8146be93163e3e", // businessId as routingId
             async (change) => {
                 // Handle real-time updates
+                // transform the data to the UI format
+                const data = {
+                    _id: change.id || change.data._id._str,
+                    businessId: change.data.businessId._str,
+                    consumerId: change.data.consumerId._str,
+                    channelId: change.data.channelId._str,
+                    status: change.data.status,
+                    assigneeId: change.data.assigneeId || null,
+                    lockedAt: change.data.lockedAt || null,
+                    unreadForAssignee: change.data.unreadForAssignee,
+                    latestInteractionId: change.data.latestInteractionId ? change.data.latestInteractionId._str : null,
+                    latestSnippet: change.data.latestSnippet || null,
+                    latestAt: change.data.latestAt || change.data.createdAt || null,
+                    latestDirection: change.data.latestDirection || null,
+                    createdAt: change.data.createdAt
+                }
+
                 switch (change.type) {
                     case 'initial':
                         // Initial data - already in minimongo from fetch
@@ -383,22 +423,6 @@ class MessagingWatcher extends Watcher2 {
                         // Check if already exists
                         const exists = await this.#data.findOne({ _id: change.id });
                         if (!exists) {
-
-                            const data = {
-                                _id: change.data._id._str,
-                                businessId: change.data.businessId._str,
-                                consumerId: change.data.consumerId._str,
-                                channelId: change.data.channelId._str,
-                                status: change.data.status,
-                                assigneeId: change.data.assigneeId || null,
-                                lockedAt: change.data.lockedAt || null,
-                                unreadForAssignee: change.data.unreadForAssignee,
-                                latestInteractionId: change.data.latestInteractionId ? change.data.latestInteractionId._str : null,
-                                latestSnippet: change.data.latestSnippet || null,
-                                latestAt: change.data.createdAt || null,
-                                latestDirection: change.data.latestDirection || null,
-                                createdAt: change.data.createdAt
-                            }
                             await this.#data.insert(data);
                         }
                         console.log('Inbox added:', change.data);
@@ -406,7 +430,9 @@ class MessagingWatcher extends Watcher2 {
 
                     case 'update':
                         if (change.data._id) delete change.data._id;
-                        await this.#data.update(change.id, change.data);
+                        if (data._id) delete data._id;
+                        await this.#data.update(change.id, data);
+                        this.setValue(INTERACTION.INBOX, data);
                         console.log('Inbox updated:', change.data);
                         break;
 
