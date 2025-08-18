@@ -27,7 +27,10 @@ const Providers = {
         },
     },
     chat: {
-        async send({ channel, to, text, takeover = false, ...rest }) {
+        async send({ channel, to, text, ...rest }) {
+            if (channel.type === "chat" && channel.identifier.includes("smarty-chat-main")) {
+                return { providerMessageId: rest.messageId || `chat-${Date.now()}`, status: 'sent' };
+            }
             const username = 'tmq';
             const password = 'P@ssword1';
             const auth = Buffer.from(`${username}:${password}`).toString('base64');
@@ -39,7 +42,7 @@ const Providers = {
                     'Content-Type': 'application/json',
                     "Authorization": "Basic " + auth,
                 },
-                body: JSON.stringify({ query: text, takeover, ...rest, }),
+                body: JSON.stringify({ query: text, ...rest, }),
             });
             return await response.json();
         },
