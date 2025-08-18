@@ -6,9 +6,9 @@ const ContactnamedivItem = ({ src, divText }) => {
   return (
     <div className={'contact-namediv'}>
       <ContactnameavatarItem
-        src={'../images/smarties-avatar-02_1smarties-avatar-02.png'}
+        src={src}
       />
-      <ReusableItem_c2043d9a divText={'Sarah Johnson'} />
+      <ReusableItem_c2043d9a divText={divText} />
     </div>
   );
 };

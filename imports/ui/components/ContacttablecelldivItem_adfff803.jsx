@@ -4,7 +4,7 @@ import Btnstyle1Item_aff44056 from './Btnstyle1Item_aff44056';
 const ContacttablecelldivItem_adfff803 = ({ divText }) => {
   return (
     <div className={'contact-table-cell-div _w-15'}>
-      <Btnstyle1Item_aff44056 divText={'Send Offer'} />
+      <Btnstyle1Item_aff44056 divText={divText} />
     </div>
   );
 };

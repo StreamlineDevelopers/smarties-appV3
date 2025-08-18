@@ -5,8 +5,8 @@ const ContacttablecelldivItem_00c9231e = ({ src, divText }) => {
   return (
     <div className={'contact-table-cell-div stretch'}>
       <ContactnamedivItem
-        src={'../images/smarties-avatar-02_1smarties-avatar-02.png'}
-        divText={'Sarah Johnson'}
+        src={src}
+        divText={divText}
       />
     </div>
   );

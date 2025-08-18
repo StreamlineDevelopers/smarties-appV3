@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import DbstattagItem_77fe3313 from './DbstattagItem_77fe3313';
 import Divblock18Item from './Divblock18Item';
 import ContacttablecelldivItem from './ContacttablecelldivItem';
@@ -13,8 +13,40 @@ import WformfailItem from './WformfailItem';
 import IconembedItem from './IconembedItem';
 import DbstatcardItem from './DbstatcardItem';
 import SidebarleadinfotimelineitemItem from './SidebarleadinfotimelineitemItem';
+import ConvertBuyerWatcher, { OVERVIEW, TABLE } from '../../api/client/watchers/ConvertBuyerWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
+import Skeleton from 'react-loading-skeleton';
+import moment from 'moment';
+import { Loader } from 'lucide-react';
 
-const MaincontentLayout_5ea7a836 = ({}) => {
+const MaincontentLayout_5ea7a836 = ({ }) => {
+  const watcher = useRef(ConvertBuyerWatcher).current;
+  useWatcher(watcher);
+
+  useEffect(() => {
+    watcher.conversionRate();
+    watcher.topPerformingNudge();
+    watcher.mostCommonObjection();
+    watcher.hotLead();
+    watcher.fetchLeads();
+  }, []);
+
+  //loaders
+  const loadingConversionRate = watcher.getValue(OVERVIEW.LOADING_CONVERSION_RATE);
+  const loadingTopPerformingNudge = watcher.getValue(OVERVIEW.LOADING_TOP_PERFORMING_NUDGE);
+  const loadingMostCommonObjection = watcher.getValue(OVERVIEW.LOADING_MOST_COMMON_OBJECTION);
+  const loadingHotLeadsRightNow = watcher.getValue(OVERVIEW.LOADING_HOT_LEAD);
+  const loadingLeadsTable = watcher.getValue(TABLE.LOADING_LEADS);
+
+  //Overview
+  const conversationRateToday = watcher.getValue(OVERVIEW.CONVERSION_RATE) || {};
+  const topPerformingNudge = watcher.getValue(OVERVIEW.TOP_PERFORMING_NUDGE) || {};
+  const mostCommonObjection = watcher.getValue(OVERVIEW.MOST_COMMON_OBJECTION) || {};
+  const hotLeadsRightNow = watcher.getValue(OVERVIEW.HOT_LEAD) || {};
+  const leadList = watcher.getValue(TABLE.LEADS) || [];
+
+
+
   return (
     <div
       id={'w-node-b4ff377d-8e91-9b13-7bfa-4c468499c3dc-f14725d7'}
@@ -50,13 +82,26 @@ const MaincontentLayout_5ea7a836 = ({}) => {
                       {'Conversion Rate Today'}
                     </div>
                     <div className={'db-stat-value-contain'}>
-                      <div className={'stat-value'}>{'4.8%'}</div>
-                      <DbstattagItem_77fe3313
-                        src={
-                          'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccf5ef19e13e52bd7f0_db-stat-arrow.svg'
-                        }
-                        divText={'2.4%'}
-                      />
+                      {/* Total Conversion */}
+                      <div className={'stat-value'}>
+                        {loadingConversionRate ? (
+                          <Skeleton height={32} width={72} />
+                        ) : (
+                          `${conversationRateToday?.totalConversion ?? 0}%`
+                        )}
+                      </div>
+
+                      {/* Average Conversion */}
+                      {loadingConversionRate ? (
+                        <Skeleton height={16} width={48} />
+                      ) : (
+                        <DbstattagItem_77fe3313
+                          src={
+                            'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccf5ef19e13e52bd7f0_db-stat-arrow.svg'
+                          }
+                          divText={`${conversationRateToday?.average ?? 0}%`}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -65,15 +110,20 @@ const MaincontentLayout_5ea7a836 = ({}) => {
                     <div className={'stat-title'}>{'Top Performing Nudge'}</div>
                     <div className={'db-stat-value-contain horizontal'}>
                       <Divblock18Item
-                        divText={'"Limited offer: Free shipping"'}
-                        itemText={'Shown 2,458 times'}
+                        divText={loadingTopPerformingNudge ? <Skeleton height={24} width={72} /> : `"${topPerformingNudge.description || 'Limited offer: Free shipping'}"`}
+                        itemText={loadingTopPerformingNudge ? <Skeleton height={16} width={200} /> : `${topPerformingNudge.totalShown || 0} sessions shown`}
                       />
-                      <DbstattagItem_77fe3313
-                        src={
-                          'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccff12d401a801aff8b_db-stat-arrow.svg'
-                        }
-                        divText={'32%'}
-                      />
+                      {/* Average Top Performing Nudge*/}
+                      {loadingTopPerformingNudge ? (
+                        <Skeleton height={16} width={48} />
+                      ) : (
+                        <DbstattagItem_77fe3313
+                          src={
+                            'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccf5ef19e13e52bd7f0_db-stat-arrow.svg'
+                          }
+                          divText={`${topPerformingNudge?.average ?? 0}%`}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -84,15 +134,20 @@ const MaincontentLayout_5ea7a836 = ({}) => {
                     </div>
                     <div className={'db-stat-value-contain'}>
                       <Divblock18Item
-                        divText={'"Price comparison needed"'}
-                        itemText={'Detected in 189 sessions'}
+                        divText={loadingMostCommonObjection ? <Skeleton height={24} width={72} /> : `"${mostCommonObjection.description || 'Price comparison needed'}"`}
+                        itemText={loadingMostCommonObjection ? <Skeleton height={16} width={200} /> : `Detect in ${mostCommonObjection.totalDetected || 0} sessions`}
                       />
-                      <DbstattagItem_77fe3313
-                        src={
-                          'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccff12d401a801aff8b_db-stat-arrow.svg'
-                        }
-                        divText={'32%'}
-                      />
+                      {/* Average Most Common Objection */}
+                      {loadingMostCommonObjection ? (
+                        <Skeleton height={16} width={48} />
+                      ) : (
+                        <DbstattagItem_77fe3313
+                          src={
+                            'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccf5ef19e13e52bd7f0_db-stat-arrow.svg'
+                          }
+                          divText={`${mostCommonObjection?.average ?? 0}%`}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -101,9 +156,9 @@ const MaincontentLayout_5ea7a836 = ({}) => {
                     <div className={'stat-title'}>{'Hot Leads Right Now'}</div>
                     <div className={'db-stat-value-contain'}>
                       <div className={'div-block-18'}>
-                        <div className={'stat-value'}>{'12'}</div>
+                        <div className={'stat-value'}>{loadingHotLeadsRightNow ? <Skeleton height={32} width={72} /> : hotLeadsRightNow.totalLeads}</div>
                         <div className={'uploadeditem-filesize'}>
-                          {'Active in last 10 minutes'}
+                          {loadingHotLeadsRightNow ? <Skeleton height={16} width={200} /> : `Active in last  ${moment().diff(moment(hotLeadsRightNow.lastActive), "minutes") || 0} minutes`}
                         </div>
                       </div>
                       <DbstattagItem_77fe3313
@@ -142,6 +197,7 @@ const MaincontentLayout_5ea7a836 = ({}) => {
                           type={'text'}
                           id={'search-2'}
                           required
+                          onChange={(e) => watcher.searchLead(e.target.value)}
                         />
                         <a
                           href={'#'}
@@ -180,16 +236,21 @@ const MaincontentLayout_5ea7a836 = ({}) => {
                           </div>
                         </div>
                       </div>
-                      <ContacttablerowItem_bd02a14f
-                        src={
-                          '../images/smarties-avatar-02_1smarties-avatar-02.png'
-                        }
-                        divText={'Sarah Johnson'}
-                        divText1={'94'}
-                        divText2={'Added to cart'}
-                        divText3={'Send Offer'}
-                      />
-                      <div className={'contact--table-row'}>
+                      {loadingLeadsTable ? (
+                        <Loader />
+                      ) : (
+                        leadList.length && leadList.map((lead, index) => (
+                          <ContacttablerowItem_bd02a14f
+                            key={index}
+                            src={lead.avatar || '../images/smarties-avatar-01_1smarties-avatar-01.png'}
+                            divText={lead.name}
+                            divText1={lead.score}
+                            divText2={lead.status}
+                            divText3={lead.action}
+                          />
+                        ))
+                      )}
+                      {/* <div className={'contact--table-row'}>
                         <ContacttablecelldivItem_00c9231e
                           src={
                             '../images/smarties-avatar-03_1smarties-avatar-03.png'
@@ -211,8 +272,8 @@ const MaincontentLayout_5ea7a836 = ({}) => {
                           divText={'Send comparison'}
                         />
                         <ContacttablecelldivItem_6a918eca divText={'Contact'} />
-                      </div>
-                      <div className={'table-priority-divider'}>
+                      </div> */}
+                      < div className={'table-priority-divider'}>
                         <div className={'table-priority-divider-content'}>
                           <div
                             className={'table-priority-divider-dot yellow'}
@@ -222,7 +283,7 @@ const MaincontentLayout_5ea7a836 = ({}) => {
                           </div>
                         </div>
                       </div>
-                      <div className={'contact--table-row'}>
+                      {/* <div className={'contact--table-row'}>
                         <ContacttablecelldivItem_00c9231e
                           src={
                             '../images/smarties-avatar-04_1smarties-avatar-04.png'
@@ -253,7 +314,7 @@ const MaincontentLayout_5ea7a836 = ({}) => {
                         divText1={'95'}
                         divText2={'Returned visitor'}
                         divText3={'Engage'}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -326,7 +387,7 @@ const MaincontentLayout_5ea7a836 = ({}) => {
             <div className={'step-formblock w-form'}>
               <form
                 id={'email-form'}
-                name={'email-form'}
+                name={'email-form '}
                 data-name={'Email Form'}
                 method={'get'}
                 data-wf-page-id={'688b61ee631f6165f14725d7'}
@@ -385,8 +446,8 @@ const MaincontentLayout_5ea7a836 = ({}) => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
