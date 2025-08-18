@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import DashboardheadertextItem_95ccbf9e from './DashboardheadertextItem_95ccbf9e';
 import DbtrendingtopichdItem from './DbtrendingtopichdItem';
 import StepItem from './StepItem';
@@ -23,7 +23,7 @@ import BlogtopicoptionItem from './BlogtopicoptionItem';
 import DbquickactiontextcontentItem_90c6701f from './DbquickactiontextcontentItem_90c6701f';
 import SeopanelrowItem from './SeopanelrowItem';
 import { useNavigate } from "react-router-dom";
-import BlogWatcher, { STEPS } from '../../api/client/watchers/BlogWatcher';
+import BlogWatcher, { BLOG, STEPS, TAB } from '../../api/client/watchers/BlogWatcher';
 import { useWatcher } from '../../api/client/Watcher2';
 
 const MaincontentLayout_97bae701 = ({ }) => {
@@ -31,7 +31,17 @@ const MaincontentLayout_97bae701 = ({ }) => {
   const watcher = useRef(BlogWatcher).current;
   useWatcher(watcher);
 
+  useEffect(() => {
+    watcher.fetchTopic();
+  }, []);
+
   const currentPosition = watcher.getValue(STEPS.CURRENT_POSITION);
+  const activeTopicTab = watcher.getValue(TAB.TOPIC) || 'all';
+  const topicsList = watcher.getValue(BLOG.TOPICS);
+  const headlinesList = watcher.getValue(BLOG.HEADLINES);
+
+  const isLoadingTopics = watcher.getValue(BLOG.LOADING_TOPIC);
+  const isLoadingHeadlines = watcher.getValue(BLOG.LOADING_HEADLINES);
 
   return (
     <div
@@ -418,18 +428,24 @@ const MaincontentLayout_97bae701 = ({ }) => {
                     data-wf-element-id={'cca59dbc-9ea1-4fc2-3e20-038f6c075148'}
                   >
                     <div className={'stepformcontent-div'}>
-                      <div className={'headline-list'}>
-                        <HeadlineitemItem
-                          label={
-                            '10 Ways AI is Transforming Digital Marketing in 2023'
-                          }
-                          divText={'SEO: 92'}
-                          divText1={
-                            'Explore the latest AI tools and techniques that are revolutionizing how marketers connect with their audience.'
-                          }
-                          divText2={'5 min read'}
-                        />
-                        <label className={'headline-item w-radio'}>
+                      {isLoadingHeadlines ?
+                        <div>{'Loading...'}</div>
+                        :
+                        <div className={'headline-list'}>
+                          {headlinesList.length > 0 && headlinesList.map((item, index) => (
+                            <HeadlineitemItem
+                              key={index}
+                              label={
+                                item.title
+                              }
+                              divText={item.seoScore}
+                              divText1={
+                                item.description
+                              }
+                              divText2={item.readTime}
+                            />
+                          ))}
+                          {/* <label className={'headline-item w-radio'}>
                           <div
                             className={
                               'w-form-formradioinput w-form-formradioinput--inputType-custom blogtopic-radiobutton w-radio-input'
@@ -484,8 +500,9 @@ const MaincontentLayout_97bae701 = ({ }) => {
                             'A practical guide to implementing AI tools and workflows in your existing marketing operations.'
                           }
                           divText2={'6 min read'}
-                        />
-                      </div>
+                        /> */}
+                        </div>
+                      }
                       <div className={'form-btn-container inbetween'}>
                         <Btnstyle1Item_1c4932a3
                           dataWId={'cca59dbc-9ea1-4fc2-3e20-038f6c075182'}
@@ -570,26 +587,35 @@ const MaincontentLayout_97bae701 = ({ }) => {
                           <a
                             data-w-tab={'Tab 1'}
                             className={
-                              'contactdetails-tablink w-inline-block w-tab-link w--current'
+                              `contactdetails-tablink w-inline-block w-tab-link ${activeTopicTab == 'all' && 'w--current'} `
                             }
+                            onClick={() => watcher.topicTabChange('all')}
                           >
                             <div>{'All Topics'}</div>
                           </a>
                           <ContactdetailstablinkItem_d67219bc
                             dataWTab={'Tab 2'}
                             divText={'Technology'}
+                            isActive={activeTopicTab == 'technology'}
+                            onClick={() => watcher.topicTabChange('technology')}
                           />
                           <ContactdetailstablinkItem_d67219bc
                             dataWTab={'Tab 3'}
                             divText={'Marketing'}
+                            isActive={activeTopicTab == 'marketing'}
+                            onClick={() => watcher.topicTabChange('marketing')}
                           />
                           <ContactdetailstablinkItem_d67219bc
                             dataWTab={'Tab 4'}
                             divText={'Business'}
+                            isActive={activeTopicTab == 'business'}
+                            onClick={() => watcher.topicTabChange('business')}
                           />
                           <ContactdetailstablinkItem_d67219bc
                             dataWTab={'Tab 5'}
                             divText={'Lifestyle'}
+                            isActive={activeTopicTab == 'lifestyle'}
+                            onClick={() => watcher.topicTabChange('lifestyle')}
                           />
                         </div>
                         <div
@@ -598,16 +624,22 @@ const MaincontentLayout_97bae701 = ({ }) => {
                           <div
                             data-w-tab={'Tab 1'}
                             className={
-                              'contactdetails-tabpane w-tab-pane w--tab-active'
+                              `contactdetails-tabpane w-tab-pane ${activeTopicTab == 'all' ? 'w--tab-active' : ''}`
                             }
                           >
-                            <div className={'blogtopic-div'}>
-                              <div className={'blog-topic-option-div'}>
-                                <BlogtopicoptionItem
-                                  itemText={'Technology'}
-                                  label={'AI Ethics in Business'}
-                                />
-                                <BlogtopicoptionItem
+                            {isLoadingTopics ?
+                              <div>{'Loading'}</div>
+                              :
+                              <div className={'blogtopic-div'}>
+                                <div className={'blog-topic-option-div'}>
+                                  {topicsList && topicsList.map((item, index) => (
+                                    <BlogtopicoptionItem
+                                      key={index}
+                                      itemText={item.tag}
+                                      label={item.label}
+                                    />))
+                                  }
+                                  {/* <BlogtopicoptionItem
                                   itemText={'Business'}
                                   label={'Remote Work Trends'}
                                 />
@@ -633,26 +665,27 @@ const MaincontentLayout_97bae701 = ({ }) => {
                                 />
                                 <BlogtopicoptionItem
                                   itemText={'Marketing'}
-                                  label={'Data Privacy'}
-                                />
+                                  label={'Data Privacy'} 
+                                />*/}
+                                </div>
                               </div>
-                            </div>
+                            }
                           </div>
                           <div
                             data-w-tab={'Tab 2'}
-                            className={'w-tab-pane'}
+                            className={`w-tab-pane' ${activeTopicTab == 'technology' ? 'w--tab-active' : ''}`}
                           ></div>
                           <div
                             data-w-tab={'Tab 3'}
-                            className={'w-tab-pane'}
+                            className={`w-tab-pane ${activeTopicTab == 'marketing' ? 'w--tab-active' : ''}`}
                           ></div>
                           <div
                             data-w-tab={'Tab 4'}
-                            className={'w-tab-pane'}
+                            className={`w-tab-pane ${activeTopicTab == 'business' ? 'w--tab-active' : ''}`}
                           ></div>
                           <div
                             data-w-tab={'Tab 5'}
-                            className={'w-tab-pane'}
+                            className={`w-tab-pane ${activeTopicTab == 'lifestyle' ? 'w--tab-active' : ''}`}
                           ></div>
                         </div>
                       </div>

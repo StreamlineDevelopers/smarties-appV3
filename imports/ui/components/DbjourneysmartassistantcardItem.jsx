@@ -3,14 +3,14 @@ import DbjourneysmartassistantcardtopItem from './Dbjourneysmartassistantcardtop
 import DbjourneysmartassistantcardbodyItem from './DbjourneysmartassistantcardbodyItem';
 import DbjourneysmartassistantcardbotItem from './DbjourneysmartassistantcardbotItem';
 
-const DbjourneysmartassistantcardItem = ({}) => {
+const DbjourneysmartassistantcardItem = ({ title, description }) => {
   return (
     <div className={'db-journey-smartassistant-card'}>
       <DbjourneysmartassistantcardtopItem />
       <DbjourneysmartassistantcardbodyItem
-        title={'This blog is performing 32% above average'}
+        title={title || 'This blog is performing 32% above average'}
         itemText={
-          'Your article "7 Ways to Automate Customer Journeys" is getting exceptional engagement. Consider creating'
+          description || 'Your article "7 Ways to Automate Customer Journeys" is getting exceptional engagement. Consider creating'
         }
       />
       <DbjourneysmartassistantcardbotItem />

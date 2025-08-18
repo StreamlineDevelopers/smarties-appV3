@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import DashboardheadertextItem_95ccbf9e from './DashboardheadertextItem_95ccbf9e';
 import DbtrendingtopichdItem from './DbtrendingtopichdItem';
 import StepItem_1d0d69f5 from './StepItem_1d0d69f5';
@@ -29,8 +29,28 @@ import PlatformoptionItem_f97190d2 from './PlatformoptionItem_f97190d2';
 import FrequencyoptionItem_eb7b5348 from './FrequencyoptionItem_eb7b5348';
 import DbquickactiontextcontentItem_90c6701f from './DbquickactiontextcontentItem_90c6701f';
 import SeopanelrowItem from './SeopanelrowItem';
+import SocialPostWatcher, { frequencyOptions, platformOptions, SOCIAL_POST, STEPS } from '../../api/client/watchers/SocialPostWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
+import { useNavigate } from 'react-router-dom';
 
-const MaincontentLayout_b95ca0d0 = ({}) => {
+const MaincontentLayout_b95ca0d0 = ({ }) => {
+  const navigate = useNavigate();
+  const watcher = useRef(SocialPostWatcher).current;
+  useWatcher(watcher);
+
+  const currentPosition = watcher.getValue(STEPS.CURRENT_POSITION);
+  const platformSelected = watcher.getValue(SOCIAL_POST.PLATFORM);
+  const frequencySelected = watcher.getValue(SOCIAL_POST.FREQUENCY);
+  const trendingTopicSelected = watcher.getValue(SOCIAL_POST.TOPIC);
+  const socialContentSelected = watcher.getValue(SOCIAL_POST.CONTENT);
+
+  const topicsList = watcher.getValue(SOCIAL_POST.TOPICS) || [];
+  const contentList = watcher.getValue(SOCIAL_POST.CONTENT_GENERATED) || [];
+
+  const isLoadingTopic = watcher.getValue(SOCIAL_POST.LOADING_TOPICS);
+  const isLoadingContent = watcher.getValue(SOCIAL_POST.LOADING_CONTENT);
+
+
   return (
     <div
       id={'w-node-_56a22ee8-48a6-d322-7d35-b57347bcd2ce-f14725d4'}
@@ -42,6 +62,10 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
             <a
               href={'../journey/buzz-builder-hub.html'}
               className={'link-return w-inline-block'}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(-1);
+              }}
             >
               <img
                 src={'../images/smarties-icon-return-grenn.svg'}
@@ -100,7 +124,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
             </div>
           </div>
           <div className={'mainwidth-control journey'}>
-            <div className={'postsocial-step4'}>
+            <div className={'postsocial-step4'} style={{ display: currentPosition === 3 ? 'flex' : 'none' }}>
               <div className={'steps-container'}>
                 <StepItem_1d0d69f5 description={'Select Platforms'} />
                 <div className={'step-divider'}></div>
@@ -182,7 +206,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                         </div>
                       </div>
                       <div className={'post-preview-list'}>
-                        <label className={'post-preview-item w-radio'}>
+                        {socialContentSelected && <label className={'post-preview-item w-radio'}>
                           <div
                             className={
                               'w-form-formradioinput w-form-formradioinput--inputType-custom blogtopic-radiobutton w-radio-input'
@@ -206,7 +230,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                                 <div className={'postpreview-item-topleft'}>
                                   <div className={'postpreview-avatar'}>
                                     <img
-                                      src={'../images/Frame_9.svg'}
+                                      src={platformSelected.icon}
                                       loading={'lazy'}
                                       width={'20'}
                                       height={'20'}
@@ -219,7 +243,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                                       className={'postpreview-info-titlediv'}
                                     >
                                       <div className={'socialcontent-name'}>
-                                        {'Twitter Post'}
+                                        {platformSelected.name}
                                       </div>
                                       <div className={'post-preview-tag'}>
                                         {'Scheduled'}
@@ -235,12 +259,12 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                               </div>
                               <div className={'socialcontent-post'}>
                                 {
-                                  "Automating your marketing workflows isn't just about saving time—it's about creating space for strategic thinking. #MarketingAutomation lets you focus on what matters most: connecting with your audience."
+                                  socialContentSelected.content
                                 }
                               </div>
                               <SocialcontenthashtagsdivItem
-                                divText={'#DigitalMarketing'}
-                                divText1={'#WorkSmarter'}
+                                divText={socialContentSelected.hashtags[0]}
+                                divText1={socialContentSelected.hashtags[1]}
                               />
                             </div>
                             <SocialcontentradiocardbottomItem />
@@ -251,8 +275,8 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                           >
                             {'Radio'}
                           </span>
-                        </label>
-                        <label className={'post-preview-item w-radio'}>
+                        </label>}
+                        {/* <label className={'post-preview-item w-radio'}>
                           <div
                             className={
                               'w-form-formradioinput w-form-formradioinput--inputType-custom blogtopic-radiobutton w-radio-input'
@@ -321,14 +345,15 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                           >
                             {'Radio'}
                           </span>
-                        </label>
+                        </label> */}
                       </div>
                       <div className={'form-btn-container inbetween'}>
                         <Btnstyle1Item_c79bbac4
                           dataWId={'56a22ee8-48a6-d322-7d35-b57347bcd420'}
+                          onClick={() => watcher.goPrevious()}
                         />
                         <div className={'btn-container-left'}>
-                          <a href={'#'} className={'btn-style1 w-inline-block'}>
+                          <a href={'#'} className={'btn-style1 w-inline-block'} onClick={() => watcher.finishAndActivateSchedule()}>
                             <div>{'Finish and Activate Schedule'}</div>
                             <IconembedItem
                               iconSrc={
@@ -345,7 +370,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                 </div>
               </div>
             </div>
-            <div className={'postsocial-step3'}>
+            <div className={'postsocial-step3'} style={{ display: currentPosition === 2 ? 'flex' : 'none' }}>
               <div className={'steps-container'}>
                 <StepItem_1d0d69f5 description={'Select Platforms'} />
                 <div className={'step-divider'}></div>
@@ -428,32 +453,24 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                                     data-w-tab={'Tab 1'}
                                     className={'w-tab-pane w--tab-active'}
                                   >
-                                    <div className={'social-topic-list'}>
-                                      <SocialcontentitemItem
-                                        divText={
-                                          'Discover how AI is transforming customer service with real-time personalization. Our latest case study shows a 45% increase in satisfaction scores!'
-                                        }
-                                        divText1={'#DigitalMarketing'}
-                                        divText2={'#WorkSmarter'}
-                                        divText3={'Professional'}
-                                      />
-                                      <SocialcontentitemItem
-                                        divText={
-                                          "Just tried the new AI assistant feature and wow! 🤯 It's like having a personal productivity coach right on my phone. Anyone else loving this?"
-                                        }
-                                        divText1={'#ROI'}
-                                        divText2={'#MarketingTech'}
-                                        divText3={'Casual'}
-                                      />
-                                      <SocialcontentitemItem
-                                        divText={
-                                          'Our analysis of 500+ AI implementations reveals: Companies integrating AI into core business functions see 32% higher revenue growth over 3 years compared to non-adopters.'
-                                        }
-                                        divText1={'#MarTech'}
-                                        divText2={'#GrowthHacking'}
-                                        divText3={'Professional'}
-                                      />
-                                    </div>
+                                    {isLoadingContent ? <div>Loading...</div>
+                                      :
+                                      <div className={'social-topic-list'}>
+                                        {contentList.length && contentList.map((item) => (
+                                          <SocialcontentitemItem
+                                            key={item.id}
+                                            divText={
+                                              item.content}
+                                            divText1={item.hashtags[0]}
+                                            divText2={item.hashtags[1]}
+                                            divText3={item.hashtags[2]}
+                                            value={socialContentSelected}
+                                            checked={socialContentSelected?.id === item.id}
+                                            onChange={() => watcher.setValue(SOCIAL_POST.CONTENT, item)}
+                                          />
+                                        ))}
+                                      </div>
+                                    }
                                   </div>
                                   <div
                                     data-w-tab={'Tab 2'}
@@ -480,6 +497,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                       <div className={'form-btn-container inbetween'}>
                         <Btnstyle1Item_c79bbac4
                           dataWId={'2c706663-f643-769c-791c-276c844a0649'}
+                          onClick={() => watcher.goPrevious()}
                         />
                         <div className={'btn-container-left'}>
                           <Btnstyle1Item_32e25154
@@ -493,6 +511,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                             iconSrc={
                               '/svgs/icon-05e60be02362b63346cf645f41bc4094.svg'
                             }
+                            onClick={() => watcher.goNext()}
                           />
                         </div>
                       </div>
@@ -503,7 +522,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                 </div>
               </div>
             </div>
-            <div className={'postsocial-step2'}>
+            <div className={'postsocial-step2'} style={{ display: currentPosition === 1 ? 'flex' : 'none' }}>
               <div className={'steps-container'}>
                 <StepItem_1d0d69f5 description={'Select Platforms'} />
                 <div className={'step-divider'}></div>
@@ -626,66 +645,73 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                                     data-w-tab={'Tab 1'}
                                     className={'w-tab-pane w--tab-active'}
                                   >
-                                    <div className={'social-topic-list'}>
-                                      <label
-                                        className={'social-topic-item w-radio'}
-                                      >
-                                        <div
-                                          className={
-                                            'w-form-formradioinput w-form-formradioinput--inputType-custom blogtopic-radiobutton w-radio-input'
-                                          }
-                                        ></div>
-                                        <input
-                                          type={'radio'}
-                                          data-name={'Radio'}
-                                          id={'radio'}
-                                          name={'radio'}
-                                          style={{
-                                            opacity: '0',
-                                            position: 'absolute',
-                                            zIndex: '-1',
-                                          }}
-                                          value={'Radio'}
-                                        />
-                                        <div className={'social-radiocard'}>
-                                          <div className={'headline-item-top'}>
+                                    {isLoadingTopic ? <div>Loading...</div>
+                                      :
+                                      <div className={'social-topic-list'}>
+                                        {topicsList.length && topicsList.map((item) => (
+                                          <label
+                                            key={item.id}
+                                            className={'social-topic-item w-radio'}
+                                          >
                                             <div
-                                              className={'trending-count-text'}
-                                            >
-                                              {'Trending #1'}
-                                            </div>
-                                            <div className={'topictag'}>
-                                              <IcontopicstagItem
-                                                iconSrc={
-                                                  '/svgs/icon-53ee87bbce20e2b51214601979867d49.svg'
+                                              className={
+                                                `w-form-formradioinput w-form-formradioinput--inputType-custom blogtopic-radiobutton w-radio-input ${trendingTopicSelected?.id == item.id && 'w--redirected-focus w--redirected-checked'}`
+                                              }
+                                            ></div>
+                                            <input
+                                              type={'radio'}
+                                              data-name={'Radio'}
+                                              id={'radio'}
+                                              name={'radio'}
+                                              style={{
+                                                opacity: '0',
+                                                position: 'absolute',
+                                                zIndex: '-1',
+                                              }}
+                                              value={trendingTopicSelected}
+                                              checked={trendingTopicSelected?.id === item.id}
+                                              onChange={() => watcher.setValue(SOCIAL_POST.TOPIC, item)}
+                                            />
+                                            <div className={'social-radiocard'}>
+                                              <div className={'headline-item-top'}>
+                                                <div
+                                                  className={'trending-count-text'}
+                                                >
+                                                  {item.trendingRank}
+                                                </div>
+                                                <div className={'topictag'}>
+                                                  <IcontopicstagItem
+                                                    iconSrc={
+                                                      item.categoryIcon
+                                                    }
+                                                  />
+                                                  <div>{item.category}</div>
+                                                </div>
+                                              </div>
+                                              <ReusableItem_f1f14634
+                                                label={item.hashtag}
+                                                divText={
+                                                  item.description
                                                 }
                                               />
-                                              <div>{'Technology'}</div>
+                                              <TrendingtopicitembotItem_5aaf5f77
+                                                divText={item.postsToday}
+                                                dataWId={
+                                                  '2a186bf9-b26d-c516-8200-f64c61860023'
+                                                }
+                                              />
                                             </div>
-                                          </div>
-                                          <ReusableItem_f1f14634
-                                            label={'#MarketingAutomation'}
-                                            divText={
-                                              'How AI is transforming digital marketing'
-                                            }
-                                          />
-                                          <TrendingtopicitembotItem_5aaf5f77
-                                            divText={'120K+ posts today'}
-                                            dataWId={
-                                              '2a186bf9-b26d-c516-8200-f64c61860023'
-                                            }
-                                          />
-                                        </div>
-                                        <span
-                                          className={
-                                            'radio-button-label-2 w-form-label'
-                                          }
-                                          htmlFor={'radio'}
-                                        >
-                                          {'Radio'}
-                                        </span>
-                                      </label>
-                                      <label
+                                            <span
+                                              className={
+                                                'radio-button-label-2 w-form-label'
+                                              }
+                                              htmlFor={'radio'}
+                                            >
+                                              {'Radio'}
+                                            </span>
+                                          </label>
+                                        ))}
+                                        {/* <label
                                         className={'social-topic-item w-radio'}
                                       >
                                         <div
@@ -800,8 +826,9 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                                         >
                                           {'Radio'}
                                         </span>
-                                      </label>
-                                    </div>
+                                      </label> */}
+                                      </div>
+                                    }
                                   </div>
                                   <div
                                     data-w-tab={'Tab 2'}
@@ -832,6 +859,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                       <div className={'form-btn-container inbetween'}>
                         <Btnstyle1Item_c79bbac4
                           dataWId={'2a186bf9-b26d-c516-8200-f64c6186006a'}
+                          onClick={() => watcher.goPrevious()}
                         />
                         <div className={'btn-container-left'}>
                           <Btnstyle1Item_4383e460
@@ -839,6 +867,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                             iconSrc={
                               '/svgs/icon-05e60be02362b63346cf645f41bc4094.svg'
                             }
+                            onClick={() => watcher.goNext()}
                           />
                         </div>
                       </div>
@@ -849,7 +878,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                 </div>
               </div>
             </div>
-            <div className={'postsocial-step1'}>
+            <div className={'postsocial-step1'} style={{ display: currentPosition === 0 ? 'flex' : 'none' }}>
               <div className={'steps-container'}>
                 <StepItem_0c31cf42
                   divText={'1'}
@@ -890,18 +919,24 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                           {'Select platforms to post to:'}
                         </div>
                         <div className={'blog-topic-option-div'}>
-                          <PlatformoptionItem_f97190d2
-                            src={'../images/smarties-social-twitter.svg'}
-                            label={'Twitter/X'}
-                          />
-                          <PlatformoptionItem_f97190d2
+                          {platformOptions.map((item, index) => (
+                            <PlatformoptionItem_f97190d2
+                              key={index}
+                              src={item.icon}
+                              label={item.name}
+                              value={item.name}
+                              checked={platformSelected?.name === item.name}
+                              onChange={() => watcher.setValue(SOCIAL_POST.PLATFORM, item)}
+                            />
+                          ))}
+                          {/* <PlatformoptionItem_f97190d2
                             src={'../images/smarties-social-insta.svg'}
                             label={'Instagram'}
                           />
                           <PlatformoptionItem_f97190d2
                             src={'../images/smarties-social-facebook.svg'}
                             label={'Facebook'}
-                          />
+                          /> */}
                         </div>
                         <div className={'calendar-preview-div'}>
                           <Btnstyle1Item_32e25154
@@ -917,13 +952,19 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                           {'How often would you like to post?'}
                         </div>
                         <div className={'frequency-option-div'}>
-                          <FrequencyoptionItem_eb7b5348
-                            title={'Daily'}
-                            divText={'Best for consistent engagement'}
-                            divText1={'Post once every day'}
-                            src={'../images/smarties-frequency-daily.svg'}
-                          />
-                          <FrequencyoptionItem_eb7b5348
+                          {frequencyOptions.map((item, index) => (
+                            <FrequencyoptionItem_eb7b5348
+                              key={item.id}
+                              title={item.title}
+                              divText={item.subtitle}
+                              divText1={item.description}
+                              src={item.icon}
+                              value={item.title}
+                              checked={frequencySelected === item.title}
+                              onChange={() => watcher.setValue(SOCIAL_POST.FREQUENCY, item.title)}
+                            />
+                          ))}
+                          {/* <FrequencyoptionItem_eb7b5348
                             title={'Weekly'}
                             divText={'Ideal for updates or newsletters'}
                             divText1={'Post 2-3 times per week'}
@@ -934,7 +975,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                             divText={'Great for announcements or campaigns'}
                             divText1={'Post 3-5 times per month'}
                             src={'../images/smarties-frequency-montlhy.svg'}
-                          />
+                          /> */}
                         </div>
                       </div>
                     </div>
@@ -945,6 +986,7 @@ const MaincontentLayout_b95ca0d0 = ({}) => {
                           iconSrc={
                             '/svgs/icon-8845fc47c482664a4fba81a990230b3c.svg'
                           }
+                          onClick={() => watcher.goNext()}
                         />
                       </div>
                     </div>

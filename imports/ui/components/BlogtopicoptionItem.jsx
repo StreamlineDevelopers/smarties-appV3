@@ -18,8 +18,8 @@ const BlogtopicoptionItem = ({ itemText, label }) => {
         value={'Radio'}
       />
       <BlogtopicradiocardItem
-        itemText={'Technology'}
-        label={'AI Ethics in Business'}
+        itemText={itemText}
+        label={label}
       />
       <span className={'radio-button-label-2 w-form-label'} htmlFor={'radio'}>
         {'Radio'}
