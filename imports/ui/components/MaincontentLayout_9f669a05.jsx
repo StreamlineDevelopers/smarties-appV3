@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import LoyaltycardtoptextcontentItem from './LoyaltycardtoptextcontentItem';
 import IconembedItem_5cfec2b8 from './IconembedItem_5cfec2b8';
 import LoyaltycardmidItem from './LoyaltycardmidItem';
@@ -15,8 +15,22 @@ import ContacttablecelldivItem_06b1398f from './ContacttablecelldivItem_06b1398f
 import WformdoneItem from './WformdoneItem';
 import WformfailItem from './WformfailItem';
 import ActivityfeedtextcontentItem from './ActivityfeedtextcontentItem';
+import BuildLoyaltyWatcher, { TABLE } from '../../api/client/watchers/BuildLoyaltyWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
+import Loader from './common/Loader';
+import { Link } from 'react-router-dom';
 
-const MaincontentLayout_9f669a05 = ({}) => {
+const MaincontentLayout_9f669a05 = ({ }) => {
+  const watcher = useRef(BuildLoyaltyWatcher).current;
+  useWatcher(watcher);
+
+  useEffect(() => {
+    watcher.fetchLoyaltyMembers();
+  }, []);
+
+  const loadingMembers = watcher.getValue(TABLE.LOADING_MEMBERS);
+  const loyalMembersList = watcher.getValue(TABLE.MEMBERS) || [];
+
   return (
     <div
       id={'w-node-a0603396-7cfe-87df-6b65-c8cff2c4b87b-f14725d9'}
@@ -34,12 +48,13 @@ const MaincontentLayout_9f669a05 = ({}) => {
             <a href={'#'} className={'btn-style1 w-inline-block'}>
               <div>{'Export'}</div>
             </a>
-            <a
-              href={'../journey/customer-memory-center.html'}
+            <Link
+              // href={'../journey/customer-memory-center.html'}
               className={'btn-style1 outline-orange w-inline-block'}
+              to={'/journey/customer-memory-center'}
             >
               <div>{'Customer Memory Center'}</div>
-            </a>
+            </Link>
           </div>
         </div>
         <div className={'journey-dashboard-width'}>
@@ -175,6 +190,7 @@ const MaincontentLayout_9f669a05 = ({}) => {
                           type={'text'}
                           id={'search-2'}
                           required
+                          onChange={(e => watcher.searchLoyaltyMembers(e.target.value))}
                         />
                         <a
                           href={'#'}
@@ -202,15 +218,23 @@ const MaincontentLayout_9f669a05 = ({}) => {
                       <ContacttablecelldivItem_52e43e34 header={'actions'} />
                     </div>
                     <div className={'contacts-table-content'}>
-                      <ContacttablerowItem
-                        src={
-                          '../images/smarties-avatar-02_1smarties-avatar-02.png'
-                        }
-                        divText={'Sarah Johnson'}
-                        label={'1,245'}
-                        label1={'12'}
-                      />
-                      <div className={'contact--table-row'}>
+                      {loadingMembers ? (
+                        <Loader />)
+                        :
+                        loyalMembersList.length ? loyalMembersList.map((member, index) => (
+                          <ContacttablerowItem
+                            src={
+                              member.avatar || '../images/smarties-avatar-01_1smarties-avatar-01.png'
+                            }
+                            divText={member.name || 'John Doe'}
+                            label={member.points || '0'}
+                            label1={member.rewardsUsed || '0'}
+                          />
+                        ))
+                          :
+                          <div>no data </div>
+                      }
+                      {/* <div className={'contact--table-row'}>
                         <ContacttablecelldivItem_00c9231e
                           src={
                             '../images/smarties-avatar-03_1smarties-avatar-03.png'
@@ -257,7 +281,7 @@ const MaincontentLayout_9f669a05 = ({}) => {
                         divText={'James Rodriguez'}
                         label={'720'}
                         label1={'8'}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>

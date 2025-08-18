@@ -17,7 +17,7 @@ import ConvertBuyerWatcher, { OVERVIEW, TABLE } from '../../api/client/watchers/
 import { useWatcher } from '../../api/client/Watcher2';
 import Skeleton from 'react-loading-skeleton';
 import moment from 'moment';
-import { Loader } from 'lucide-react';
+import Loader from './common/Loader';
 
 const MaincontentLayout_5ea7a836 = ({ }) => {
   const watcher = useRef(ConvertBuyerWatcher).current;
@@ -239,16 +239,16 @@ const MaincontentLayout_5ea7a836 = ({ }) => {
                       {loadingLeadsTable ? (
                         <Loader />
                       ) : (
-                        leadList.length && leadList.map((lead, index) => (
+                        leadList.length ? leadList.map((lead, index) => (
                           <ContacttablerowItem_bd02a14f
                             key={index}
                             src={lead.avatar || '../images/smarties-avatar-01_1smarties-avatar-01.png'}
-                            divText={lead.name}
-                            divText1={lead.score}
-                            divText2={lead.status}
-                            divText3={lead.action}
+                            divText={lead.name || 'John Smith'}
+                            divText1={lead.score || '95'}
+                            divText2={lead.status || 'Viewed pricing'}
+                            divText3={lead.action || 'Send comparison'}
                           />
-                        ))
+                        )) : (<div>no data</div>)
                       )}
                       {/* <div className={'contact--table-row'}>
                         <ContacttablecelldivItem_00c9231e
