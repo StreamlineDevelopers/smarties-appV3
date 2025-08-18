@@ -5,6 +5,7 @@ import Client from "../Client";
 import { toast } from 'sonner';
 import { TOAST_STYLE } from "../../common/const";
 import { Accounts } from 'meteor/tmq:accounts';
+import { loyaltyMembers } from "./data/loyaltyMember";
 const { Adapter, Logger } = core;
 
 Adapter.Meteor = Meteor;
@@ -31,7 +32,7 @@ class BuildLoyaltyWatcher extends Watcher2 {
     fetchLoyaltyMembers() {
         this.setValue(TABLE.LOADING_MEMBERS, true);
         // Simulate fetching data
-        this.setValue(TABLE.MEMBERS, loyaltyMemb);
+        this.setValue(TABLE.MEMBERS, loyaltyMembers);
         setTimeout(() => {
             this.setValue(TABLE.LOADING_MEMBERS, false);
         }, 1000);
