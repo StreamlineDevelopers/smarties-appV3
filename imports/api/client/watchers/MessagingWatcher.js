@@ -6,6 +6,9 @@ import { toast } from 'sonner';
 import { TOAST_STYLE } from "../../common/const";
 // import { Accounts } from 'meteor/tmq:accounts';
 const { Adapter, Logger } = core;
+import messageService from "../../common/static_codegen/tmq/message_pb";
+import inboxService from "../../common/static_codegen/tmq/inbox_pb";
+import interactionService from "../../common/static_codegen/tmq/interaction_pb";
 import {
     collectionManager,
     syncManager,

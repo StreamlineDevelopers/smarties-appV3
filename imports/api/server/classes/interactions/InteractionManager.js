@@ -188,7 +188,10 @@ class InteractionManager {
                     latestAt: interaction.timestamp,
                 });
             }
+            // Return the freshly updated inbox document so callers can emit current data
+            return await Inbox.findById(inboxId);
         }
+        return null;
     }
 
     // ---- Normalizers (provider-agnostic shapes) ----

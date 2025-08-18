@@ -56,14 +56,14 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
                 status: 'received',
             });
 
-            await InteractionManager.updateInboxLatest({ inboxId: inbox._id, interaction, incrementUnread: true });
+            const updatedInbox = await InteractionManager.updateInboxLatest({ inboxId: inbox._id, interaction, incrementUnread: true });
             let businessId = biz._id._str || biz._id.toString();
-            const inboxid = inbox._id._str || inbox._id.toString();
+            const inboxid = (updatedInbox?._id?._str || updatedInbox?._id?.toString()) || (inbox._id._str || inbox._id.toString());
             const interactionid = interaction._id._str || interaction._id.toString();
             if (isNewInbox) {
-                Server.RedisVentServer.triggers.insert('inboxapp', 'inbox', businessId, inboxid, inbox);
+                Server.RedisVentServer.triggers.insert('inboxapp', 'inbox', businessId, inboxid, updatedInbox || inbox);
             } else {
-                Server.RedisVentServer.triggers.update('inboxapp', 'inbox', businessId, inboxid, inbox);
+                Server.RedisVentServer.triggers.update('inboxapp', 'inbox', businessId, inboxid, updatedInbox || inbox);
             }
             Server.RedisVentServer.triggers.insert('interactionapp', 'interaction', inboxid, interactionid, interaction);
 
@@ -127,14 +127,14 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
                 attributes: providerRes ? [{ key: 'providerMessageId', value: String(providerRes.providerMessageId) }] : [],
             });
 
-            await InteractionManager.updateInboxLatest({ inboxId: inbox._id, interaction, incrementUnread: false });
+            const updatedInbox = await InteractionManager.updateInboxLatest({ inboxId: inbox._id, interaction, incrementUnread: false });
             let businessId = biz._id._str || biz._id.toString();
-            const inboxid = inbox._id._str || inbox._id.toString();
+            const inboxid = (updatedInbox?._id?._str || updatedInbox?._id?.toString()) || (inbox._id._str || inbox._id.toString());
             const interactionid = interaction._id._str || interaction._id.toString();
             if (isNewInbox) {
-                Server.RedisVentServer.triggers.insert('inboxapp', 'inbox', businessId, inboxid, inbox);
+                Server.RedisVentServer.triggers.insert('inboxapp', 'inbox', businessId, inboxid, updatedInbox || inbox);
             } else {
-                Server.RedisVentServer.triggers.update('inboxapp', 'inbox', businessId, inboxid, inbox);
+                Server.RedisVentServer.triggers.update('inboxapp', 'inbox', businessId, inboxid, updatedInbox || inbox);
             }
             Server.RedisVentServer.triggers.insert('interactionapp', 'interaction', inboxid, interactionid, interaction);
 
