@@ -12,10 +12,9 @@ const SocialcontentradiocardItem = ({
     <div className={'social-content-radiocard'}>
       <SocialcontentradiocardtopItem
         divText={
-          'Discover how AI is transforming customer service with real-time personalization. Our latest case study shows a 45% increase in satisfaction scores!'
-        }
-        divText1={'#DigitalMarketing'}
-        divText2={'#WorkSmarter'}
+          divText}
+        divText1={divText1}
+        divText2={divText2}
       />
       <SocialcontentradiocardbottomItem_ea75eecd />
       <div className={'social-content-tag'}>{divText3 || 'Professional'}</div>

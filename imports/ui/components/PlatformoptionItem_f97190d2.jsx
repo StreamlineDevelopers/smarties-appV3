@@ -1,12 +1,12 @@
 import React from 'react';
 import PlatformradiocardItem_995327b4 from './PlatformradiocardItem_995327b4';
 
-const PlatformoptionItem_f97190d2 = ({ src, label }) => {
+const PlatformoptionItem_f97190d2 = ({ src, label, value, checked, onChange = () => { } }) => {
   return (
     <label className={'platform-option w-radio'}>
       <div
         className={
-          'w-form-formradioinput w-form-formradioinput--inputType-custom blogtopic-radiobutton w-radio-input'
+          `w-form-formradioinput w-form-formradioinput--inputType-custom blogtopic-radiobutton w-radio-input ${checked && 'w--redirected-checked'} `
         }
       ></div>
       <input
@@ -15,11 +15,13 @@ const PlatformoptionItem_f97190d2 = ({ src, label }) => {
         id={'radio'}
         name={'social-platform'}
         style={{ opacity: '0', position: 'absolute', zIndex: '-1' }}
-        value={'Radio'}
+        value={value}
+        checked={checked}
+        onChange={onChange}
       />
       <PlatformradiocardItem_995327b4
-        src={'../images/smarties-social-twitter.svg'}
-        label={'Twitter/X'}
+        src={src}
+        label={label}
       />
       <span className={'radio-button-label-2 w-form-label'} htmlFor={'radio'}>
         {'Radio'}

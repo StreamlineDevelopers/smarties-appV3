@@ -64,6 +64,9 @@ const MaincontentLayout_70481141 = ({ }) => {
   const inboxList = watcher.getValue(INTERACTION.INBOX);
   const currentInteraction = watcher.getValue(INTERACTION.CURRENT);
 
+  const loadingMessage = watcher.getValue(INTERACTION.LOADING_MESSAGE);
+  const loadingInbox = watcher.getValue(INTERACTION.LOADING_INBOX);
+
   return (
     <div
       id={'w-node-_29f7b4c2-cc51-33c6-047b-9accbc43f6c6-f14725cd'}
