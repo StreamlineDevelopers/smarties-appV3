@@ -123,8 +123,8 @@ const Contacts = () => {
                 </a>
                 <ContactdetailstablinkItem_8f6eaf6f
                   dataWTab={'Tab 5'}
-                  isActive={activeContactDetailsTab == 'sentiment'}
                   divText={'Sentiment'}
+                  isActive={activeContactDetailsTab == 'sentiment'}
                   onClick={() => watcher.contactDetailsTabChange('sentiment')}
                 />
                 <a
