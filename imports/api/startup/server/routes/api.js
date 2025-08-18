@@ -2,6 +2,7 @@ import { WebApp } from 'meteor/webapp';
 import bodyParser from 'body-parser';
 import connectRoute from 'connect-route';
 import { LogLevel, Logger } from "@tmq/logger";
+import { fetch } from "meteor/fetch";
 
 import SchemaErrorHandler from '../../../server/utils/schemaErrorHandler.js';
 import InteractionManager from '../../../server/classes/interactions/InteractionManager.js';
@@ -24,6 +25,24 @@ const Providers = {
             return { providerMessageId: `mock-wa-${Date.now()}`, status: 'sent' };
         },
     },
+    chat: {
+        async send({ channel, to, text, takeover = false, ...rest }) {
+            const username = 'tmq';
+            const password = 'P@ssword1';
+            const auth = Buffer.from(`${username}:${password}`).toString('base64');
+            const testUrl = "https://n8n.ph01.us/webhook-test/2522bf0c-4e08-44ec-86bc-721b42a1716d";
+            const productionUrl = "https://n8n.ph01.us/webhook/2522bf0c-4e08-44ec-86bc-721b42a1716d";
+            const response = await fetch(testUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": "Basic " + auth,
+                },
+                body: JSON.stringify({ query: text, takeover, ...rest, }),
+            });
+            return await response.json();
+        },
+    }
 };
 // ---- HTTP Wiring ----
 WebApp.connectHandlers.use(bodyParser.json());
@@ -42,6 +61,12 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
             const channel = await InteractionManager.resolveChannel({ businessId: biz._id, type, identifier, provider, metadata: req.body?.meta });
             const consumer = await InteractionManager.resolveOrCreateConsumer({ businessId: biz._id, externalId });
             const inbox = await InteractionManager.ensureInbox({ businessId: biz._id, consumerId: consumer._id, channelId: channel._id });
+            const attributes = [];
+            if (req.body.meta) {
+                for (const key in req.body.meta) {
+                    attributes.push({ key, value: req.body.meta[key] });
+                }
+            }
 
             const interaction = await InteractionManager.recordInteraction({
                 businessId: biz._id,
@@ -53,6 +78,7 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
                 text,
                 attachments,
                 status: 'received',
+                attributes,
             });
 
             await InteractionManager.updateInboxLatest({ inboxId: inbox._id, interaction, incrementUnread: true });
@@ -92,15 +118,15 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
             const biz = await InteractionManager.resolveBusinessBySlug(slug);
 
             const { provider, type, identifier, to, text, attachments } = InteractionManager.normalizeOutbound(req.body || {});
+
+            console.log({ provider, type, identifier, to, text, attachments });
             const channel = await InteractionManager.resolveChannel({ businessId: biz._id, type, identifier, provider, metadata: req.body?.meta });
 
             // Ensure consumer + inbox
             const consumer = await InteractionManager.resolveOrCreateConsumer({ businessId: biz._id, externalId: to });
             const inbox = await InteractionManager.ensureInbox({ businessId: biz._id, consumerId: consumer._id, channelId: channel._id });
 
-            // Provider handoff (mock)
-            const adapter = Providers[provider] || Providers.sms;
-            const providerRes = await adapter.send({ channel, to, text, attachments });
+
 
             // Persist interaction as outbound
             const interaction = await InteractionManager.recordInteraction({
@@ -112,9 +138,17 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
                 direction: 'outbound',
                 text,
                 attachments,
-                status: providerRes?.status || 'queued',
-                attributes: providerRes ? [{ key: 'providerMessageId', value: String(providerRes.providerMessageId) }] : [],
+                status: 'queued',
+                attributes: [],
             });
+
+            // Provider handoff (mock)
+            const adapter = Providers[type] || Providers.sms;
+            const providerRes = await adapter.send({ channel, to, text, attachments, ...req.body, interactionId: interaction._id._str, slug: biz.slug });
+            console.log("providerRes", providerRes);
+            if (providerRes?.code !== 200) {
+                await InteractionManager.updateInteraction({ interactionId: interaction._id, status: 'failed' });
+            }
 
             await InteractionManager.updateInboxLatest({ inboxId: inbox._id, interaction, incrementUnread: false });
 
@@ -145,5 +179,27 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
                 InteractionManager.bad(res, 400, err.message || 'outbound_failed');
             }
         }
+    });
+    router.post('/:slug/receipt', async (req, res) => {
+        const { slug } = req.params;
+        Logger.debug(`Received receipt webhook for business ${slug}`, req.body);
+        try {
+            const { provider, type, identifier, to, text, attachments, interactionId, status } = InteractionManager.normalizeReceipt(req.body || {});
+            await InteractionManager.updateInteraction({ interactionId, status });
+            InteractionManager.ok(res, { slug, message: "Receipt received" });
+        } catch (error) {
+            if (SchemaErrorHandler.isValidationError(error)) {
+                const errorResponse = SchemaErrorHandler.createErrorResponse(error, {
+                    operation: 'receipt_webhook',
+                    businessSlug: slug,
+                    requestData: req.body
+                });
+                SchemaErrorHandler.logValidationError(error, 'receipt webhook processing', req.body);
+                InteractionManager.bad(res, 400, errorResponse);
+            } else {
+                InteractionManager.bad(res, 400, error.message || 'receipt_failed');
+            }
+        }
+
     });
 }));
