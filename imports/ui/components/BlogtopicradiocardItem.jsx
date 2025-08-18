@@ -4,7 +4,7 @@ import BlogtopictagItem from './BlogtopictagItem';
 const BlogtopicradiocardItem = ({ itemText, label }) => {
   return (
     <div className={'blogtopic-radiocard'}>
-      <BlogtopictagItem itemText={'Technology'} />
+      <BlogtopictagItem itemText={itemText} />
       <div className={'blogtopic-radiolabel'}>
         {label || 'AI Ethics in Business'}
       </div>

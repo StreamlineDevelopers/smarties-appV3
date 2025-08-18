@@ -13,7 +13,7 @@ const MessaginginboxtextcontentbotItem_6121060c = ({
       </div>
       <MessaginginboxiconsdivItem_fa1aed03
         dataWId={'b4729139-7f78-8afa-aaa9-4ab7545ae1b0'}
-        divText={'2:15 PM'}
+        divText={divText1}
       />
     </div>
   );

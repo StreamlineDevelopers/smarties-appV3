@@ -12,15 +12,15 @@ const MessaginginboxtextcontentItem_485da7aa = ({
   return (
     <div className={'messaging-inbox-textcontent'}>
       <MessaginginboxtextcontenttopItem_b70001eb
-        divText={'Emma Wilson'}
+        divText={divText}
         divText1={
-          'I’m having an issue with logging in after the latest update...'
+          divText1
         }
       />
       <MessaginginboxtextcontentbotItem_6121060c
-        divText={'Feature request follow-up'}
+        divText={divText2}
         dataWId={'5412962f-dc78-9f6c-9b1b-5129db7c78df'}
-        divText1={'25m ago'}
+        divText1={divText3}
       />
     </div>
   );

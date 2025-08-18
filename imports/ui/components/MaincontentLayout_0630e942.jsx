@@ -17,7 +17,7 @@ import EnrichmentusagecardItem from './EnrichmentusagecardItem';
 import MessaginginboxtextcontenttopItem from './MessaginginboxtextcontenttopItem';
 import SidebaracctdetailsrowItem from './SidebaracctdetailsrowItem';
 
-const MaincontentLayout_0630e942 = ({}) => {
+const MaincontentLayout_0630e942 = ({ }) => {
   return (
     <div
       id={'w-node-_4d31c1a9-ef5a-abec-5af1-44ae70d7f13a-f14725d6'}

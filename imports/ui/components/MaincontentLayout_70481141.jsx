@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import FiltergroupItem_0045d701 from './FiltergroupItem_0045d701';
 import FiltergroupItem_26f64ca4 from './FiltergroupItem_26f64ca4';
 import FiltergroupItem_308e054b from './FiltergroupItem_308e054b';
@@ -44,26 +44,118 @@ import RowdatacollectionItem from './RowdatacollectionItem';
 import RowenrichmentItem from './RowenrichmentItem';
 import RowenrichmentItem_f2bca9a4 from './RowenrichmentItem_f2bca9a4';
 import RowenrichmentItem_074d9266 from './RowenrichmentItem_074d9266';
-import MessagingWatcher, { INBOX, POPUP, TAB, TOGGLE } from '../../api/client/watchers/MessagingWatcher';
+import MessagingWatcher, { INTERACTION, POPUP, TAB, TOGGLE } from '../../api/client/watchers/MessagingWatcher';
 import { useWatcher } from '../../api/client/Watcher2';
 
 const MaincontentLayout_70481141 = ({ }) => {
   const watcher = useRef(MessagingWatcher).current;
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [error, setError] = useState(null);
+  const [inbox, setInbox] = useState([]);
+  const conversationDivRef = useRef(null);
   useWatcher(watcher);
+  const isInboxActive = watcher.getValue("inboxActive") ?? false;
 
   useEffect(() => {
-    watcher.fetchMessages();
+
+    // watcher.fetchInbox();
+    async function setupWatcher() {
+      try {
+        // Initialize watcher (this connects to RedisVent)
+        await watcher.initialize();
+
+        // Fetch initial data from backend
+        watcher.fetchInbox();
+
+        // Get data from local minimongo
+        const data = await watcher.getAll();
+        watcher.setValue(INTERACTION.INBOX, data);
+        // setTodos(data);
+        // setLoading(false);
+
+        // Start listening for real-time updates
+        watcher.inboxListen();
+
+        // Subscribe to local changes
+        const unsubscribe = watcher.DB.onChange(async () => {
+          const updatedTodos = await watcher.getAll();
+          watcher.setValue(INTERACTION.INBOX, updatedTodos);
+          // setTodos(updatedTodos);
+        });
+
+        return unsubscribe;
+      } catch (err) {
+        console.log(err);
+        // setError(err.message);
+        // setLoading(false);
+      }
+    }
+
+    const cleanupPromise = setupWatcher();
+
     return () => {
-      watcher.clear();
+      cleanupPromise.then(cleanup => cleanup?.());
+      watcher.stopListening();
     };
   }, []);
 
-  const isSmartiesAssistantToggled = watcher.getValue(TOGGLE.SMARTIES_ASSISTANT);
+  useEffect(() => {
+    if (isInboxActive) {
+      async function setupInteractionWatcher() {
+        try {
+          // Get data from local minimongo
+          const data = await watcher.getAllInteraction();
+          watcher.setValue(INTERACTION.MESSAGES, data);
+          // setTodos(data);
+          // setLoading(false);
+
+          // Start listening for real-time updates
+          // watcher.interactionListen(watcher.getValue("currentInboxId"));
+
+          // Subscribe to local changes
+          const unsubscribe = watcher.DBInteraction.onChange(async () => {
+            const updatedTodos = await watcher.getAllInteraction();
+            watcher.setValue(INTERACTION.MESSAGES, updatedTodos);
+            // setTodos(updatedTodos);
+          });
+
+          return unsubscribe;
+        } catch (err) {
+          console.log(err);
+          watcher.setValue("inboxActive", false);
+          // setError(err.message);
+          // setLoading(false);
+        }
+      }
+
+      const cleanupPromise = setupInteractionWatcher();
+
+      return () => {
+        cleanupPromise.then(cleanup => cleanup?.());
+        watcher.stopInteractionListening();
+      };
+    }
+  }, [isInboxActive]);
+
+
+
+  const isSmartiesAssistantToggled = watcher.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? true;
   const isScriptInjectionPopupOpen = watcher.getValue(POPUP.SCRIPT_INJECTION);
   const activeMessageTab = watcher.getValue(TAB.MESSAGES);
   const activeCustomerInformationTab = watcher.getValue(TAB.CUSTOMER_INFORMATION);
   const isMessageFilterPopupOpen = watcher.getValue(POPUP.MESSAGES_FILTER);
-  const messageList = watcher.getValue(INBOX.MESSAGES);
+  const messageList = watcher.getValue(INTERACTION.MESSAGES);
+  const inboxList = watcher.getValue(INTERACTION.INBOX);
+  const currentInteraction = watcher.getValue(INTERACTION.CURRENT);
+
+  const loadingMessage = watcher.getValue(INTERACTION.LOADING_MESSAGE);
+  const loadingInbox = watcher.getValue(INTERACTION.LOADING_INBOX);
+  // Auto-scroll to bottom when new messages are added
+  useEffect(() => {
+    if (conversationDivRef.current && messageList.length > 0) {
+      conversationDivRef.current.scrollTop = conversationDivRef.current.scrollHeight;
+    }
+  }, [messageList.length]);
 
   return (
     <div
@@ -228,54 +320,46 @@ const MaincontentLayout_70481141 = ({ }) => {
                       <FilterdropdownItem divText={'Newest'} />
                     </div>
                     <div className={'inbox-list gap-5'}>
-                      <a
-                        href={'#'}
-                        className={'messaging-inbox-item active w-inline-block'}
-                      >
-                        <div className={'messaging-inbox-item-left'}>
-                          <div className={'messaging-inbox-avatar-col'}>
-                            <MessaginginboxavatarItem_9c103e5b
-                              src={
-                                'images/smarties-avatar-01_1smarties-avatar-01.png'
-                              }
-                              dataWId={'da766056-4c22-deca-22ff-455fcbcfc86a'}
-                            />
-                            <div className={'messaging-inbox-user-tag'}>
-                              {'PROSPECT'}
-                            </div>
-                          </div>
-                          <div className={'messaging-inbox-textcontent'}>
-                            <div className={'messaging-inbox-textcontent-top'}>
-                              <MessaginginboxnamerowItem_c231de57
-                                divText={'John Smith'}
-                              />
-                              <div className={'messaging-inbox-preview-div'}>
-                                <div className={'messaging-inbox-icon-status'}>
-                                  <img
-                                    loading={'lazy'}
-                                    src={'images/smarties-inbox-icon-mic_1.svg'}
-                                    alt={''}
-                                  />
-                                </div>
-                                <div className={'messaging-inbox-preview'}>
-                                  {
-                                    'I’m having trouble with the system not saving...'
+                      {inboxList.map((data, index) => {
+                        console.log(data);
+                        return (
+                          <a
+                            key={data._id}
+                            href={'#'}
+                            className={`messaging-inbox-item ${data._id == currentInteraction?._id && 'active'} w-inline-block`}
+                            onClick={() => watcher.fetchMessages(data)}
+                          >
+                            <div className={'messaging-inbox-item-left'}>
+                              <div className={'messaging-inbox-avatar-col'}>
+                                <MessaginginboxavatarItem_9c103e5b
+                                  src={
+                                    data.avatar
                                   }
+                                  dataWId={'2ee757d2-bd3e-4a12-ca0b-9190293817ff'}
+                                />
+                                <div
+                                  className={'messaging-inbox-user-tag bg-yellow'}
+                                >
+                                  {data.tag}
                                 </div>
                               </div>
+                              <MessaginginboxtextcontentItem_485da7aa
+                                divText={data.name}
+                                divText1={
+                                  data.latestSnippet
+                                }
+                                divText2={data.topic}
+                                dataWId={'5412962f-dc78-9f6c-9b1b-5129db7c78df'}
+                                divText3={data.time}
+                              />
                             </div>
-                            <MessaginginboxtextcontentbotItem_6121060c
-                              divText={'Pricing inquiry'}
-                              dataWId={'b4729139-7f78-8afa-aaa9-4ab7545ae1b0'}
-                              divText1={'2:15 PM'}
+                            <MessaginginboxitemrightItem_d2b9f097
+                              dataWId={'2ee757d2-bd3e-4a12-ca0b-91902938181b'}
                             />
-                          </div>
-                        </div>
-                        <MessaginginboxitemrightItem_d2b9f097
-                          dataWId={'fc19d0d7-f5e8-4f20-e129-a4d9753767c8'}
-                        />
-                      </a>
-                      <a
+                          </a>
+                        )
+                      })}
+                      {/* <a
                         href={'#'}
                         className={'messaging-inbox-item w-inline-block'}
                       >
@@ -378,8 +462,8 @@ const MaincontentLayout_70481141 = ({ }) => {
                         <MessaginginboxitemrightItem
                           dataWId={'d640b168-e14b-d21f-cb34-702cefb626af'}
                         />
-                      </a>
-                      <a
+                      </a> */}
+                      {/* <a
                         href={'#'}
                         className={'messaging-inbox-item w-inline-block'}
                       >
@@ -424,7 +508,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                         <MessaginginboxitemrightItem
                           dataWId={'560112a4-5782-ac37-5ecd-0293c66568fc'}
                         />
-                      </a>
+                      </a> */}
                     </div>
                   </div>
                 </div>
@@ -434,7 +518,7 @@ const MaincontentLayout_70481141 = ({ }) => {
               </div>
             </div>
           </div>
-          <div className={'messaging-maincol h-auto'}>
+          <div className={'messaging-maincol h-auto'} style={{ display: messageList.length ? 'block' : 'none' }}>
             <div className={'messaging-formblock w-form'}>
               <form
                 id={'wf-form-form-messaging'}
@@ -468,10 +552,10 @@ const MaincontentLayout_70481141 = ({ }) => {
                               className={'card-inbox-name'}
                             >
                               <div className={'name-contact'}>
-                                {'John Smith'}
+                                {currentInteraction?.name || 'Customer Name'}
                               </div>
                             </div>
-                            <div className={'tag-customer'}>{'Prospect'}</div>
+                            <div className={'tag-customer'}>{currentInteraction?.tag || 'prospect'}</div>
                           </div>
                           <div className={'contact-page-viewing'}>
                             <div className={'contact-page-viewing-content'}>
@@ -639,8 +723,8 @@ const MaincontentLayout_70481141 = ({ }) => {
                         <div className={'messaging-handling-agent-bg'} style={{ display: isSmartiesAssistantToggled ? 'block' : 'none' }}></div>
                       </div>
                     </div>
-                    <div className="messaging-main-conversation-div">
-                      {messageList.map((data, index) => {
+                    <div className="messaging-main-conversation-div" ref={conversationDivRef}>
+                      {messageList.length && messageList.map((data, index) => {
                         if (data.direction === "inbound") {
                           return (
                             <div key={index} className="convo-inbound">
@@ -688,7 +772,9 @@ const MaincontentLayout_70481141 = ({ }) => {
                     </div>
                   </div>
                   <div className={'messaging-main-bot'}>
-                    <div className={'user-typing-div'}>
+                    {/* comment this out for now */}
+                    {/* TODO: uncomment this when we have a way to show user typing */}
+                    {/* <div className={'user-typing-div'}>
                       <div className={'usertyping-avatar'}>
                         <img
                           loading={'lazy'}
@@ -699,8 +785,9 @@ const MaincontentLayout_70481141 = ({ }) => {
                         />
                       </div>
                       <div>{'John Smith is typing...'}</div>
-                    </div>
-                    <div className={'reply-row'}>
+                    </div> */}
+                    <div className={'reply-row'}
+                      style={{ pointerEvents: isSmartiesAssistantToggled ? 'none' : 'auto', opacity: isSmartiesAssistantToggled ? 0.5 : 1 }}>
                       <div className={'reply-row-aisuggestion-row'}>
                         <div className={'message-chat-div'}>
                           <div className={'message-chat-left'}>
@@ -784,9 +871,9 @@ const MaincontentLayout_70481141 = ({ }) => {
                           placeholder={'Type your message'}
                           type={'url'}
                           id={'reply-input'}
-                          value={watcher.getValue(INBOX.MESSAGE_TEXT)}
+                          value={watcher.getValue(INTERACTION.MESSAGE_TEXT)}
                           onChange={(e) => {
-                            watcher.setValue(INBOX.MESSAGE_TEXT, e.target.value)
+                            watcher.setValue(INTERACTION.MESSAGE_TEXT, e.target.value)
 
                           }}
                         />
@@ -816,12 +903,11 @@ const MaincontentLayout_70481141 = ({ }) => {
                               alt={''}
                             />
                           </div>
-                          <div className={'reply-btn-icon'}>
+                          <div className={'reply-btn-icon'} onClick={() => watcher.sendMessage()}>
                             <img
                               loading={'lazy'}
                               src={'images/smarties-inbox-icon-send.svg'}
                               alt={''}
-                              onClick={() => watcher.sendMessage()}
                             />
                           </div>
                           <div className={'popup-scriptinjection'} style={{ display: isScriptInjectionPopupOpen ? 'flex' : 'none' }}>
@@ -943,7 +1029,7 @@ const MaincontentLayout_70481141 = ({ }) => {
               <WformfailItem />
             </div>
           </div>
-          <div className={'contact-side-column'}>
+          <div className={'contact-side-column'} style={{ display: messageList.length ? 'block' : 'none' }}>
             <div className={'side-column-hd'}>
               <div className={'side-column-text-hd'}>
                 {'Customer Information'}
@@ -2022,8 +2108,8 @@ const MaincontentLayout_70481141 = ({ }) => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

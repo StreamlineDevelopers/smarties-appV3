@@ -7,8 +7,7 @@ const SocialcontentradiocardtopItem = ({ divText, divText1, divText2 }) => {
     <div className={'social-content-radiocard-top'}>
       <SocialcontentradiocardtitlerowItem />
       <div className={'socialcontent-post'}>
-        {divText ||
-          'Discover how AI is transforming customer service with real-time personalization. Our latest case study shows a 45% increase in satisfaction scores!'}
+        {divText}
       </div>
       <SocialcontenthashtagsdivItem
         divText={'#DigitalMarketing'}

@@ -94,13 +94,15 @@ class InteractionManager {
      * @param {string} businessId 
      * @param {string} consumerId 
      * @param {string} channelId 
-     * @returns {Promise<Inbox>}
+     * @returns {Promise<{inbox: Inbox, isNew: boolean}>}
      */
     static async ensureInbox({ businessId, consumerId, channelId }) {
         // Try to find existing inbox
         let inbox = await Inbox.findByBusinessIdAndConsumerIdAndChannelId(businessId, consumerId, channelId);
+        let isNew = false;
 
         if (!inbox) {
+            isNew = true;
             const inboxData = new Inbox({
                 businessId: businessId,
                 consumerId: consumerId,
@@ -112,7 +114,7 @@ class InteractionManager {
             const _id = await inboxData.save();
             inbox = await Inbox.findById(_id);
         }
-        return inbox;
+        return { inbox, isNew };
     }
 
     /**
@@ -187,7 +189,10 @@ class InteractionManager {
                     latestAt: interaction.timestamp,
                 });
             }
+            // Return the freshly updated inbox document so callers can emit current data
+            return await Inbox.findById(inboxId);
         }
+        return null;
     }
 
     // ---- Normalizers (provider-agnostic shapes) ----
