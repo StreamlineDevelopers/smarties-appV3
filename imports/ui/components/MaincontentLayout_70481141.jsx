@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import FiltergroupItem_0045d701 from './FiltergroupItem_0045d701';
 import FiltergroupItem_26f64ca4 from './FiltergroupItem_26f64ca4';
 import FiltergroupItem_308e054b from './FiltergroupItem_308e054b';
@@ -49,13 +49,97 @@ import { useWatcher } from '../../api/client/Watcher2';
 
 const MaincontentLayout_70481141 = ({ }) => {
   const watcher = useRef(MessagingWatcher).current;
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [error, setError] = useState(null);
+  const [inbox, setInbox] = useState([]);
+  const conversationDivRef = useRef(null);
   useWatcher(watcher);
+  const isInboxActive = watcher.getValue("inboxActive") ?? false;
 
   useEffect(() => {
-    watcher.fetchInbox();
+
+    // watcher.fetchInbox();
+    async function setupWatcher() {
+      try {
+        // Initialize watcher (this connects to RedisVent)
+        await watcher.initialize();
+
+        // Fetch initial data from backend
+        watcher.fetchInbox();
+
+        // Get data from local minimongo
+        const data = await watcher.getAll();
+        watcher.setValue(INTERACTION.INBOX, data);
+        // setTodos(data);
+        // setLoading(false);
+
+        // Start listening for real-time updates
+        watcher.inboxListen();
+
+        // Subscribe to local changes
+        const unsubscribe = watcher.DB.onChange(async () => {
+          const updatedTodos = await watcher.getAll();
+          watcher.setValue(INTERACTION.INBOX, updatedTodos);
+          // setTodos(updatedTodos);
+        });
+
+        return unsubscribe;
+      } catch (err) {
+        console.log(err);
+        // setError(err.message);
+        // setLoading(false);
+      }
+    }
+
+    const cleanupPromise = setupWatcher();
+
+    return () => {
+      cleanupPromise.then(cleanup => cleanup?.());
+      watcher.stopListening();
+    };
   }, []);
 
-  const isSmartiesAssistantToggled = watcher.getValue(TOGGLE.SMARTIES_ASSISTANT);
+  useEffect(() => {
+    if (isInboxActive) {
+      async function setupInteractionWatcher() {
+        try {
+          // Get data from local minimongo
+          const data = await watcher.getAllInteraction();
+          watcher.setValue(INTERACTION.MESSAGES, data);
+          // setTodos(data);
+          // setLoading(false);
+
+          // Start listening for real-time updates
+          // watcher.interactionListen(watcher.getValue("currentInboxId"));
+
+          // Subscribe to local changes
+          const unsubscribe = watcher.DBInteraction.onChange(async () => {
+            const updatedTodos = await watcher.getAllInteraction();
+            watcher.setValue(INTERACTION.MESSAGES, updatedTodos);
+            // setTodos(updatedTodos);
+          });
+
+          return unsubscribe;
+        } catch (err) {
+          console.log(err);
+          watcher.setValue("inboxActive", false);
+          // setError(err.message);
+          // setLoading(false);
+        }
+      }
+
+      const cleanupPromise = setupInteractionWatcher();
+
+      return () => {
+        cleanupPromise.then(cleanup => cleanup?.());
+        watcher.stopInteractionListening();
+      };
+    }
+  }, [isInboxActive]);
+
+
+
+  const isSmartiesAssistantToggled = watcher.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? true;
   const isScriptInjectionPopupOpen = watcher.getValue(POPUP.SCRIPT_INJECTION);
   const activeMessageTab = watcher.getValue(TAB.MESSAGES);
   const activeCustomerInformationTab = watcher.getValue(TAB.CUSTOMER_INFORMATION);
@@ -66,6 +150,12 @@ const MaincontentLayout_70481141 = ({ }) => {
 
   const loadingMessage = watcher.getValue(INTERACTION.LOADING_MESSAGE);
   const loadingInbox = watcher.getValue(INTERACTION.LOADING_INBOX);
+  // Auto-scroll to bottom when new messages are added
+  useEffect(() => {
+    if (conversationDivRef.current && messageList.length > 0) {
+      conversationDivRef.current.scrollTop = conversationDivRef.current.scrollHeight;
+    }
+  }, [messageList.length]);
 
   return (
     <div
@@ -230,42 +320,45 @@ const MaincontentLayout_70481141 = ({ }) => {
                       <FilterdropdownItem divText={'Newest'} />
                     </div>
                     <div className={'inbox-list gap-5'}>
-                      {inboxList.map((data, index) => (
-                        <a
-                          key={data._id}
-                          href={'#'}
-                          className={`messaging-inbox-item ${data._id == currentInteraction?._id && 'active'} w-inline-block`}
-                          onClick={() => watcher.fetchMessages(data)}
-                        >
-                          <div className={'messaging-inbox-item-left'}>
-                            <div className={'messaging-inbox-avatar-col'}>
-                              <MessaginginboxavatarItem_9c103e5b
-                                src={
-                                  data.avatar
-                                }
-                                dataWId={'2ee757d2-bd3e-4a12-ca0b-9190293817ff'}
-                              />
-                              <div
-                                className={'messaging-inbox-user-tag bg-yellow'}
-                              >
-                                {data.tag}
+                      {inboxList.map((data, index) => {
+                        console.log(data);
+                        return (
+                          <a
+                            key={data._id}
+                            href={'#'}
+                            className={`messaging-inbox-item ${data._id == currentInteraction?._id && 'active'} w-inline-block`}
+                            onClick={() => watcher.fetchMessages(data)}
+                          >
+                            <div className={'messaging-inbox-item-left'}>
+                              <div className={'messaging-inbox-avatar-col'}>
+                                <MessaginginboxavatarItem_9c103e5b
+                                  src={
+                                    data.avatar
+                                  }
+                                  dataWId={'2ee757d2-bd3e-4a12-ca0b-9190293817ff'}
+                                />
+                                <div
+                                  className={'messaging-inbox-user-tag bg-yellow'}
+                                >
+                                  {data.tag}
+                                </div>
                               </div>
+                              <MessaginginboxtextcontentItem_485da7aa
+                                divText={data.name}
+                                divText1={
+                                  data.latestSnippet
+                                }
+                                divText2={data.topic}
+                                dataWId={'5412962f-dc78-9f6c-9b1b-5129db7c78df'}
+                                divText3={data.time}
+                              />
                             </div>
-                            <MessaginginboxtextcontentItem_485da7aa
-                              divText={data.name}
-                              divText1={
-                                data.previewMessage
-                              }
-                              divText2={data.topic}
-                              dataWId={'5412962f-dc78-9f6c-9b1b-5129db7c78df'}
-                              divText3={data.time}
+                            <MessaginginboxitemrightItem_d2b9f097
+                              dataWId={'2ee757d2-bd3e-4a12-ca0b-91902938181b'}
                             />
-                          </div>
-                          <MessaginginboxitemrightItem_d2b9f097
-                            dataWId={'2ee757d2-bd3e-4a12-ca0b-91902938181b'}
-                          />
-                        </a>
-                      ))}
+                          </a>
+                        )
+                      })}
                       {/* <a
                         href={'#'}
                         className={'messaging-inbox-item w-inline-block'}
@@ -630,7 +723,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                         <div className={'messaging-handling-agent-bg'} style={{ display: isSmartiesAssistantToggled ? 'block' : 'none' }}></div>
                       </div>
                     </div>
-                    <div className="messaging-main-conversation-div">
+                    <div className="messaging-main-conversation-div" ref={conversationDivRef}>
                       {messageList.length && messageList.map((data, index) => {
                         if (data.direction === "inbound") {
                           return (
@@ -679,7 +772,9 @@ const MaincontentLayout_70481141 = ({ }) => {
                     </div>
                   </div>
                   <div className={'messaging-main-bot'}>
-                    <div className={'user-typing-div'}>
+                    {/* comment this out for now */}
+                    {/* TODO: uncomment this when we have a way to show user typing */}
+                    {/* <div className={'user-typing-div'}>
                       <div className={'usertyping-avatar'}>
                         <img
                           loading={'lazy'}
@@ -690,8 +785,9 @@ const MaincontentLayout_70481141 = ({ }) => {
                         />
                       </div>
                       <div>{'John Smith is typing...'}</div>
-                    </div>
-                    <div className={'reply-row'}>
+                    </div> */}
+                    <div className={'reply-row'}
+                      style={{ pointerEvents: isSmartiesAssistantToggled ? 'none' : 'auto', opacity: isSmartiesAssistantToggled ? 0.5 : 1 }}>
                       <div className={'reply-row-aisuggestion-row'}>
                         <div className={'message-chat-div'}>
                           <div className={'message-chat-left'}>
@@ -2012,8 +2108,8 @@ const MaincontentLayout_70481141 = ({ }) => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

@@ -13,6 +13,7 @@
     "@tmq-dev-ph/tmq-dev-core-client": "file:.core-packages/tmq-dev-ph-tmq-dev-core-client-1.3.148.tgz",
     "@tmq-dev-ph/tmq-dev-core-server": "file:.core-packages/tmq-dev-ph-tmq-dev-core-server-1.2.735.tgz",
     "@tmq/logger": "^1.0.4",
+    "axios": "^1.11.0",
     "connect-route": "^0.1.5",
     "lucide-react": "^0.536.0",
     "meteor-node-stubs": "^1.2.5",
@@ -20,7 +21,7 @@
     "react-dom": "^18.2.0",
     "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^6.30.0",
-    "redisvent-module": "^1.0.0",
+    "redisvent-module": "^1.0.2",
     "sonner": "^2.0.7"
   },
   "meteor": {
