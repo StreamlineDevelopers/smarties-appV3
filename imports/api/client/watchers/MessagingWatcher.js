@@ -310,7 +310,7 @@ class MessagingWatcher extends Watcher2 {
                         message: interaction.payload?.text || '',
                         attachments: interaction.payload?.attachmentsList || [],
                         status: interaction.status,
-                        timestamp: interaction.timestamp ? new Date(interaction.timestamp).toLocaleTimeString() : '',
+                        timestamp: interaction.timestamp,
                         attributes,
                         // UI specific fields for compatibility with existing components
                         sender: interaction.direction === 'inbound' ? 'User' : 'Agent'

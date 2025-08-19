@@ -741,7 +741,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                               </div>
                               <ConvoinbounddurationItem
                                 dataWId="d2601b0f-93ed-ec78-d431-297ce3d04872"
-                                divText={data.timestamp}
+                                divText={moment(data.timestamp).format('h:mm A')}
                               />
                             </div>
                           );
@@ -750,7 +750,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                             <div key={index} className="convo-outbound">
                               <ConvoinbounddurationItem
                                 dataWId="40de4617-1996-b595-f7c8-2ed436404f34"
-                                divText={data.timestamp}
+                                divText={moment(data.timestamp).format('h:mm A')}
                               />
                               <div className="convo-bubble-outbound">
                                 <div>

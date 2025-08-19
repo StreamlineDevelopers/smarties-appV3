@@ -6,7 +6,7 @@ const ConvoinbounddurationItem = ({ dataWId, divText }) => {
     <div className={'convo-inbound-duration'}>
       <DurationdivItem
         dataWId={'d2601b0f-93ed-ec78-d431-297ce3d04872'}
-        divText={'10:30 AM'}
+        divText={divText}
       />
     </div>
   );
