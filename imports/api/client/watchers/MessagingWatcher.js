@@ -141,9 +141,6 @@ class MessagingWatcher extends Watcher2 {
     #sessionId = null;
     #businessId = "63b81a722f8146be93163e3e";
     #interactionData = null;
-    #username = "";
-    #password = "";
-    #smartiesAssistantIsHumanUrl = "";
     constructor(parent) {
         super(parent);
         this.setValue(TAB.MESSAGES, 'all');
@@ -160,8 +157,6 @@ class MessagingWatcher extends Watcher2 {
             syncEnabled: false  // We'll handle sync manually
         });
 
-        this.setupConfig();
-
         this.listening = false;
         this.initialized = false;
     }
@@ -171,13 +166,6 @@ class MessagingWatcher extends Watcher2 {
 
     get DBInteraction() {
         return this.#interactionData;
-    }
-
-    setupConfig() {
-        console.log(this.Settings);
-        this.#username = this.Settings.auth.username || "tmq";
-        this.#password = this.Settings.auth.password || "P@ssword1";
-        this.#smartiesAssistantIsHumanUrl = this.Settings.smartiesAssistant.isHumanUrl;
     }
 
     async initialize() {
@@ -419,8 +407,9 @@ class MessagingWatcher extends Watcher2 {
 
     async toggleSmartiesAssistant() {
         const value = this.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? true;
-        const auth = btoa(`${this.#username}:${this.#password}`);
-        const res = await axios.post(this.#smartiesAssistantIsHumanUrl, {
+        const data = await this.ensureConfig();
+        const auth = btoa(`${data.auth.username}:${data.auth.password}`);
+        const res = await axios.post(data.smartiesAssistant.isHumanUrl, {
             sessionId: this.#sessionId,
             state: value ? 'human' : 'bot',
             // takeover: !value
@@ -439,8 +428,9 @@ class MessagingWatcher extends Watcher2 {
             toast.warning("Session ID not found", TOAST_STYLE.WARNING);
             return;
         }
-        const auth = btoa(`${this.#username}:${this.#password}`);
-        const res = await axios.get(this.#smartiesAssistantIsHumanUrl, {
+        const data = await this.ensureConfig();
+        const auth = btoa(`${data.auth.username}:${data.auth.password}`);
+        const res = await axios.get(data.smartiesAssistant.isHumanUrl, {
             sessionId: this.#sessionId
         }, {
             headers: {
@@ -448,8 +438,6 @@ class MessagingWatcher extends Watcher2 {
                 'Authorization': `Basic ${auth}`
             }
         });
-        console.log('res', res);
-
         if (res.status === 200) {
             this.setValue(TOGGLE.SMARTIES_ASSISTANT, !(res.data.status === 'human'));
         } else {
