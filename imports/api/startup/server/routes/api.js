@@ -33,8 +33,8 @@ const Providers = {
                 return { providerMessageId: rest.messageId || `chat-${Date.now()}`, status: 'sent' };
             }
 
-            const username = Server.Config.public.auth.username || 'tmq';
-            const password = Server.Config.public.auth.password || 'P@ssword1';
+            const username = Server.Config.auth.username || 'tmq';
+            const password = Server.Config.auth.password || 'P@ssword1';
             const auth = Buffer.from(`${username}:${password}`).toString('base64');
             const testUrl = Server.Config.server.smartiesAssistant.testUrl;
             const productionUrl = Server.Config.server.smartiesAssistant.productionUrl;
