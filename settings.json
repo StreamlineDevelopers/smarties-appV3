@@ -11,5 +11,21 @@
             "pushToRedis": true
         },
         "debug": false
+    },
+    "server": {
+        "wsPort": 3502,
+        "smartiesAssistant": {
+            "testUrl": "",
+            "productionUrl": ""
+        }
+    },
+    "client": {
+        "smartiesAssistant": {
+            "isHumanUrl": ""
+        }
+    },
+    "auth": {
+        "username": "tmq",
+        "password": "P@ssword1"
     }
 }

@@ -7,6 +7,7 @@ import { fetch } from "meteor/fetch";
 import SchemaErrorHandler from '../../../server/utils/schemaErrorHandler.js';
 import InteractionManager from '../../../server/classes/interactions/InteractionManager.js';
 import Server from '../../../server/Server.js';
+import Interactions from '../../../server/classes/dbTemplates/Interactions.js';
 
 Logger.setLogLevel(LogLevel.DEBUG);
 
@@ -27,22 +28,23 @@ const Providers = {
         },
     },
     chat: {
-        async send({ channel, to, text, ...rest }) {
-            if (channel.type === "chat" && channel.identifier.includes("smarty-chat-main")) {
+        async send({ channel, to, text, sessionId, ...rest }) {
+            if (channel.type === "chat" && rest.meta?.agentId === "bot") {
                 return { providerMessageId: rest.messageId || `chat-${Date.now()}`, status: 'sent' };
             }
-            const username = 'tmq';
-            const password = 'P@ssword1';
+
+            const username = Server.Config.auth.username || 'tmq';
+            const password = Server.Config.auth.password || 'P@ssword1';
             const auth = Buffer.from(`${username}:${password}`).toString('base64');
-            const testUrl = "https://n8n.ph01.us/webhook-test/2522bf0c-4e08-44ec-86bc-721b42a1716d";
-            const productionUrl = "https://n8n.ph01.us/webhook/2522bf0c-4e08-44ec-86bc-721b42a1716d";
-            const response = await fetch(testUrl, {
+            const testUrl = Server.Config.server.smartiesAssistant.testUrl;
+            const productionUrl = Server.Config.server.smartiesAssistant.productionUrl;
+            const response = await fetch(productionUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     "Authorization": "Basic " + auth,
                 },
-                body: JSON.stringify({ query: text, ...rest, }),
+                body: JSON.stringify({ query: text, sessionId, ...rest }),
             });
             return await response.json();
         },
@@ -64,7 +66,7 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
 
             const channel = await InteractionManager.resolveChannel({ businessId: biz._id, type, identifier, provider, metadata: req.body?.meta });
             const consumer = await InteractionManager.resolveOrCreateConsumer({ businessId: biz._id, externalId });
-            const inbox = await InteractionManager.ensureInbox({ businessId: biz._id, consumerId: consumer._id, channelId: channel._id });
+            const { inbox, isNew: isNewInbox } = await InteractionManager.ensureInbox({ businessId: biz._id, consumerId: consumer._id, channelId: channel._id });
             const attributes = [];
             if (req.body.meta) {
                 for (const key in req.body.meta) {
@@ -130,19 +132,23 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
         try {
             Logger.debug(`Received outbound webhook for business ${slug}`, req.body);
             const biz = await InteractionManager.resolveBusinessBySlug(slug);
-
             const { provider, type, identifier, to, text, attachments } = InteractionManager.normalizeOutbound(req.body || {});
-
-            console.log({ provider, type, identifier, to, text, attachments });
             const channel = await InteractionManager.resolveChannel({ businessId: biz._id, type, identifier, provider, metadata: req.body?.meta });
 
             // Ensure consumer + inbox
             const consumer = await InteractionManager.resolveOrCreateConsumer({ businessId: biz._id, externalId: to });
             const { inbox, isNew: isNewInbox } = await InteractionManager.ensureInbox({ businessId: biz._id, consumerId: consumer._id, channelId: channel._id });
-
-
-
-            // Persist interaction as outbound
+            const attributes = [];
+            if (req.body.meta) {
+                for (const key in req.body.meta) {
+                    attributes.push({ key, value: req.body.meta[key] });
+                }
+            }
+            const latestInteraction = inbox.latestInteractionId ? await Interactions.findById(inbox.latestInteractionId) : null;
+            const sessionId = latestInteraction?.attributes?.find(attr => attr.key === "sessionId")?.value;
+            if (sessionId) {
+                attributes.push({ key: "sessionId", value: sessionId });
+            }
             const interaction = await InteractionManager.recordInteraction({
                 businessId: biz._id,
                 inboxId: inbox._id,
@@ -153,15 +159,16 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
                 text,
                 attachments,
                 status: 'queued',
-                attributes: [],
+                attributes,
             });
 
             // Provider handoff (mock)
             const adapter = Providers[type] || Providers.sms;
-            const providerRes = await adapter.send({ channel, to, text, attachments, ...req.body, interactionId: interaction._id._str, slug: biz.slug });
-            if (providerRes?.code !== 200) {
-                await InteractionManager.updateInteraction({ interactionId: interaction._id, status: 'failed' });
-            }
+            const providerRes = await adapter.send({ channel, to, text, attachments, ...req.body, interactionId: interaction._id._str, slug: biz.slug, sessionId });
+            // providerRes { providerMessageId: 'chat-1755541948233', status: 'sent' }
+            // if (providerRes?.code !== 200) {
+            //     await InteractionManager.updateInteraction({ interactionId: interaction._id, status: 'failed' });
+            // }
 
             const updatedInbox = await InteractionManager.updateInboxLatest({ inboxId: inbox._id, interaction, incrementUnread: false });
             let businessId = biz._id._str || biz._id.toString();
