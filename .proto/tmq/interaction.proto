@@ -1,5 +1,5 @@
 syntax = "proto3";
-
+import "google/protobuf/any.proto";
 package tmq;
 
 // Request message to get interactions by inbox ID
@@ -16,12 +16,7 @@ message InteractionPayload {
 // Attribute key-value pair with support for different value types
 message InteractionAttribute {
   string key = 1;
-  oneof value {
-    string string_value = 2;
-    double double_value = 3;
-    bool bool_value = 4;
-    int32 int_value = 5;
-  }
+  google.protobuf.Any value = 2;
 }
 
 // Individual interaction entry

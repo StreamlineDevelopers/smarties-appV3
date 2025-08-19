@@ -1,5 +1,13 @@
 {
-    "public": {},
+    "public": {
+        "auth": {
+            "username": "tmq",
+            "password": "P@ssword1"
+        },
+        "smartiesAssistant": {
+            "isHumanUrl": ""
+        }
+    },
     "redisOplog": {
         "redis": {
             "port": 6379,
@@ -11,5 +19,12 @@
             "pushToRedis": true
         },
         "debug": false
+    },
+    "server": {
+        "wsPort": 3502,
+        "smartiesAssistant": {
+            "testUrl": "",
+            "productionUrl": ""
+        }
     }
 }

@@ -3,6 +3,7 @@
  * compiler version: 3.20.3
  * source: tmq/interaction.proto
  * git: https://github.com/thesayyn/protoc-gen-ts */
+import * as dependency_1 from "./../google/protobuf/any";
 import * as pb_1 from "google-protobuf";
 import * as grpc_1 from "@grpc/grpc-js";
 export namespace tmq {
@@ -164,47 +165,19 @@ export namespace tmq {
         }
     }
     export class InteractionAttribute extends pb_1.Message {
-        #one_of_decls: number[][] = [[2, 3, 4, 5]];
-        constructor(data?: any[] | ({
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
             key?: string;
-        } & (({
-            string_value?: string;
-            double_value?: never;
-            bool_value?: never;
-            int_value?: never;
-        } | {
-            string_value?: never;
-            double_value?: number;
-            bool_value?: never;
-            int_value?: never;
-        } | {
-            string_value?: never;
-            double_value?: never;
-            bool_value?: boolean;
-            int_value?: never;
-        } | {
-            string_value?: never;
-            double_value?: never;
-            bool_value?: never;
-            int_value?: number;
-        })))) {
+            value?: dependency_1.google.protobuf.Any;
+        }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") {
                 if ("key" in data && data.key != undefined) {
                     this.key = data.key;
                 }
-                if ("string_value" in data && data.string_value != undefined) {
-                    this.string_value = data.string_value;
-                }
-                if ("double_value" in data && data.double_value != undefined) {
-                    this.double_value = data.double_value;
-                }
-                if ("bool_value" in data && data.bool_value != undefined) {
-                    this.bool_value = data.bool_value;
-                }
-                if ("int_value" in data && data.int_value != undefined) {
-                    this.int_value = data.int_value;
+                if ("value" in data && data.value != undefined) {
+                    this.value = data.value;
                 }
             }
         }
@@ -214,101 +187,38 @@ export namespace tmq {
         set key(value: string) {
             pb_1.Message.setField(this, 1, value);
         }
-        get string_value() {
-            return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
-        }
-        set string_value(value: string) {
-            pb_1.Message.setOneofField(this, 2, this.#one_of_decls[0], value);
-        }
-        get has_string_value() {
-            return pb_1.Message.getField(this, 2) != null;
-        }
-        get double_value() {
-            return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
-        }
-        set double_value(value: number) {
-            pb_1.Message.setOneofField(this, 3, this.#one_of_decls[0], value);
-        }
-        get has_double_value() {
-            return pb_1.Message.getField(this, 3) != null;
-        }
-        get bool_value() {
-            return pb_1.Message.getFieldWithDefault(this, 4, false) as boolean;
-        }
-        set bool_value(value: boolean) {
-            pb_1.Message.setOneofField(this, 4, this.#one_of_decls[0], value);
-        }
-        get has_bool_value() {
-            return pb_1.Message.getField(this, 4) != null;
-        }
-        get int_value() {
-            return pb_1.Message.getFieldWithDefault(this, 5, 0) as number;
-        }
-        set int_value(value: number) {
-            pb_1.Message.setOneofField(this, 5, this.#one_of_decls[0], value);
-        }
-        get has_int_value() {
-            return pb_1.Message.getField(this, 5) != null;
-        }
         get value() {
-            const cases: {
-                [index: number]: "none" | "string_value" | "double_value" | "bool_value" | "int_value";
-            } = {
-                0: "none",
-                2: "string_value",
-                3: "double_value",
-                4: "bool_value",
-                5: "int_value"
-            };
-            return cases[pb_1.Message.computeOneofCase(this, [2, 3, 4, 5])];
+            return pb_1.Message.getWrapperField(this, dependency_1.google.protobuf.Any, 2) as dependency_1.google.protobuf.Any;
+        }
+        set value(value: dependency_1.google.protobuf.Any) {
+            pb_1.Message.setWrapperField(this, 2, value);
+        }
+        get has_value() {
+            return pb_1.Message.getField(this, 2) != null;
         }
         static fromObject(data: {
             key?: string;
-            string_value?: string;
-            double_value?: number;
-            bool_value?: boolean;
-            int_value?: number;
+            value?: ReturnType<typeof dependency_1.google.protobuf.Any.prototype.toObject>;
         }): InteractionAttribute {
             const message = new InteractionAttribute({});
             if (data.key != null) {
                 message.key = data.key;
             }
-            if (data.string_value != null) {
-                message.string_value = data.string_value;
-            }
-            if (data.double_value != null) {
-                message.double_value = data.double_value;
-            }
-            if (data.bool_value != null) {
-                message.bool_value = data.bool_value;
-            }
-            if (data.int_value != null) {
-                message.int_value = data.int_value;
+            if (data.value != null) {
+                message.value = dependency_1.google.protobuf.Any.fromObject(data.value);
             }
             return message;
         }
         toObject() {
             const data: {
                 key?: string;
-                string_value?: string;
-                double_value?: number;
-                bool_value?: boolean;
-                int_value?: number;
+                value?: ReturnType<typeof dependency_1.google.protobuf.Any.prototype.toObject>;
             } = {};
             if (this.key != null) {
                 data.key = this.key;
             }
-            if (this.string_value != null) {
-                data.string_value = this.string_value;
-            }
-            if (this.double_value != null) {
-                data.double_value = this.double_value;
-            }
-            if (this.bool_value != null) {
-                data.bool_value = this.bool_value;
-            }
-            if (this.int_value != null) {
-                data.int_value = this.int_value;
+            if (this.value != null) {
+                data.value = this.value.toObject();
             }
             return data;
         }
@@ -318,14 +228,8 @@ export namespace tmq {
             const writer = w || new pb_1.BinaryWriter();
             if (this.key.length)
                 writer.writeString(1, this.key);
-            if (this.has_string_value)
-                writer.writeString(2, this.string_value);
-            if (this.has_double_value)
-                writer.writeDouble(3, this.double_value);
-            if (this.has_bool_value)
-                writer.writeBool(4, this.bool_value);
-            if (this.has_int_value)
-                writer.writeInt32(5, this.int_value);
+            if (this.has_value)
+                writer.writeMessage(2, this.value, () => this.value.serialize(writer));
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -339,16 +243,7 @@ export namespace tmq {
                         message.key = reader.readString();
                         break;
                     case 2:
-                        message.string_value = reader.readString();
-                        break;
-                    case 3:
-                        message.double_value = reader.readDouble();
-                        break;
-                    case 4:
-                        message.bool_value = reader.readBool();
-                        break;
-                    case 5:
-                        message.int_value = reader.readInt32();
+                        reader.readMessage(message.value, () => message.value = dependency_1.google.protobuf.Any.deserialize(reader));
                         break;
                     default: reader.skipField();
                 }

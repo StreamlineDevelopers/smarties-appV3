@@ -106,12 +106,44 @@ export async function initializeRedisVent(wsUrl = 'ws://localhost:3502') {
     return initializationPromise;
 }
 
+// Decode google.protobuf.Any from toObject() form { typeUrl, value: base64 }
+function decodeAny(any) {
+    if (!any || any.value == null) return null;
+    try {
+        const binary = atob(any.value);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        const text = new TextDecoder().decode(bytes);
+        if (any.typeUrl && any.typeUrl.endsWith('/string')) return text;
+        if (any.typeUrl && (any.typeUrl.endsWith('/int64') || any.typeUrl.endsWith('/double') || any.typeUrl.endsWith('/number'))) {
+            const n = Number(text);
+            return Number.isNaN(n) ? text : n;
+        }
+        if (any.typeUrl && any.typeUrl.endsWith('/json')) return JSON.parse(text);
+        return text;
+    } catch (e) {
+        return any.value;
+    }
+}
+
+function decodeAttributeList(list) {
+    return (list || []).map(a => ({
+        key: a.key,
+        value: a && a.value && typeof a.value === 'object' && 'value' in a.value ? decodeAny(a.value) : a.value
+    }));
+}
+
 class MessagingWatcher extends Watcher2 {
     #data
     #lastBasis = null;
     #processes = {};
     #listen = null;
+    #sessionId = null;
+    #businessId = "63b81a722f8146be93163e3e";
     #interactionData = null;
+    #username = "";
+    #password = "";
+    #smartiesAssistantIsHumanUrl = "";
     constructor(parent) {
         super(parent);
         this.setValue(TAB.MESSAGES, 'all');
@@ -128,6 +160,8 @@ class MessagingWatcher extends Watcher2 {
             syncEnabled: false  // We'll handle sync manually
         });
 
+        this.setupConfig();
+
         this.listening = false;
         this.initialized = false;
     }
@@ -137,6 +171,13 @@ class MessagingWatcher extends Watcher2 {
 
     get DBInteraction() {
         return this.#interactionData;
+    }
+
+    setupConfig() {
+        console.log(this.Settings);
+        this.#username = this.Settings.auth.username || "tmq";
+        this.#password = this.Settings.auth.password || "P@ssword1";
+        this.#smartiesAssistantIsHumanUrl = this.Settings.smartiesAssistant.isHumanUrl;
     }
 
     async initialize() {
@@ -168,13 +209,13 @@ class MessagingWatcher extends Watcher2 {
         this.setValue(TAB.MESSAGES, tab);
     }
 
-    async fetchInbox(businessId) {
+    async fetchInbox() {
         this.setValue(INTERACTION.LOADING_INBOX, true);
 
         try {
             // Create request for InboxService.GetInbox
             const req = new proto.tmq.GetInboxRequest();
-            req.setBusinessId("63b81a722f8146be93163e3e");
+            req.setBusinessId(this.#businessId);
 
             // Call InboxService.GetInbox - 0x2686675b
             const { err, result } = await this.Parent.callFunc(0x2686675b, req);
@@ -191,8 +232,6 @@ class MessagingWatcher extends Watcher2 {
             const responseObj = response.toObject();
 
             if (responseObj.success) {
-                console.log("Inbox fetched successfully:", responseObj);
-
                 // Transform server data to UI format if needed
                 const transformedInbox = responseObj.inboxesList.map(inbox => ({
                     _id: inbox.id,
@@ -247,6 +286,7 @@ class MessagingWatcher extends Watcher2 {
         this.setValue(INTERACTION.CURRENT, inboxData);
         this.setValue("inboxActive", true);
         this.interactionListen(inboxData._id);
+        const latestInteractionId = inboxData.latestInteractionId;
         try {
             // Create request for InteractionService.GetInteractions
             const req = new proto.tmq.GetInteractionsRequest();
@@ -267,27 +307,34 @@ class MessagingWatcher extends Watcher2 {
             const responseObj = response.toObject();
 
             if (responseObj.success) {
-                console.log("Interactions fetched successfully:", responseObj);
-
                 // Transform server data to UI message format
-                const transformedMessages = responseObj.interactionsList.map(interaction => ({
-                    id: interaction.id,
-                    businessId: interaction.businessId,
-                    inboxId: interaction.inboxId,
-                    channelId: interaction.channelId,
-                    consumerId: interaction.consumerId,
-                    userId: interaction.userId,
-                    medium: interaction.medium,
-                    direction: interaction.direction,
-                    message: interaction.payload?.text || '',
-                    attachments: interaction.payload?.attachmentsList || [],
-                    status: interaction.status,
-                    timestamp: interaction.timestamp ? new Date(interaction.timestamp).toLocaleTimeString() : '',
-                    attributes: interaction.attributesList || [],
-                    // UI specific fields for compatibility with existing components
-                    sender: interaction.direction === 'inbound' ? 'User' : 'Agent'
-                }));
-
+                const transformedMessages = responseObj.interactionsList.map(interaction => {
+                    const attributes = decodeAttributeList(interaction.attributesList);
+                    return {
+                        id: interaction.id,
+                        businessId: interaction.businessId,
+                        inboxId: interaction.inboxId,
+                        channelId: interaction.channelId,
+                        consumerId: interaction.consumerId,
+                        userId: interaction.userId,
+                        medium: interaction.medium,
+                        direction: interaction.direction,
+                        message: interaction.payload?.text || '',
+                        attachments: interaction.payload?.attachmentsList || [],
+                        status: interaction.status,
+                        timestamp: interaction.timestamp ? new Date(interaction.timestamp).toLocaleTimeString() : '',
+                        attributes,
+                        // UI specific fields for compatibility with existing components
+                        sender: interaction.direction === 'inbound' ? 'User' : 'Agent'
+                    };
+                });
+                // get the latestInteraction from the latestInteractionId
+                const latestInteraction = transformedMessages.find(interaction => interaction.id.includes(latestInteractionId));
+                // get the sessionId in latestInteraction.attributes
+                // set latest interaction data
+                const sessionId = latestInteraction.attributes.find(attribute => attribute.key === 'sessionId')?.value;
+                this.#sessionId = sessionId;
+                await this.checkSmartiesAssistantStatus(sessionId);
                 const existing = await this.#interactionData.find({}).fetch();
                 for (const doc of existing) {
                     await this.#interactionData.remove(doc._id);
@@ -319,22 +366,12 @@ class MessagingWatcher extends Watcher2 {
      * @param {string} message - The message text to send.
      */
     async sendMessage() {
-        // this.setValue(INTERACTION.MESSAGES, [
-        //     ...this.getValue(INTERACTION.MESSAGES),
-        //     {
-        //         id: String(Date.now()),
-        //         sender: "User",
-        //         direction: "inbound",
-        //         message: this.getValue(INTERACTION.MESSAGE_TEXT),
-        //         timestamp: new Date().toLocaleTimeString(),
-        //     },
-        // ]);
-        // this.setValue(INTERACTION.MESSAGE_TEXT, '');
         const res = await axios.post(`/api/b/smarties-test/channels/messages/outbound`, {
             "provider": "smarty",
             "type": "chat",
             "from": "smarty-chat-main",
-            "to": "customer_1755201392732",
+            // "identifier": "smarty-chat-main",
+            "to": "widget",
             "text": this.getValue(INTERACTION.MESSAGE_TEXT),
             "meta": {
                 "agentId": "agent_001",
@@ -380,19 +417,57 @@ class MessagingWatcher extends Watcher2 {
         this.setValue(POPUP.DATA_ENRICHMENT, flag);
     }
 
-    toggleSmartiesAssistant() {
+    async toggleSmartiesAssistant() {
         const value = this.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? true;
-        this.setValue(TOGGLE.SMARTIES_ASSISTANT, !value);
+        const auth = btoa(`${this.#username}:${this.#password}`);
+        const res = await axios.post(this.#smartiesAssistantIsHumanUrl, {
+            sessionId: this.#sessionId,
+            state: value ? 'human' : 'bot',
+            // takeover: !value
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Basic ${auth}`
+            }
+        })
+        this.setValue(TOGGLE.SMARTIES_ASSISTANT, !(res.data.status === 'human'));
+    }
+
+    async checkSmartiesAssistantStatus(sessionId = null) {
+        if (!sessionId) sessionId = this.#sessionId;
+        if (!sessionId) {
+            toast.warning("Session ID not found", TOAST_STYLE.WARNING);
+            return;
+        }
+        const auth = btoa(`${this.#username}:${this.#password}`);
+        const res = await axios.get(this.#smartiesAssistantIsHumanUrl, {
+            sessionId: this.#sessionId
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Basic ${auth}`
+            }
+        });
+        console.log('res', res);
+
+        if (res.status === 200) {
+            this.setValue(TOGGLE.SMARTIES_ASSISTANT, !(res.data.status === 'human'));
+        } else {
+            toast.error("Failed to check Smarties Assistant Status", TOAST_STYLE.ERROR);
+        }
     }
 
     inboxListen() {
         if (this.listening) return;
-
+        if (!this.#businessId) {
+            toast.warning("Business not set", TOAST_STYLE.WARNING);
+            return;
+        }
         // Subscribe to real-time changes
         this.subscription = subscriptionManager.listen(
             'inboxapp',
             'inbox',
-            "63b81a722f8146be93163e3e", // businessId as routingId
+            this.#businessId, // businessId as routingId
             async (change) => {
                 // Handle real-time updates
                 // transform the data to the UI format
@@ -431,7 +506,7 @@ class MessagingWatcher extends Watcher2 {
                         if (change.data._id) delete change.data._id;
                         if (data._id) delete data._id;
                         await this.#data.update(change.id, data);
-                        this.setValue(INTERACTION.INBOX, data);
+                        // this.setValue(INTERACTION.INBOX, data);
                         console.log('Inbox updated:', change.data);
                         break;
 
@@ -493,7 +568,7 @@ class MessagingWatcher extends Watcher2 {
                                 attachments: change.data.payload?.attachmentsList || [],
                                 status: change.data.status,
                                 timestamp: change.data.createdAt,
-                                attributes: change.data.attributesList || [],
+                                attributes: decodeAttributeList(change.data.attributesList),
                                 sender: change.data.direction === 'inbound' ? 'User' : 'Agent'
                             }
                             await this.#interactionData.insert(data);
@@ -502,8 +577,29 @@ class MessagingWatcher extends Watcher2 {
                         break;
 
                     case 'update':
-                        await this.#interactionData.update(change.id, change.data);
-                        console.log('Interaction updated:', change.data);
+                        const updated = {
+                            businessId: change.data.businessId?._str ?? change.data.businessId,
+                            inboxId: change.data.inboxId?._str ?? change.data.inboxId,
+                            channelId: change.data.channelId?._str ?? change.data.channelId,
+                            consumerId: change.data.consumerId?._str ?? change.data.consumerId,
+                            userId: change.data.userId,
+                            medium: change.data.medium,
+                            direction: change.data.direction,
+                            message: change.data.payload?.text || '',
+                            attachments: change.data.payload?.attachmentsList || [],
+                            status: change.data.status,
+                            timestamp: change.data.createdAt,
+                            attributes: decodeAttributeList(change.data.attributesList),
+                            sender: change.data.direction === 'inbound' ? 'User' : 'Agent'
+                        };
+                        await this.#interactionData.update(change.id, updated);
+                        console.log('Interaction updated:', updated);
+
+                        const sessionAttr = (change.data.attributesList || []).find(attribute => attribute.key === 'sessionId');
+                        const decodedSessionId = sessionAttr && sessionAttr.value && typeof sessionAttr.value === 'object' ? decodeAny(sessionAttr.value) : sessionAttr?.value;
+                        if (decodedSessionId) {
+                            this.#sessionId = decodedSessionId;
+                        }
                         break;
 
                     case 'remove':

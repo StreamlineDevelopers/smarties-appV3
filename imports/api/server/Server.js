@@ -41,20 +41,19 @@ class Server extends Core {
 
     async startRedis() {
         if (this.#isInitialized) return;
-
         try {
             await this.#redisVentServer.initialize({
                 redis: {
-                    host: 'localhost',
-                    port: 6379
+                    host: this.Config.redisOplog.redis.host || 'localhost',
+                    port: this.Config.redisOplog.redis.port || 6379
                 },
-                wsPort: 3502,
+                wsPort: this.Config.server.wsPort || 3502,
                 debug: true
             });
             this.#isInitialized = true;
-            console.log('✓ RedisVent server initialized');
+            Logger.showStatus('✓ RedisVent server initialized');
         } catch (error) {
-            console.error('Failed to initialize RedisVent:', error);
+            Logger.showError('Failed to initialize RedisVent:', error);
             throw error; // Don't exit in Meteor, throw instead
         }
         return super.startRedis().then(() => {
