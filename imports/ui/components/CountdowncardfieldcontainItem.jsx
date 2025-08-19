@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CountdowncardfieldcontainItem = ({ placeholder, divText }) => {
+const CountdowncardfieldcontainItem = ({ placeholder, divText, value, onChange }) => {
   return (
     <div className={'countdown-card-field-contain'}>
       <input
@@ -12,6 +12,8 @@ const CountdowncardfieldcontainItem = ({ placeholder, divText }) => {
         type={'text'}
         id={'field'}
         required
+        value={value}
+        onChange={onChange}
       />
       <div className={'countdown-time'}>{divText || 'Hours'}</div>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import WformdoneItem from './WformdoneItem';
 import WformfailItem from './WformfailItem';
 import MessagingtablinkItem_12257a7d from './MessagingtablinkItem_12257a7d';
@@ -19,8 +19,31 @@ import CountdowncardcoloncolItem from './CountdowncardcoloncolItem';
 import UrgencytypelinkItem from './UrgencytypelinkItem';
 import UrgencytypeitemItem from './UrgencytypeitemItem';
 import QuickpresentsitemItem from './QuickpresentsitemItem';
+import ObjectionFeedWatcher, { NUDGE, OBJECTION } from '../../api/client/watchers/ObjectionFeedWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
+import Loader from './common/Loader';
 
-const MaincontentLayout_0e80098f = ({}) => {
+const MaincontentLayout_0e80098f = ({ }) => {
+  const watcher = useRef(ObjectionFeedWatcher).current;
+  useWatcher(watcher);
+
+  useEffect(() => {
+    watcher.fetchObjections();
+  }, []);
+
+  const loadingObjection = watcher.getValue(OBJECTION.LOADING_LIST);
+  const loadingSuggestionResponse = watcher.getValue(OBJECTION.LOADING_SUGGESTION_RESPONSE);
+  const objectionList = watcher.getValue(OBJECTION.LIST) || [];
+  const selectedObjection = watcher.getValue(OBJECTION.SELECTED_OBJECTION) || null;
+  const suggestedResponses = watcher.getValue(OBJECTION.SUGGESTION_RESPONSE) || [];
+
+  //nudge tools
+  const loadingNudge = watcher.getValue(NUDGE.LOADING) || false;
+  const testimonials = watcher.getValue(NUDGE.TESTIMONIALS) || null;
+  const countdownTimer = watcher.getValue(NUDGE.COUNTDOWN_TIMER) || {};
+  const discount = watcher.getValue(NUDGE.DISCOUNT) || '';
+  const urgentType = watcher.getValue(NUDGE.URGENT_TYPE) || [];
+
   return (
     <div
       id={'w-node-_650a9fdf-eb40-62bd-8ac2-9a0cde2ee07a-f14725d8'}
@@ -67,6 +90,7 @@ const MaincontentLayout_0e80098f = ({}) => {
                       type={'text'}
                       id={'search-2'}
                       required
+                      onChange={(e => watcher.searchObjection(e.target.value))}
                     />
                   </div>
                 </div>
@@ -106,32 +130,42 @@ const MaincontentLayout_0e80098f = ({}) => {
                 >
                   <div className={'messaging-tabpane-div'}>
                     <div className={'inbox-list gap-5'}>
-                      <a
-                        href={'#'}
-                        className={'objection-list-item active w-inline-block'}
-                      >
-                        <div className={'messaging-inbox-item-left'}>
-                          <div className={'messaging-inbox-textcontent'}>
-                            <MessaginginboxtextcontenttopItem_8f1f0751
-                              divText={'Unclear pricing'}
-                              divText1={
-                                '"I like your product, but I can\'t figure out how much it will cost for my team of 15."'
-                              }
-                            />
-                            <div className={'objectionlist-item-bot'}>
-                              <ObjectiondetectionitemItem
-                                divText={'Detected in 12 conversations'}
-                              />
-                              <div
-                                className={'messaging-inbox-user-tag bg-orange'}
-                              >
-                                {'critical'}
+                      {loadingObjection ? (
+                        <Loader />
+                      ) :
+                        objectionList.length ? objectionList.map((objection) => (
+                          <a
+                            key={objection.id}
+                            // href={'#'}
+                            className={`objection-list-item ${selectedObjection?.id == objection.id ? 'active' : ''} w-inline-block`}
+                            onClick={() => watcher.selectObjection(objection)}
+                            style={{ cursor: 'pointer', backgroundColor: selectedObjection?.id == objection.id ? '#f0f8ff' : 'transparent' }}
+                          >
+                            <div className={'messaging-inbox-item-left'}>
+                              <div className={'messaging-inbox-textcontent'}>
+                                <MessaginginboxtextcontenttopItem_8f1f0751
+                                  divText={objection.title || 'Unknown Objection'}
+                                  divText1={
+                                    objection.preview || 'No preview available'
+                                  }
+                                />
+                                <div className={'objectionlist-item-bot'}>
+                                  <ObjectiondetectionitemItem
+                                    divText={`Detected in ${objection.detected} conversations`}
+                                  />
+                                  <div
+                                    className={`messaging-inbox-user-tag ${objection.tag == 'critical' ? `bg-orange` : objection.tag == 'new' ? 'bg-blue' : objection.tag == 'frequent' ? 'bg-yellow' : 'bg-grey'}`}
+                                  >
+                                    {objection.tag || 'FREQUENT'}
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      </a>
-                      <a
+                          </a>))
+                          :
+                          <div>no data</div>
+                      }
+                      {/* <a
                         href={'#'}
                         className={'objection-list-item w-inline-block'}
                       >
@@ -219,7 +253,7 @@ const MaincontentLayout_0e80098f = ({}) => {
                             </div>
                           </div>
                         </div>
-                      </a>
+                      </a> */}
                     </div>
                   </div>
                 </div>
@@ -228,120 +262,128 @@ const MaincontentLayout_0e80098f = ({}) => {
               </div>
             </div>
           </div>
-          <div className={'messaging-maincol outline'}>
-            <div className={'w-form'}>
-              <form
-                id={'wf-form-tool-form'}
-                name={'wf-form-tool-form'}
-                data-name={'tool form'}
-                method={'get'}
-                data-wf-page-id={'688b61ee631f6165f14725d8'}
-                data-wf-element-id={'650a9fdf-eb40-62bd-8ac2-9a0cde2ee108'}
-              >
-                <div className={'form-body'}>
-                  <div className={'messaging-main-top newshoppers'}>
-                    <div className={'messaging-main-topleft vertical'}>
-                      <div className={'messaging-sidebar-h1'}>
-                        {'Suggested Responses'}
+          {selectedObjection &&
+            <div className={'messaging-maincol outline'}>
+              <div className={'w-form'}>
+                <form
+                  id={'wf-form-tool-form'}
+                  name={'wf-form-tool-form'}
+                  data-name={'tool form'}
+                  method={'get'}
+                  data-wf-page-id={'688b61ee631f6165f14725d8'}
+                  data-wf-element-id={'650a9fdf-eb40-62bd-8ac2-9a0cde2ee108'}
+                >
+                  <div className={'form-body'}>
+                    <div className={'messaging-main-top newshoppers'}>
+                      <div className={'messaging-main-topleft vertical'}>
+                        <div className={'messaging-sidebar-h1'}>
+                          {'Suggested Responses'}
+                        </div>
+                        <div className={'db-quickaction-text'}>
+                          {'For: '}
+                          <span className={'span-teal'}>{selectedObjection.title || ""}</span>
+                        </div>
                       </div>
-                      <div className={'db-quickaction-text'}>
-                        {'For: '}
-                        <span className={'span-teal'}>{'Unclear pricing'}</span>
-                      </div>
-                    </div>
-                    <div className={'messaging-main-topright'}>
-                      <div className={'messaging-mainbtns-div'}>
-                        <a
-                          href={'#'}
-                          className={'btn-style1 outline-small w-inline-block'}
-                        >
-                          <div className={'icon-btnai w-embed'}>
-                            <img
-                              src="/svgs/icon-9f2545ad754432c4ae21a54e6036e946.svg"
-                              alt="icon"
-                            />
-                          </div>
-                          <div>{'Regenerate'}</div>
-                        </a>
-                        <div className={'assistant-menu'}>
-                          <div
-                            data-w-id={'650a9fdf-eb40-62bd-8ac2-9a0cde2ee134'}
-                            className={'button-options'}
+                      <div className={'messaging-main-topright'}>
+                        <div className={'messaging-mainbtns-div'}>
+                          <a
+                            href={'#'}
+                            className={'btn-style1 outline-small w-inline-block'}
+                            onClick={() => watcher.generateSuggestionResponse(selectedObjection?.id)}
                           >
-                            <img
-                              width={'15'}
-                              height={'15'}
-                              alt={''}
-                              src={
-                                'https://cdn.prod.website-files.com/681bd50cca2b1f41b87287dc/681cae0a45e15d21303356de_smarties-icon-menu.svg'
-                              }
-                              loading={'lazy'}
-                              className={'smarties-icon-menu'}
-                            />
-                          </div>
-                          <div className={'menu-dropdown'}>
-                            <MenuitemItem_6b295b9a
-                              src={'../images/smarties-icon-version.svg'}
-                              divText={'Version History'}
-                            />
-                            <MenuitemItem_6b295b9a
-                              src={'../images/smarties-icon-document.svg'}
-                              divText={'Call Logs'}
-                            />
-                            <MenuitemItem_6b295b9a
-                              src={'../images/smarties-icon-duplicate.svg'}
-                              divText={'Duplicate'}
-                            />
-                            <MenuitemItem_6b295b9a
-                              src={'../images/smarties-icon-delete_outline.svg'}
-                              divText={'Delete'}
-                            />
+                            <div className={'icon-btnai w-embed'}>
+                              <img
+                                src="/svgs/icon-9f2545ad754432c4ae21a54e6036e946.svg"
+                                alt="icon"
+                              />
+                            </div>
+                            <div>{'Regenerate'}</div>
+                          </a>
+                          <div className={'assistant-menu'}>
+                            <div
+                              data-w-id={'650a9fdf-eb40-62bd-8ac2-9a0cde2ee134'}
+                              className={'button-options'}
+                            >
+                              <img
+                                width={'15'}
+                                height={'15'}
+                                alt={''}
+                                src={
+                                  'https://cdn.prod.website-files.com/681bd50cca2b1f41b87287dc/681cae0a45e15d21303356de_smarties-icon-menu.svg'
+                                }
+                                loading={'lazy'}
+                                className={'smarties-icon-menu'}
+                              />
+                            </div>
+                            <div className={'menu-dropdown'}>
+                              <MenuitemItem_6b295b9a
+                                src={'../images/smarties-icon-version.svg'}
+                                divText={'Version History'}
+                              />
+                              <MenuitemItem_6b295b9a
+                                src={'../images/smarties-icon-document.svg'}
+                                divText={'Call Logs'}
+                              />
+                              <MenuitemItem_6b295b9a
+                                src={'../images/smarties-icon-duplicate.svg'}
+                                divText={'Duplicate'}
+                              />
+                              <MenuitemItem_6b295b9a
+                                src={'../images/smarties-icon-delete_outline.svg'}
+                                divText={'Delete'}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className={'objectionfeed-body'}>
-                    <div className={'tone-row'}>
-                      <div className={'tone-text'}>{'Style:'}</div>
-                      <div className={'tone-btn-container'}>
-                        <div className={'tone-btn active'}>
-                          <div>{'Friendly'}</div>
-                        </div>
-                        <TonebtnItem divText={'Informative'} />
-                        <TonebtnItem divText={'Casual'} />
-                        <TonebtnItem divText={'Professional'} />
-                      </div>
-                    </div>
-                    <div className={'objection-response-div'}>
-                      <div className={'objections-response-card'}>
-                        <ObjectionresponsetopItem
-                          divText={'Response #1'}
-                          divText1={'ROI'}
-                          divText2={'Value'}
-                          dataWId={'6c69d6e6-d7e0-44df-2be5-fd5ef4d20f56'}
-                        />
-                        <ObjectionsresponsecardbodyItem
-                          divText={
-                            'Thanks for your interest! For a team of 15, you\'d be on our "Growth" plan at $29/user/month, which comes to $435 monthly or $4,350 annually (saving 17%). I\'d be happy to set up a quick call to walk through all included features and any available discounts for your specific needs!'
-                          }
-                        />
-                        <ObjectionresponsebotItem />
-                        <div className={'topperformer-div'}>
-                          <img
-                            src={'../images/mdiflame_1.svg'}
-                            loading={'lazy'}
-                            width={'18'}
-                            height={'18'}
-                            alt={''}
-                            className={'mdiflame'}
-                          />
-                          <div className={'daily-trend-item-4'}>
-                            {'Top Performer'}
+                    <div className={'objectionfeed-body'}>
+                      <div className={'tone-row'}>
+                        <div className={'tone-text'}>{'Style:'}</div>
+                        <div className={'tone-btn-container'}>
+                          <div className={'tone-btn active'}>
+                            <div>{'Friendly'}</div>
                           </div>
+                          <TonebtnItem divText={'Informative'} />
+                          <TonebtnItem divText={'Casual'} />
+                          <TonebtnItem divText={'Professional'} />
                         </div>
                       </div>
-                      <div className={'objections-response-card'}>
+                      <div className={'objection-response-div'}>
+                        {
+                          loadingSuggestionResponse ? (
+                            <Loader />
+                          ) :
+                            suggestedResponses.length ? suggestedResponses.map((response) => (
+                              <div key={response.id} className={'objections-response-card'}>
+                                <ObjectionresponsetopItem
+                                  divText={response.title || 'Response #1'}
+                                  divText1={response.tags || null}
+                                  divText2={null}
+                                  dataWId={'6c69d6e6-d7e0-44df-2be5-fd5ef4d20f56'}
+                                />
+                                <ObjectionsresponsecardbodyItem
+                                  divText={
+                                    response.text || ''
+                                  }
+                                />
+                                <ObjectionresponsebotItem />
+                                <div className={'topperformer-div'}>
+                                  <img
+                                    src={'../images/mdiflame_1.svg'}
+                                    loading={'lazy'}
+                                    width={'18'}
+                                    height={'18'}
+                                    alt={''}
+                                    className={'mdiflame'}
+                                  />
+                                  <div className={'daily-trend-item-4'}>
+                                    {'Top Performer'}
+                                  </div>
+                                </div>
+                              </div>))
+                              : <div>no data</div>}
+                        {/* <div className={'objections-response-card'}>
                         <div className={'objection-response-top'}>
                           <div className={'objection-response-topleft'}>
                             <div className={'objection-response-hd'}>
@@ -378,245 +420,212 @@ const MaincontentLayout_0e80098f = ({}) => {
                           }
                         />
                         <ObjectionresponsebotItem />
+                      </div> */}
                       </div>
                     </div>
                   </div>
-                </div>
-              </form>
-              <WformdoneItem />
-              <WformfailItem />
-            </div>
-          </div>
-          <div className={'delivery-settings-sidebar'}>
-            <div className={'messaging-sidebar-hd-div align-inbetween'}>
-              <div className={'messaging-sidebar-h1'}>{'Nudge Tools'}</div>
-              <div
-                data-w-id={'650a9fdf-eb40-62bd-8ac2-9a0cde2ee1cc'}
-                className={'sidebar-close'}
-              >
-                <img src={'../images/Frame_5.svg'} loading={'lazy'} alt={''} />
+                </form>
+                <WformdoneItem />
+                <WformfailItem />
               </div>
             </div>
-            <div className={'step-formblock w-form'}>
-              <form
-                id={'email-form'}
-                name={'email-form'}
-                data-name={'Email Form'}
-                method={'get'}
-                data-wf-page-id={'688b61ee631f6165f14725d8'}
-                data-wf-element-id={'650a9fdf-eb40-62bd-8ac2-9a0cde2ee1cf'}
-              >
-                <div className={'sidebar-contact-body gap-20'}>
-                  <div className={'nudge-group'}>
-                    <div className={'nudge-header-div'}>
-                      <div className={'messaging-sidebar-h2-style2'}>
-                        {'Testimonials'}
+          }
+          {loadingNudge ?
+            <Loader /> :
+            <div className={'delivery-settings-sidebar'}>
+              <div className={'messaging-sidebar-hd-div align-inbetween'}>
+                <div className={'messaging-sidebar-h1'}>{'Nudge Tools'}</div>
+                <div
+                  data-w-id={'650a9fdf-eb40-62bd-8ac2-9a0cde2ee1cc'}
+                  className={'sidebar-close'}
+                >
+                  <img src={'../images/Frame_5.svg'} loading={'lazy'} alt={''} />
+                </div>
+              </div>
+              <div className={'step-formblock w-form'}>
+                <form
+                  id={'email-form'}
+                  name={'email-form'}
+                  data-name={'Email Form'}
+                  method={'get'}
+                  data-wf-page-id={'688b61ee631f6165f14725d8'}
+                  data-wf-element-id={'650a9fdf-eb40-62bd-8ac2-9a0cde2ee1cf'}
+                >
+                  <div className={'sidebar-contact-body gap-20'}>
+                    <div className={'nudge-group'}>
+                      <div className={'nudge-header-div'}>
+                        <div className={'messaging-sidebar-h2-style2'}>
+                          {'Testimonials'}
+                        </div>
+                        <div className={'testimonials-action-btndiv'}>
+                          <TestimonialsactionbtnItem
+                            src={'../images/Frame_39.svg'}
+                          />
+                          <TestimonialsactionbtnItem
+                            src={'../images/Frame_27.svg'}
+                          />
+                        </div>
                       </div>
-                      <div className={'testimonials-action-btndiv'}>
-                        <TestimonialsactionbtnItem
-                          src={'../images/Frame_39.svg'}
-                        />
-                        <TestimonialsactionbtnItem
-                          src={'../images/Frame_27.svg'}
-                        />
-                      </div>
-                    </div>
-                    <div className={'nudge-testimonials-card'}>
-                      <div className={'nudege-tesimonial-top-div'}>
-                        <img
-                          src={'../images/img_1img.png'}
-                          loading={'lazy'}
-                          width={'40'}
-                          height={'40'}
-                          alt={''}
-                          className={'nudege-tesimonial-image'}
-                        />
-                        <div className={'nudege-tesimonial-details-div'}>
+                      <div className={'nudge-testimonials-card'}>
+                        <div className={'nudege-tesimonial-top-div'}>
+                          <img
+                            src={'../images/img_1img.png'}
+                            loading={'lazy'}
+                            width={'40'}
+                            height={'40'}
+                            alt={''}
+                            className={'nudege-tesimonial-image'}
+                          />
+                          <div className={'nudege-tesimonial-details-div'}>
+                            <div
+                              className={'nudege-tesimonial-details-stars-div'}
+                            >
+                              {Array.from({ length: testimonials.stars }).map((_, i) => (
+                                <div
+                                  className={'nudege-tesimonial-details-star-icon'}
+                                >
+                                  <img
+                                    src={'../images/Frame_32.svg'}
+                                    loading={'lazy'}
+                                    width={'13.5'}
+                                    height={'12'}
+                                    alt={''}
+                                    className={'frame-style-30'}
+                                  />
+                                </div>
+                              ))}
+
+                            </div>
+                            <div className={'nudge-testimonial-name'}>
+                              {testimonials.name || ''}
+                            </div>
+                            <div className={'nudge-testimonial-position'}>
+                              {testimonials.position || ''}
+                            </div>
+                          </div>
+                        </div>
+                        <div className={'nudge-testimonial-textdiv'}>
+                          <div className={'nudge-testimonial-text'}>
+                            {
+                              testimonials.text || ''
+                            }
+                          </div>
+                        </div>
+                        <div className={'nudge-testimonial-slider-dot-div'}>
                           <div
-                            className={'nudege-tesimonial-details-stars-div'}
+                            className={'nudge-testimonial-slider-dot-div-center'}
                           >
                             <div
-                              className={'nudege-tesimonial-details-star-icon'}
-                            >
-                              <img
-                                src={'../images/Frame_32.svg'}
-                                loading={'lazy'}
-                                width={'13.5'}
-                                height={'12'}
-                                alt={''}
-                                className={'frame-style-30'}
-                              />
-                            </div>
-                            <div
-                              className={'nudege-tesimonial-details-star-icon'}
-                            >
-                              <img
-                                src={'../images/Frame_37.svg'}
-                                loading={'lazy'}
-                                width={'13.5'}
-                                height={'12'}
-                                alt={''}
-                                className={'frame-style-30'}
-                              />
-                            </div>
-                            <div
-                              className={'nudege-tesimonial-details-star-icon'}
-                            >
-                              <img
-                                src={'../images/Frame_32.svg'}
-                                loading={'lazy'}
-                                width={'13.5'}
-                                height={'12'}
-                                alt={''}
-                                className={'frame-style-30'}
-                              />
-                            </div>
-                            <div
-                              className={'nudege-tesimonial-details-star-icon'}
-                            >
-                              <img
-                                src={'../images/Frame_37.svg'}
-                                loading={'lazy'}
-                                width={'13.5'}
-                                height={'12'}
-                                alt={''}
-                                className={'frame-style-30'}
-                              />
-                            </div>
-                            <div
-                              className={'nudege-tesimonial-details-star-icon'}
-                            >
-                              <img
-                                src={'../images/Frame_32.svg'}
-                                loading={'lazy'}
-                                width={'13.5'}
-                                height={'12'}
-                                alt={''}
-                                className={'frame-style-30'}
-                              />
-                            </div>
+                              className={'nudge-testimonial-slider-dot current'}
+                            ></div>
+                            <div className={'nudge-testimonial-slider-dot'}></div>
+                            <div className={'nudge-testimonial-slider-dot'}></div>
                           </div>
-                          <div className={'nudge-testimonial-name'}>
-                            {'Michael Thompson'}
-                          </div>
-                          <div className={'nudge-testimonial-position'}>
-                            {'CTO at TechFlow'}
-                          </div>
-                        </div>
-                      </div>
-                      <div className={'nudge-testimonial-textdiv'}>
-                        <div className={'nudge-testimonial-text'}>
-                          {
-                            '"The pricing was actually much more reasonable than we expected for the value we\'re getting. Our team of 20 saw ROI within the first month!"'
-                          }
-                        </div>
-                      </div>
-                      <div className={'nudge-testimonial-slider-dot-div'}>
-                        <div
-                          className={'nudge-testimonial-slider-dot-div-center'}
-                        >
-                          <div
-                            className={'nudge-testimonial-slider-dot current'}
-                          ></div>
-                          <div className={'nudge-testimonial-slider-dot'}></div>
-                          <div className={'nudge-testimonial-slider-dot'}></div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className={'nudge-group'}>
-                    <div className={'messaging-sidebar-h2-style2'}>
-                      {'Countdown Timer'}
+                    <div className={'nudge-group'}>
+                      <div className={'messaging-sidebar-h2-style2'}>
+                        {'Countdown Timer'}
+                      </div>
+                      <div className={'countdown-card'}>
+                        <div className={'countdown-card-top'}>
+                          <div className={'countdown-card-offer-text'}>
+                            {'Offer ends in:'}
+                          </div>
+                          <div className={'countdown-card-btn-row'}>
+                            <CountdowncardlinkItem divText={'Edit'} />
+                            <CountdowncardlinkItem divText={'Reset'} />
+                          </div>
+                        </div>
+                        <div className={'countdown-card-main-div'}>
+                          <CountdowncardfieldcontainItem
+                            placeholder={'2'}
+                            divText={'Hours'}
+                            value={countdownTimer.hours || '0'}
+                            onChange={(e => watcher.setValue(NUDGE.COUNTDOWN_TIMER, { ...countdownTimer, hours: e.target.value }))}
+                          />
+                          <CountdowncardcoloncolItem />
+                          <CountdowncardfieldcontainItem
+                            placeholder={'15'}
+                            divText={'Minutes'}
+                            value={countdownTimer.minutes || '0'}
+                            onChange={(e => watcher.setValue(NUDGE.COUNTDOWN_TIMER, { ...countdownTimer, minutes: e.target.value }))}
+                          />
+                          <CountdowncardcoloncolItem />
+                          <CountdowncardfieldcontainItem
+                            placeholder={'42'}
+                            divText={'Seconds'}
+                            value={countdownTimer.seconds || '0'}
+                            onChange={(e => watcher.setValue(NUDGE.COUNTDOWN_TIMER, { ...countdownTimer, seconds: e.target.value }))}
+                          />
+                        </div>
+                        <div className={'countdown-card-discount-div'}>
+                          <input
+                            className={'textfield w-input'}
+                            maxlength={'256'}
+                            name={'field-2'}
+                            data-name={'Field 2'}
+                            placeholder={'Special 20% team discount'}
+                            type={'text'}
+                            id={'field-2'}
+                            required
+                            value={discount || ''}
+                            onChange={(e => watcher.setValue(NUDGE.DISCOUNT, e.target.value))}
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className={'countdown-card'}>
-                      <div className={'countdown-card-top'}>
-                        <div className={'countdown-card-offer-text'}>
-                          {'Offer ends in:'}
-                        </div>
-                        <div className={'countdown-card-btn-row'}>
-                          <CountdowncardlinkItem divText={'Edit'} />
-                          <CountdowncardlinkItem divText={'Reset'} />
-                        </div>
+                    <div className={'nudge-group'}>
+                      <div className={'messaging-sidebar-h2-style2'}>
+                        {'Urgency Types'}
                       </div>
-                      <div className={'countdown-card-main-div'}>
-                        <CountdowncardfieldcontainItem
-                          placeholder={'2'}
-                          divText={'Hours'}
-                        />
-                        <CountdowncardcoloncolItem />
-                        <CountdowncardfieldcontainItem
-                          placeholder={'15'}
-                          divText={'Minutes'}
-                        />
-                        <CountdowncardcoloncolItem />
-                        <CountdowncardfieldcontainItem
-                          placeholder={'42'}
-                          divText={'Seconds'}
-                        />
+                      <div className={'urgencytype-list'}>
+                        <div className={'urgency-type-item'}>
+                          <div className={'urgency-type-left'}>
+                            <div className={'input-6'}>
+                              <div className={'svg-5'}>
+                                <img
+                                  src={'../images/Frame_28.svg'}
+                                  loading={'lazy'}
+                                  width={'14'}
+                                  height={'12'}
+                                  alt={''}
+                                  className={'frame-style-31'}
+                                />
+                              </div>
+                            </div>
+                            <div className={'text-78'}>{'Scarcity'}</div>
+                          </div>
+                          <UrgencytypelinkItem />
+                        </div>
+                        <UrgencytypeitemItem divText={'Social Proof'} />
+                        <UrgencytypeitemItem divText={'Time-Limited'} />
                       </div>
-                      <div className={'countdown-card-discount-div'}>
-                        <input
-                          className={'textfield w-input'}
-                          maxlength={'256'}
-                          name={'field-2'}
-                          data-name={'Field 2'}
-                          placeholder={'Special 20% team discount'}
-                          type={'text'}
-                          id={'field-2'}
-                          required
+                    </div>
+                    <div className={'nudge-group'}>
+                      <div className={'messaging-sidebar-h2-style2'}>
+                        {'Quick Presets'}
+                      </div>
+                      <div className={'quickpresents-options'}>
+                        <QuickpresentsitemItem
+                          itemText={'Limited-time discount'}
+                        />
+                        <QuickpresentsitemItem
+                          itemText={'Free onboarding session'}
+                        />
+                        <QuickpresentsitemItem
+                          itemText={'Case study highlight'}
                         />
                       </div>
                     </div>
                   </div>
-                  <div className={'nudge-group'}>
-                    <div className={'messaging-sidebar-h2-style2'}>
-                      {'Urgency Types'}
-                    </div>
-                    <div className={'urgencytype-list'}>
-                      <div className={'urgency-type-item'}>
-                        <div className={'urgency-type-left'}>
-                          <div className={'input-6'}>
-                            <div className={'svg-5'}>
-                              <img
-                                src={'../images/Frame_28.svg'}
-                                loading={'lazy'}
-                                width={'14'}
-                                height={'12'}
-                                alt={''}
-                                className={'frame-style-31'}
-                              />
-                            </div>
-                          </div>
-                          <div className={'text-78'}>{'Scarcity'}</div>
-                        </div>
-                        <UrgencytypelinkItem />
-                      </div>
-                      <UrgencytypeitemItem divText={'Social Proof'} />
-                      <UrgencytypeitemItem divText={'Time-Limited'} />
-                    </div>
-                  </div>
-                  <div className={'nudge-group'}>
-                    <div className={'messaging-sidebar-h2-style2'}>
-                      {'Quick Presets'}
-                    </div>
-                    <div className={'quickpresents-options'}>
-                      <QuickpresentsitemItem
-                        itemText={'Limited-time discount'}
-                      />
-                      <QuickpresentsitemItem
-                        itemText={'Free onboarding session'}
-                      />
-                      <QuickpresentsitemItem
-                        itemText={'Case study highlight'}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </form>
-              <WformdoneItem />
-              <WformfailItem />
+                </form>
+                <WformdoneItem />
+                <WformfailItem />
+              </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     </div>
