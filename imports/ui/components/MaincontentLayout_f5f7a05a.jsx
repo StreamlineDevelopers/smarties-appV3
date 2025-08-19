@@ -138,7 +138,7 @@ const MaincontentLayout_f5f7a05a = ({ }) => {
                 <Link
                   href={'../journey/create-podcast.html'}
                   className={'content-action-card bg-green w-inline-block'}
-                  to={'/journey/post-to-social'}
+                  to={'/journey/create-podcast'}
                 >
                   <div className={'card-icon bg-green'}>
                     <img

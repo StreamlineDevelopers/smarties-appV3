@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import IconseoItem from './IconseoItem';
 import ContactdetailstablinkItem_37b42888 from './ContactdetailstablinkItem_37b42888';
 import TonebtnItem_d52b4e16 from './TonebtnItem_d52b4e16';
@@ -15,8 +15,31 @@ import WformdoneItem from './WformdoneItem';
 import WformfailItem from './WformfailItem';
 import JourneyquickactionscardItem from './JourneyquickactionscardItem';
 import SidebaracctdetailsrowItem_5c432672 from './SidebaracctdetailsrowItem_5c432672';
+import ContentLibraryWatcher, { TABLE } from '../../api/client/watchers/ContentLibraryWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
+import Loader from './common/Loader';
+import moment from 'moment';
 
-const MaincontentLayout_cd6434c3 = ({}) => {
+const MaincontentLayout_cd6434c3 = ({ }) => {
+  const watcher = useRef(ContentLibraryWatcher).current;
+  useWatcher(watcher);
+
+  useEffect(() => {
+    watcher.fetchContentItems();
+    return () => {
+      // Cleanup if necessary
+      watcher.setValue(TABLE.LOADING_CONTENT, false);
+      watcher.setValue(TABLE.CONTENT_ITEMS, []);
+      watcher.setValue(TABLE.SELECTED_CONTENT_ITEM, "");
+    }
+  }, []);
+
+  const loadingContent = watcher.getValue(TABLE.LOADING_CONTENT);
+  const contentItems = watcher.getValue(TABLE.CONTENT_ITEMS) || [];
+  const selectedContentItem = watcher.getValue(TABLE.SELECTED_CONTENT_ITEM) || "";
+
+  const activeBlogTab = watcher.getValue(TABLE.FILTER_STATUS) || 'all';
+
   return (
     <div
       id={'w-node-edc52c55-d0f6-4c51-06f6-d16cbc8f440d-f14725db'}
@@ -131,13 +154,13 @@ const MaincontentLayout_cd6434c3 = ({}) => {
                           <div className={'tone-row'}>
                             <div className={'tone-text'}>{'Status:'}</div>
                             <div className={'tone-btn-container'}>
-                              <div className={'tone-btn active'}>
+                              <div className={`tone-btn ${activeBlogTab == 'all' ? 'active' : ''}`} onClick={() => watcher.blogTabChange()}>
                                 <div>{'All'}</div>
                               </div>
-                              <TonebtnItem_d52b4e16 divText={'Published'} />
-                              <TonebtnItem_d52b4e16 divText={'Draft'} />
-                              <TonebtnItem_d52b4e16 divText={'Scheduled'} />
-                              <TonebtnItem_d52b4e16 divText={'Archived'} />
+                              <TonebtnItem_d52b4e16 divText={'Published'} isActive={activeBlogTab == 'published'} onClick={() => watcher.blogTabChange('published')} />
+                              <TonebtnItem_d52b4e16 divText={'Draft'} isActive={activeBlogTab == 'draft'} onClick={() => watcher.blogTabChange('draft')} />
+                              <TonebtnItem_d52b4e16 divText={'Scheduled'} isActive={activeBlogTab == 'scheduled'} onClick={() => watcher.blogTabChange('scheduled')} />
+                              <TonebtnItem_d52b4e16 divText={'Archived'} isActive={activeBlogTab == 'archived'} onClick={() => watcher.blogTabChange('archived')} />
                             </div>
                           </div>
                           <div className={'contact-table-div'}>
@@ -167,37 +190,49 @@ const MaincontentLayout_cd6434c3 = ({}) => {
                               />
                             </div>
                             <div className={'contacts-table-content'}>
-                              <div className={'contact--table-row'}>
-                                <div className={'contact-table-cell-div _w-3'}>
-                                  <WcheckboxItem_40cdd1a4 />
-                                </div>
-                                <ContacttablecelldivItem_8f00e4e1
-                                  divText={
-                                    '10 Marketing Automation Trends for 2023'
-                                  }
-                                />
-                                <ContacttablecelldivItem_220d476b />
-                                <ContacttablecelldivItem_e7da42e5
-                                  label={'Company Blog'}
-                                />
-                                <ContacttablecelldivItem_ce242086 />
-                                <div
-                                  className={'contact-table-cell-div stretch'}
-                                >
-                                  <div className={'aiscore'}>
-                                    <div className={'plan-usage-progress-row'}>
+                              {loadingContent ? (
+                                <Loader />
+                              )
+                                :
+                                (
+                                  contentItems.length ? contentItems.map((item) => (
+                                    <div className={'contact--table-row'}
+                                      onClick={() => watcher.selectContentItem(item)}
+                                      style={{ cursor: 'pointer', backgroundColor: selectedContentItem.id == item.id && "#e1d5d1" }} key={item._id}>
+                                      <div className={'contact-table-cell-div _w-3'}>
+                                        <WcheckboxItem_40cdd1a4 />
+                                      </div>
+                                      <ContacttablecelldivItem_8f00e4e1
+                                        divText={
+                                          item.title ||
+                                          'The Future of Content Marketing in 2024'
+                                        }
+                                      />
+                                      <ContacttablecelldivItem_220d476b dateCreated={moment(item.createdAt).format('YYYY-MM-DD')} />
+                                      <ContacttablecelldivItem_e7da42e5
+                                        label={item.channel || 'Company Blog'}
+                                      />
+                                      <ContacttablecelldivItem_ce242086 status={item.status || 'draft'} />
                                       <div
-                                        className={'plan-usage-progress _w-87'}
-                                      ></div>
-                                    </div>
-                                    <div className={'settings-sublabel'}>
-                                      {'87%'}
-                                    </div>
-                                  </div>
-                                </div>
-                                <ContacttablecelldivItem_448cefa3 />
-                              </div>
-                              <div className={'contact--table-row'}>
+                                        className={'contact-table-cell-div stretch'}
+                                      >
+                                        <div className={'aiscore'}>
+                                          <div className={'plan-usage-progress-row'}>
+                                            <div
+                                              className={'plan-usage-progress'}
+                                              style={{ width: `${item.engagementScore || '87%'}` + '%' }}
+                                            ></div>
+                                          </div>
+                                          <div className={'settings-sublabel'}>
+                                            {`${item.engagementScore}%` || '87%'}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <ContacttablecelldivItem_448cefa3 />
+                                    </div>)) : <div>no data </div>
+                                )
+                              }
+                              {/* <div className={'contact--table-row'}>
                                 <div className={'contact-table-cell-div _w-3'}>
                                   <WcheckboxItem_40cdd1a4 />
                                 </div>
@@ -298,35 +333,35 @@ const MaincontentLayout_cd6434c3 = ({}) => {
                                 <ContacttablecelldivItem_448cefa3 />
                               </div>
                               <div className={'contact--table-row'}>
-                                <div className={'contact-table-cell-div _w-3'}>
-                                  <WcheckboxItem_40cdd1a4 />
-                                </div>
-                                <ContacttablecelldivItem_8f00e4e1
-                                  divText={
-                                    'Building a Content Calendar That Works'
-                                  }
-                                />
-                                <ContacttablecelldivItem_220d476b />
-                                <ContacttablecelldivItem_e7da42e5
-                                  label={'Company Blog'}
-                                />
-                                <ContacttablecelldivItem_ce242086 />
-                                <div
-                                  className={'contact-table-cell-div stretch'}
-                                >
-                                  <div className={'aiscore'}>
-                                    <div className={'plan-usage-progress-row'}>
-                                      <div
-                                        className={'plan-usage-progress _w-75'}
-                                      ></div>
-                                    </div>
-                                    <div className={'settings-sublabel'}>
-                                      {'75%'}
-                                    </div>
+                              <div className={'contact-table-cell-div _w-3'}>
+                                <WcheckboxItem_40cdd1a4 />
+                              </div>
+                              <ContacttablecelldivItem_8f00e4e1
+                                divText={
+                                  'Building a Content Calendar That Works'
+                                }
+                              />
+                              <ContacttablecelldivItem_220d476b />
+                              <ContacttablecelldivItem_e7da42e5
+                                label={'Company Blog'}
+                              />
+                              <ContacttablecelldivItem_ce242086 />
+                              <div
+                                className={'contact-table-cell-div stretch'}
+                              >
+                                <div className={'aiscore'}>
+                                  <div className={'plan-usage-progress-row'}>
+                                    <div
+                                      className={'plan-usage-progress _w-75'}
+                                    ></div>
+                                  </div>
+                                  <div className={'settings-sublabel'}>
+                                    {'75%'}
                                   </div>
                                 </div>
-                                <ContacttablecelldivItem_448cefa3 />
                               </div>
+                              <ContacttablecelldivItem_448cefa3 />
+                            </div> */}
                             </div>
                           </div>
                         </div>
@@ -346,7 +381,7 @@ const MaincontentLayout_cd6434c3 = ({}) => {
               </div>
             </div>
           </div>
-          <div className={'delivery-settings-sidebar'}>
+          <div className={'delivery-settings-sidebar'} style={{ display: typeof selectedContentItem == 'object' ? 'block' : 'none' }}>
             <div className={'messaging-sidebar-hd-div align-inbetween'}>
               <div className={'messaging-sidebar-h1'}>{'Preview'}</div>
               <div
@@ -369,18 +404,18 @@ const MaincontentLayout_cd6434c3 = ({}) => {
                   <div className={'preview-card'}>
                     <div className={'preview-top'}>
                       <div className={'preview-title'}>
-                        {'How AI is Changing Digital Marketing'}
+                        {selectedContentItem.title || 'The Future of Content Marketing in 2024'}
                       </div>
                       <div className={'preview-dateauthor'}>
-                        {'June 5, 2023•Sarah Johnson'}
+                        {`${moment(selectedContentItem.createdAt).format('MMMM DD, YYYY')}•${selectedContentItem.author || 'Alex Morgan'}`}
                       </div>
                       <div className={'contact-table-tag bg-green'}>
-                        {'Published'}
+                        {selectedContentItem.status || 'Published'}
                       </div>
                     </div>
                     <div className={'preview-text'}>
                       {
-                        'Artificial intelligence is revolutionizing how marketers approach their strategies. From predictive analytics to personalized content creation, AI tools are enabling marketers to work smarter and achieve better results. This post explores the key ways AI is transforming digital marketing and provides practical tips for incorporating AI into your marketing workflow.'
+                        selectedContentItem.text || 'Artificial intelligence is revolutionizing how marketers approach their strategies. From predictive analytics to personalized content creation, AI tools are enabling marketers to work smarter and achieve better results. This post explores the key ways AI is transforming digital marketing and provides practical tips for incorporating AI into your marketing workflow.'
                       }
                     </div>
                   </div>
@@ -392,10 +427,10 @@ const MaincontentLayout_cd6434c3 = ({}) => {
                             {'AI Engagement Score'}
                           </div>
                           <div className={'planusage-data text-roange'}>
-                            {'87%'}
+                            {`${selectedContentItem.engagementScore}%`}
                           </div>
                         </div>
-                        <PlanusageprogressrowItem_4645fce9 />
+                        <PlanusageprogressrowItem_4645fce9 percentage={selectedContentItem.engagementScore} />
                         <div className={'plan-usage-div-textcontent'}>
                           <div className={'planusage-label small'}>
                             {
@@ -434,19 +469,19 @@ const MaincontentLayout_cd6434c3 = ({}) => {
                         <div className={'sidebar-acctdetails-body'}>
                           <SidebaracctdetailsrowItem_5c432672
                             label={'Word Count:'}
-                            divText={'1,240'}
+                            divText={selectedContentItem.wordCount || '1240'}
                           />
                           <SidebaracctdetailsrowItem_5c432672
                             label={'Reading Time:'}
-                            divText={'4 min'}
+                            divText={selectedContentItem.readingTime || '4 min'}
                           />
                           <SidebaracctdetailsrowItem_5c432672
                             label={'Created By:'}
-                            divText={'Alex Morgan'}
+                            divText={selectedContentItem.createdBy || 'Alex Morgan'}
                           />
                           <SidebaracctdetailsrowItem_5c432672
                             label={'Last Modified:'}
-                            divText={'May 12, 2023'}
+                            divText={moment(selectedContentItem.lastModified).format('MMMM DD, YYYY') || 'May 12, 2023'}
                           />
                         </div>
                       </div>
@@ -470,8 +505,8 @@ const MaincontentLayout_cd6434c3 = ({}) => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

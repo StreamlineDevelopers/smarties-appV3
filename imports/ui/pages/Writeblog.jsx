@@ -8,8 +8,8 @@ const Writeblog = () => {
     <>
       <div className={'page-wrap'}>
         <TopbarLayout_051e974c />
-        <MaincontentLayout_97bae701 />
         <SidebarLayout />
+        <MaincontentLayout_97bae701 />
       </div>
     </>
   );

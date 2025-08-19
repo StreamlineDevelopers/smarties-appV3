@@ -16,15 +16,15 @@ const ContacttablerowItem_bd02a14f = ({
     <div className={'contact--table-row'}>
       <ContacttablecelldivItem_00c9231e
         src={'../images/smarties-avatar-02_1smarties-avatar-02.png'}
-        divText={'Sarah Johnson'}
+        divText={divText || 'John Doe'}
       />
-      <ContacttablecelldivItem_2ec726a2 divText={'94'} />
-      <ContacttablecelldivItem_3fa68a40 divText={'Added to cart'} />
+      <ContacttablecelldivItem_2ec726a2 divText={divText1} />
+      <ContacttablecelldivItem_3fa68a40 divText={divText2} />
       <ContacttablecelldivItem_d8491e9b
         src={'../images/smarties-leadtable-icon-03.svg'}
         divText={'Send 10% discount'}
       />
-      <ContacttablecelldivItem_adfff803 divText={'Send Offer'} />
+      <ContacttablecelldivItem_adfff803 divText={divText3} />
     </div>
   );
 };

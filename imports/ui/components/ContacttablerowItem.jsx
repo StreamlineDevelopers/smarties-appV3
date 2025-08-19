@@ -10,12 +10,12 @@ const ContacttablerowItem = ({ src, divText, label, label1 }) => {
   return (
     <div className={'contact--table-row'}>
       <ContacttablecelldivItem_00c9231e
-        src={'../images/smarties-avatar-02_1smarties-avatar-02.png'}
-        divText={'Sarah Johnson'}
+        src={src}
+        divText={divText}
       />
       <ContacttablecelldivItem_bbde43b8 />
-      <ContacttablecelldivItem_89bc2880 label={'1,245'} />
-      <ContacttablecelldivItem_5dc40295 label={'12'} />
+      <ContacttablecelldivItem_89bc2880 label={label} />
+      <ContacttablecelldivItem_5dc40295 label={label1} />
       <ContacttablecelldivItem_9aa00f4d
         label={'VIP Event Invitation (2 days)'}
       />

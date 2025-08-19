@@ -3,6 +3,7 @@ import Consumers from '../dbTemplates/Consumers.js';
 import Inbox from '../dbTemplates/Inbox.js';
 import Interactions from '../dbTemplates/Interactions.js';
 import Channels from '../dbTemplates/Channels.js';
+import { isObjectId, toObjectId } from '../db/helper.js';
 
 class InteractionManager {
     constructor() { }
@@ -93,13 +94,15 @@ class InteractionManager {
      * @param {string} businessId 
      * @param {string} consumerId 
      * @param {string} channelId 
-     * @returns {Promise<Inbox>}
+     * @returns {Promise<{inbox: Inbox, isNew: boolean}>}
      */
     static async ensureInbox({ businessId, consumerId, channelId }) {
         // Try to find existing inbox
         let inbox = await Inbox.findByBusinessIdAndConsumerIdAndChannelId(businessId, consumerId, channelId);
+        let isNew = false;
 
         if (!inbox) {
+            isNew = true;
             const inboxData = new Inbox({
                 businessId: businessId,
                 consumerId: consumerId,
@@ -111,7 +114,7 @@ class InteractionManager {
             const _id = await inboxData.save();
             inbox = await Inbox.findById(_id);
         }
-        return inbox;
+        return { inbox, isNew };
     }
 
     /**
@@ -186,7 +189,10 @@ class InteractionManager {
                     latestAt: interaction.timestamp,
                 });
             }
+            // Return the freshly updated inbox document so callers can emit current data
+            return await Inbox.findById(inboxId);
         }
+        return null;
     }
 
     // ---- Normalizers (provider-agnostic shapes) ----
@@ -199,7 +205,7 @@ class InteractionManager {
         // try common fields first; adapt per provider if needed
         const provider = (reqBody.provider || reqBody.meta?.provider || 'sms').toLowerCase();
         const type = reqBody.type || 'messaging';
-        const identifier = reqBody.to || reqBody.destination || reqBody.channel || 'default';
+        const identifier = reqBody.to || reqBody.destination || reqBody.channel || reqBody.identifier || 'default';
         const externalId = reqBody.from || reqBody.externalId || reqBody.sender;
         const text = reqBody.text ?? reqBody.message ?? '';
         const attachments = Array.isArray(reqBody.attachments) ? reqBody.attachments : [];
@@ -214,11 +220,43 @@ class InteractionManager {
     static normalizeOutbound(reqBody) {
         const provider = (reqBody.provider || 'sms').toLowerCase();
         const type = reqBody.type || 'messaging';
-        const identifier = reqBody.from || reqBody.channelIdentifier || 'default';
+        const identifier = reqBody.from || reqBody.channelIdentifier || reqBody.identifier || 'default';
         const to = reqBody.to || reqBody.externalId; // consumer external id
         const text = reqBody.text ?? '';
         const attachments = Array.isArray(reqBody.attachments) ? reqBody.attachments : [];
         return { provider, type, identifier, to, text, attachments };
+    }
+
+    static normalizeReceipt(reqBody) {
+        const provider = (reqBody.provider || 'sms').toLowerCase();
+        const type = reqBody.type || 'messaging';
+        const identifier = reqBody.from || reqBody.channelIdentifier || reqBody.identifier || 'default';
+        const to = reqBody.to || reqBody.externalId; // consumer external id
+        const text = reqBody.text ?? '';
+        const attachments = Array.isArray(reqBody.attachments) ? reqBody.attachments : [];
+        const interactionId = reqBody.interactionId || reqBody.messageId;
+        const status = reqBody.status;
+        return { provider, type, identifier, to, text, attachments, interactionId, status };
+    }
+
+    static async updateInteraction({ interactionId, status }) {
+        if (!interactionId) return;
+        if (typeof interactionId === 'string') {
+            interactionId = toObjectId(interactionId);
+        }
+        if (typeof status === "boolean") {
+            status = status ? 'delivered' : 'failed';
+        }
+        if (typeof status === 'string') {
+            status = status.toLowerCase();
+        }
+
+        const interaction = await Interactions.findById(interactionId);
+        if (interaction) {
+            interaction.status = status || 'delivered';
+            await interaction.save();
+        }
+        return interaction;
     }
 }
 

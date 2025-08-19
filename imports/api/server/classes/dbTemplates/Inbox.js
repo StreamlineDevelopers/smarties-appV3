@@ -120,8 +120,8 @@ export default class Inbox {
         return data ? new Inbox(data) : null;
     }
 
-    static async findByBusinessId(businessId) {
-        const docs = await InboxCollection.find({ businessId: toObjectId(businessId) }).fetchAsync();
+    static async findByBusinessId(businessId, options = {}) {
+        const docs = await InboxCollection.find({ businessId: toObjectId(businessId) }, options).fetchAsync();
         return docs.map(d => new Inbox(d));
     }
 

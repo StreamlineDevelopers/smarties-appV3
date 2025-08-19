@@ -1,9 +1,9 @@
 import React from 'react';
 
-const PlanusageprogressrowItem_4645fce9 = ({}) => {
+const PlanusageprogressrowItem_4645fce9 = ({ percentage = "87" }) => {
   return (
     <div className={'plan-usage-progress-row'}>
-      <div className={'plan-usage-progress _w-92'}></div>
+      <div className={'plan-usage-progress'} style={{ width: percentage + '%' }}></div>
     </div>
   );
 };

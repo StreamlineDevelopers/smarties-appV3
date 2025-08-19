@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import WformdoneItem from './WformdoneItem';
 import WformfailItem from './WformfailItem';
 import MessagingtablinkItem from './MessagingtablinkItem';
@@ -16,8 +16,21 @@ import FrequencyoptionItem from './FrequencyoptionItem';
 import EnrichmentusagecardItem from './EnrichmentusagecardItem';
 import MessaginginboxtextcontenttopItem from './MessaginginboxtextcontenttopItem';
 import SidebaracctdetailsrowItem from './SidebaracctdetailsrowItem';
+import RichTextEditor from './common/RichTextEditor';
+import AttractShoppersWatcher, { EMAIL, TAB } from '../../api/client/watchers/AttractShoppersWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
 
-const MaincontentLayout_0630e942 = ({}) => {
+const MaincontentLayout_0630e942 = ({ }) => {
+  const watcher = useRef(AttractShoppersWatcher).current;
+  useWatcher(watcher);
+
+  const activeLeadTab = watcher.getValue(TAB.LEAD) || 'all';
+
+  // content
+  const headline = watcher.getValue(EMAIL.HEADLINE) || '';
+  const content = watcher.getValue(EMAIL.CONTENT) || '';
+
+
   return (
     <div
       id={'w-node-_4d31c1a9-ef5a-abec-5af1-44ae70d7f13a-f14725d6'}
@@ -82,13 +95,14 @@ const MaincontentLayout_0630e942 = ({}) => {
                   <div className={'form-row mb-0'}>
                     <input
                       className={'inbox-search w-input'}
-                      maxlength={'256'}
+                      maxLength={'256'}
                       name={'search-2'}
                       data-name={'Search 2'}
                       placeholder={'Search'}
                       type={'text'}
                       id={'search-2'}
                       required
+                      onChange={(e => watcher.searchLead(e.target.value))}
                     />
                   </div>
                 </div>
@@ -107,19 +121,20 @@ const MaincontentLayout_0630e942 = ({}) => {
                 <a
                   data-w-tab={'Tab 1'}
                   className={
-                    'messaging-tablink w-inline-block w-tab-link w--current'
+                    `messaging-tablink w-inline-block w-tab-link ${activeLeadTab == 'all' && 'w--current'} `
                   }
+                  onClick={() => watcher.leadTabChange('all')}
                 >
                   <div>{'All'}</div>
                 </a>
-                <MessagingtablinkItem dataWTab={'Tab 2'} divText={'New'} />
-                <MessagingtablinkItem dataWTab={'Tab 3'} divText={'Warm'} />
-                <MessagingtablinkItem dataWTab={'Tab 4'} divText={'Hot'} />
+                <MessagingtablinkItem dataWTab={'Tab 2'} divText={'New'} isActive={activeLeadTab == 'new'} onClick={() => watcher.leadTabChange('new')} />
+                <MessagingtablinkItem dataWTab={'Tab 3'} divText={'Warm'} isActive={activeLeadTab == 'warm'} onClick={() => watcher.leadTabChange('warm')} />
+                <MessagingtablinkItem dataWTab={'Tab 4'} divText={'Hot'} isActive={activeLeadTab == 'hot'} onClick={() => watcher.leadTabChange('hot')} />
               </div>
               <div className={'messaging-inbox-tabscontent w-tab-content'}>
                 <div
                   data-w-tab={'Tab 1'}
-                  className={'w-tab-pane w--tab-active'}
+                  className={`w-tab-pane ${activeLeadTab == 'all' ? 'w--tab-active' : ''}`}
                 >
                   <div className={'messaging-tabpane-div'}>
                     <div className={'filter-row gap-10'}>
@@ -163,9 +178,9 @@ const MaincontentLayout_0630e942 = ({}) => {
                     </div>
                   </div>
                 </div>
-                <div data-w-tab={'Tab 2'} className={'w-tab-pane'}></div>
-                <div data-w-tab={'Tab 3'} className={'w-tab-pane'}></div>
-                <div data-w-tab={'Tab 4'} className={'w-tab-pane'}></div>
+                <div data-w-tab={'Tab 2'} className={`w-tab-pane ${activeLeadTab == 'new' ? 'w--tab-active' : ''}`}></div>
+                <div data-w-tab={'Tab 3'} className={`w-tab-pane ${activeLeadTab == 'warm' ? 'w--tab-active' : ''}`}></div>
+                <div data-w-tab={'Tab 4'} className={`w-tab-pane ${activeLeadTab == 'hot' ? 'w--tab-active' : ''}`}></div>
               </div>
             </div>
           </div>
@@ -370,7 +385,7 @@ const MaincontentLayout_0630e942 = ({}) => {
                       <div className={'headline-list'}>
                         <input
                           className={'title-textfield w-input'}
-                          maxlength={'256'}
+                          maxLength={'256'}
                           name={'field'}
                           data-name={'Field'}
                           placeholder={
@@ -379,9 +394,15 @@ const MaincontentLayout_0630e942 = ({}) => {
                           type={'text'}
                           id={'field'}
                           required
+                          onChange={(e) => watcher.setValue(EMAIL.HEADLINE, e.target.value)}
+                          value={headline} // Ensure controlled input 
                         />
                         <div className={'content-editor-div'}>
-                          <div className={'content-editor-controls-div'}>
+                          <RichTextEditor
+                            value={content}
+                            onChange={(newContent) => watcher.setValue(EMAIL.CONTENT, newContent)}
+                          />
+                          {/* <div className={'content-editor-controls-div'}>
                             <div className={'content-editor-controls-div-left'}>
                               <EditorbtnItem
                                 src={'../images/Frame_7.svg'}
@@ -443,20 +464,21 @@ const MaincontentLayout_0630e942 = ({}) => {
                               }
                               <br />
                               <br />
-                              {'Best regards, '}
+                              {'Best regards, '}
                               <br />
                               {'The BrightPilot Team'}
                             </div>
                             <textarea
                               placeholder={'Continue editing your email...'}
-                              maxlength={'5000'}
+                              maxLength={'5000'}
                               id={'field-3'}
                               name={'field-3'}
                               data-name={'Field 3'}
                               className={'content-textarea w-input'}
                             ></textarea>
-                          </div>
+                          </div> */}
                         </div>
+
                       </div>
                     </div>
                     <div className={'variables-row'}>
@@ -496,7 +518,7 @@ const MaincontentLayout_0630e942 = ({}) => {
                         />
                         <div>{'Save as Draft'}</div>
                       </a>
-                      <a href={'#'} className={'btn-style1 w-inline-block'}>
+                      <a href={'#'} className={'btn-style1 w-inline-block'} onClick={() => watcher.approveAndSend()}>
                         <div>{'Approve & Send'}</div>
                         <IconembedItem
                           iconSrc={

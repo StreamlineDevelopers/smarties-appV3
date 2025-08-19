@@ -4,7 +4,7 @@ import ContactstabletagsdivItem_2ebde64a from './ContactstabletagsdivItem_2ebde6
 const ContacttablecelldivItem_2ec726a2 = ({ divText }) => {
   return (
     <div className={'contact-table-cell-div _w-10'}>
-      <ContactstabletagsdivItem_2ebde64a divText={'94'} />
+      <ContactstabletagsdivItem_2ebde64a divText={divText} />
     </div>
   );
 };

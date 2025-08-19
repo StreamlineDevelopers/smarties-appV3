@@ -5,9 +5,9 @@ const FrequencyradiocardItem_2b9d4f8f = ({ title, divText, divText1, src }) => {
   return (
     <div className={'frequency-radiocard'}>
       <FrequencyradiocardleftItem_3653bfb8
-        title={'Daily'}
-        divText={'Best for consistent engagement'}
-        divText1={'Post once every day'}
+        title={title}
+        divText={divText}
+        divText1={divText1}
       />
       <div className={'frequency-radiocard-icon'}>
         <img

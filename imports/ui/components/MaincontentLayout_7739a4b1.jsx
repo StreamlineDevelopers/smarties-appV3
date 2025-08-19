@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import DbjourneyvaluecontainItem from './DbjourneyvaluecontainItem';
 import DbjourneyactionlinkItem from './DbjourneyactionlinkItem';
 import DashboardheadertextItem from './DashboardheadertextItem';
@@ -11,8 +11,52 @@ import DashboardactivityfeedItem_95424040 from './DashboardactivityfeedItem_9542
 import ActivityfeedtextcontentItem_4ac4fc9f from './ActivityfeedtextcontentItem_4ac4fc9f';
 import JourneyquickactionscardItem_3e47746a from './JourneyquickactionscardItem_3e47746a';
 import ActivityfeedtextcontentItem_860691cb from './ActivityfeedtextcontentItem_860691cb';
+import DbJourneyCardSkeleton from './common/DbJourneyCardSkeleton';
+import JourneyWatcher, { CUSTOMER_JOURNEY_FLOW, OVERVIEW, RECENT_ACTIVITY, SMARTIES_ASSISTANT } from '../../api/client/watchers/JourneyWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
+import Skeleton from 'react-loading-skeleton';
+import Loader from './common/Loader';
 
-const MaincontentLayout_7739a4b1 = ({}) => {
+const MaincontentLayout_7739a4b1 = ({ }) => {
+  const watcher = useRef(JourneyWatcher).current;
+  useWatcher(watcher);
+
+  useEffect(() => {
+    watcher.setEngagementRate();
+    watcher.setLeadInterest();
+    watcher.setConversionRate();
+    watcher.setLoyaltyScore();
+    watcher.fetchInsights();
+    watcher.fetchRecentActivity();
+  }, []);
+
+  //Loading states for each engagement type
+  const isLoadingEngagement = watcher.getValue(CUSTOMER_JOURNEY_FLOW.LOADING_ENGAGEMENT_RATE);
+  const isLoadingLeadInterest = watcher.getValue(CUSTOMER_JOURNEY_FLOW.LOADING_LEAD_INTEREST);
+  const isLoadingConversion = watcher.getValue(CUSTOMER_JOURNEY_FLOW.LOADING_CONVERSION);
+  const isLoadingLoyalty = watcher.getValue(CUSTOMER_JOURNEY_FLOW.LOADING_LOYALTY);
+
+  //Values for customer journey flow
+  const engagementRate = (watcher.getValue(CUSTOMER_JOURNEY_FLOW.ENGAGEMENT_RATE) ?? 0).toLocaleString();
+  const leadInterest = (watcher.getValue(CUSTOMER_JOURNEY_FLOW.LEAD_INTEREST) ?? 0).toLocaleString();
+  const conversionRate = (watcher.getValue(CUSTOMER_JOURNEY_FLOW.CONVERSION) ?? 0).toLocaleString();
+  const loyaltyScore = (watcher.getValue(CUSTOMER_JOURNEY_FLOW.LOYALTY) ?? 0).toLocaleString();
+
+  //Values for overview section
+  const engagementAverage = ((watcher.getValue(OVERVIEW.ENGAGEMENT_AVERAGE) ?? 0).toLocaleString()) + "%";
+  const leadInterestAverage = ((watcher.getValue(OVERVIEW.LEAD_INTEREST_SCORE) ?? 0).toLocaleString()) + "%";
+  const conversionAverage = ((watcher.getValue(OVERVIEW.CONVERSION_AVERAGE) ?? 0).toLocaleString()) + "%";
+  const loyaltyIndex = ((watcher.getValue(OVERVIEW.LOYALTY_INDEX) ?? 0).toLocaleString()) + "%";
+
+  //Smarties Asssistant 
+  const isLoadingInsights = watcher.getValue(SMARTIES_ASSISTANT.LOADING_INSIGHTS);
+  const insights = watcher.getValue(SMARTIES_ASSISTANT.INSIGHTS) || [];
+
+  //recent Activity
+  const isLoadingRecentActivity = watcher.getValue(RECENT_ACTIVITY.LOADING_RECENT_ACTIVITY);
+  const recentActivity = watcher.getValue(RECENT_ACTIVITY.ACTIVITY) || [];
+
+
   return (
     <div
       id={'w-node-_68345d2b-46af-5a6b-6f20-9ad106f106e7-f14725d1'}
@@ -46,23 +90,27 @@ const MaincontentLayout_7739a4b1 = ({}) => {
                 </div>
               </div>
               <div className={'db-journey-card-contain'}>
-                <div className={'db-journey-card'}>
-                  <div className={'db-journey-card-left'}>
-                    <div className={'db-journey-card-top'}>
-                      <div className={'stat-title journey'}>
-                        {'Engagement Rate'}
+                {isLoadingEngagement ?
+                  <DbJourneyCardSkeleton />
+                  :
+                  <div className={'db-journey-card'}>
+                    <div className={'db-journey-card-left'}>
+                      <div className={'db-journey-card-top'}>
+                        <div className={'stat-title journey'}>
+                          {'Engagement Rate'}
+                        </div>
+                        <div className={'db-journey-tag'}>
+                          <div>{'ACTIVE'}</div>
+                        </div>
                       </div>
-                      <div className={'db-journey-tag'}>
-                        <div>{'ACTIVE'}</div>
-                      </div>
+                      <DbjourneyvaluecontainItem
+                        divText={engagementRate}
+                        divText1={'interactions'}
+                      />
+                      <DbjourneyactionlinkItem divText={'View Engagement'} />
                     </div>
-                    <DbjourneyvaluecontainItem
-                      divText={'14,382'}
-                      divText1={'interactions'}
-                    />
-                    <DbjourneyactionlinkItem divText={'View Engagement'} />
                   </div>
-                </div>
+                }
                 <div className={'db-journey-flow-arrow'}>
                   <img
                     src={'../images/smarties-flow-arrow.svg'}
@@ -70,23 +118,27 @@ const MaincontentLayout_7739a4b1 = ({}) => {
                     alt={''}
                   />
                 </div>
-                <div className={'db-journey-card bg-blue'}>
-                  <div className={'db-journey-card-left'}>
-                    <div className={'db-journey-card-top'}>
-                      <div className={'stat-title journey'}>
-                        {'Lead Interest'}
+                {isLoadingLeadInterest ?
+                  <DbJourneyCardSkeleton color={'bg-blue'} />
+                  :
+                  <div className={'db-journey-card bg-blue'}>
+                    <div className={'db-journey-card-left'}>
+                      <div className={'db-journey-card-top'}>
+                        <div className={'stat-title journey'}>
+                          {'Lead Interest'}
+                        </div>
+                        <div className={'db-journey-tag bg-blue'}>
+                          <div>{'growing'}</div>
+                        </div>
                       </div>
-                      <div className={'db-journey-tag bg-blue'}>
-                        <div>{'growing'}</div>
-                      </div>
+                      <DbjourneyvaluecontainItem
+                        divText={leadInterest}
+                        divText1={'qualified leads'}
+                      />
+                      <DbjourneyactionlinkItem divText={'Trigger Follow-up'} />
                     </div>
-                    <DbjourneyvaluecontainItem
-                      divText={'8,754'}
-                      divText1={'qualified leads'}
-                    />
-                    <DbjourneyactionlinkItem divText={'Trigger Follow-up'} />
                   </div>
-                </div>
+                }
                 <div className={'db-journey-flow-arrow'}>
                   <img
                     src={'../images/smarties-flow-arrow.svg'}
@@ -94,21 +146,25 @@ const MaincontentLayout_7739a4b1 = ({}) => {
                     alt={''}
                   />
                 </div>
-                <div className={'db-journey-card bg-purple'}>
-                  <div className={'db-journey-card-left'}>
-                    <div className={'db-journey-card-top'}>
-                      <div className={'stat-title journey'}>{'Conversion'}</div>
-                      <div className={'db-journey-tag bg-purple'}>
-                        <div>{'Needs Attention'}</div>
+                {isLoadingConversion ?
+                  <DbJourneyCardSkeleton color={'bg-purple'} />
+                  :
+                  <div className={'db-journey-card bg-purple'}>
+                    <div className={'db-journey-card-left'}>
+                      <div className={'db-journey-card-top'}>
+                        <div className={'stat-title journey'}>{'Conversion'}</div>
+                        <div className={'db-journey-tag bg-purple'}>
+                          <div>{'Needs Attention'}</div>
+                        </div>
                       </div>
+                      <DbjourneyvaluecontainItem
+                        divText={conversionRate}
+                        divText1={'customers'}
+                      />
+                      <DbjourneyactionlinkItem divText={'View Conversions'} />
                     </div>
-                    <DbjourneyvaluecontainItem
-                      divText={'1,120'}
-                      divText1={'customers'}
-                    />
-                    <DbjourneyactionlinkItem divText={'View Conversions'} />
                   </div>
-                </div>
+                }
                 <div className={'db-journey-flow-arrow'}>
                   <img
                     src={'../images/smarties-flow-arrow.svg'}
@@ -116,21 +172,25 @@ const MaincontentLayout_7739a4b1 = ({}) => {
                     alt={''}
                   />
                 </div>
-                <div className={'db-journey-card bg-lightblue'}>
-                  <div className={'db-journey-card-left'}>
-                    <div className={'db-journey-card-top'}>
-                      <div className={'stat-title journey'}>{'Loyalty'}</div>
-                      <div className={'db-journey-tag bg-lgithblue'}>
-                        <div>{'Strong'}</div>
+                {isLoadingLoyalty ?
+                  <DbJourneyCardSkeleton color={'bg-lightblue'} />
+                  :
+                  <div className={'db-journey-card bg-lightblue'}>
+                    <div className={'db-journey-card-left'}>
+                      <div className={'db-journey-card-top'}>
+                        <div className={'stat-title journey'}>{'Loyalty'}</div>
+                        <div className={'db-journey-tag bg-lgithblue'}>
+                          <div>{'Strong'}</div>
+                        </div>
                       </div>
+                      <DbjourneyvaluecontainItem
+                        divText={loyaltyScore}
+                        divText1={'retained'}
+                      />
+                      <DbjourneyactionlinkItem divText={'Boost Retention'} />
                     </div>
-                    <DbjourneyvaluecontainItem
-                      divText={'968'}
-                      divText1={'retained'}
-                    />
-                    <DbjourneyactionlinkItem divText={'Boost Retention'} />
                   </div>
-                </div>
+                }
               </div>
             </div>
             <div className={'dashboard-group'}>
@@ -138,7 +198,7 @@ const MaincontentLayout_7739a4b1 = ({}) => {
               <div className={'db-stat-card-contain'}>
                 <DbstatcardItem_fb60caec
                   title={'Engagement Rate'}
-                  divText={'38.2%'}
+                  divText={isLoadingEngagement ? <Skeleton height={25} width={72} /> : engagementAverage}
                   src={
                     'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccf5ef19e13e52bd7f0_db-stat-arrow.svg'
                   }
@@ -146,7 +206,7 @@ const MaincontentLayout_7739a4b1 = ({}) => {
                 />
                 <DbstatcardItem_fb60caec
                   title={'Lead Interest Score'}
-                  divText={'7.4'}
+                  divText={isLoadingLeadInterest ? <Skeleton height={25} width={72} /> : leadInterestAverage}
                   src={
                     'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccff12d401a801aff8b_db-stat-arrow.svg'
                   }
@@ -156,7 +216,7 @@ const MaincontentLayout_7739a4b1 = ({}) => {
                   <div className={'db-stat-card-left'}>
                     <div className={'stat-title'}>{'Conversion %'}</div>
                     <div className={'db-stat-value-contain'}>
-                      <div className={'stat-value'}>{'12.8%'}</div>
+                      <div className={'stat-value'}>{isLoadingConversion ? <Skeleton height={25} width={72} /> : conversionAverage}</div>
                       <div className={'db-stat-tag'}>
                         <img
                           src={'../images/smarties-stat-chevron-down.svg'}
@@ -173,7 +233,7 @@ const MaincontentLayout_7739a4b1 = ({}) => {
                 </div>
                 <DbstatcardItem_fb60caec
                   title={'Loyalty Index'}
-                  divText={'86.5%'}
+                  divText={isLoadingLoyalty ? <Skeleton height={25} width={72} /> : loyaltyIndex}
                   src={
                     'https://cdn.prod.website-files.com/67ece27c367a4f53eeef80d8/681bcccf5ef19e13e52bd7f0_db-stat-arrow.svg'
                   }
@@ -190,8 +250,19 @@ const MaincontentLayout_7739a4b1 = ({}) => {
                   </a>
                 </div>
                 <div className={'db-recentassistants-card'}>
-                  <DbjourneysmartassistantcardItem />
-                  <div className={'db-journey-smartassistant-card'}>
+                  {isLoadingInsights ?
+                    <Loader />
+                    :
+                    insights.length && insights.map((item, index) => (
+                      <DbjourneysmartassistantcardItem
+                        key={index}
+                        title={item.title}
+                        description={item.description}
+                      />
+                    ))
+                  }
+
+                  {/* <div className={'db-journey-smartassistant-card'}>
                     <div className={'db-journey-smartassistant-card-top'}>
                       <div className={'smartassitant-tag blue'}>
                         <div>{'Loyalty'}</div>
@@ -228,15 +299,23 @@ const MaincontentLayout_7739a4b1 = ({}) => {
                         </a>
                       </div>
                     </div>
-                  </div>
-                  <DbjourneysmartassistantcardItem />
+                  </div> */}
+                  {/* <DbjourneysmartassistantcardItem /> */}
                 </div>
               </div>
               <div className={'dashboard-group stretch'}>
                 <DashboardheadertextItem title={'Recent activity'} />
                 <div className={'db-recentassistants-card'}>
-                  <DashboardactivityfeedItem_95424040 />
-                  <div className={'dashboard-activityfeed'}>
+                  {isLoadingRecentActivity ?
+                    <Loader />
+                    :
+                    recentActivity.length && recentActivity.map((item, index) => (
+                      <DashboardactivityfeedItem_95424040
+                        key={index}
+                      />
+                    ))
+                  }
+                  {/* <div className={'dashboard-activityfeed'}>
                     <div className={'card-icon bg-blue'}>
                       <img
                         src={'../images/smarties-activity-icon-01.svg'}
@@ -290,7 +369,7 @@ const MaincontentLayout_7739a4b1 = ({}) => {
                       title={'meeting'}
                     />
                   </div>
-                  <DashboardactivityfeedItem_95424040 />
+                  <DashboardactivityfeedItem_95424040 /> */}
                 </div>
               </div>
             </div>
