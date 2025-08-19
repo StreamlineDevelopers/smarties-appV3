@@ -7,6 +7,7 @@ import { Package } from "@tmq-dev-ph/tmq-dev-core-server";
 
 Package.addDB("Product", [{ key: { dtCreated: -1 } }]);
 
+Package.addDB("content", [{ key: { dtCreated: -1 } }]);
 
 // /imports/startup/server/index.js (or server/main.js)
 

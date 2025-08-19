@@ -1,0 +1,183 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+// Webhook Event Request Messages
+message WebhookEventRequest {
+  string account_id = 1;
+  string type = 2;
+  string source = 3;
+  SocialMediaInfo social = 4;
+  bytes data = 5;
+  repeated string tags = 6;
+  double priority = 7;
+  bytes metadata = 8;
+}
+
+message CommentWebhookRequest {
+  string accountId = 1;
+  string content = 2;
+  string platform = 3;
+  string handle = 4;
+  repeated string tags = 5;
+  double priority = 6;
+}
+
+message LikeWebhookRequest {
+  string accountId = 1;
+  string platform = 2;
+  string identifier = 3;
+  repeated string tags = 4;
+  double priority = 5;
+}
+
+message WebhookStatsRequest {
+  int32 hours = 1;
+}
+
+message WebhookEventByIdRequest {
+  string webhookId = 1;
+}
+
+message WebhookEventFilters {
+  string accountId = 1;
+  string type = 2;
+  string source = 3;
+  string status = 4;
+  double minPriority = 5;
+}
+
+message ListWebhookEventsRequest {
+  WebhookEventFilters filters = 1;
+}
+
+message UpdateWebhookEventRequest {
+  string webhookId = 1;
+  WebhookEventUpdateData updateData = 2;
+}
+
+message WebhookEventUpdateData {
+  string status = 1;
+  repeated string tags = 2;
+  double priority = 3;
+  bytes metadata = 4;
+}
+
+message WebhookAnalyticsRequest {
+  string accountId = 1;
+  int32 days = 2;
+}
+
+
+// Social Media Information
+message SocialMediaInfo {
+  string platform = 1;
+  string handle = 2;
+  string identifier = 3;
+}
+
+// Webhook Event Data
+message WebhookEventData {
+  string content = 1;
+  string author = 2;
+  string postId = 3;
+  string commentId = 4;
+  string likeId = 5;
+}
+
+// Webhook Event Response
+message WebhookEventResponse {
+  string id = 1;
+  string webhookId = 2;
+  string accountId = 3;
+  string type = 4;
+  string source = 5;
+  SocialMediaInfo social = 6;
+  WebhookEventData data = 7;
+  repeated string tags = 8;
+  double priority = 9;
+  string status = 10;
+  uint64 processedAt = 11;
+  uint64 createdAt = 12;
+  bool success = 13;
+}
+
+// Comment Response
+message CommentResponse {
+  string id = 1;
+  string webhookId = 2;
+  string accountId = 3;
+  string content = 4;
+  string platform = 5;
+  string handle = 6;
+  string status = 7;
+  bool success = 8;
+}
+
+// Like Response
+message LikeResponse {
+  string id = 1;
+  string webhookId = 2;
+  string accountId = 3;
+  string platform = 4;
+  string identifier = 5;
+  string status = 6;
+  bool success = 7;
+}
+
+// Webhook Health Response
+message WebhookHealthResponse {
+  bool success = 1;
+  bytes health = 2;
+  string message = 3;
+}
+
+// Webhook Stats Response
+message WebhookStatsResponse {
+  bool success = 1;
+  bytes stats = 2;
+  string timePeriod = 3;
+  string message = 4;
+}
+
+// Webhook Event List Response
+message WebhookEventListResponse {
+  repeated WebhookEventResponse webhooks = 1;
+  int32 count = 2;
+  string message = 3;
+}
+
+// Webhook Analytics Response
+message WebhookAnalyticsResponse {
+  bool success = 1;
+  bytes analytics = 2;
+  string message = 3;
+}
+
+// Generic Success Response
+message SuccessResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Service definition
+service CustomerEngagementService {
+  // Webhook Processing
+  rpc processWebhook(WebhookEventRequest) returns (WebhookEventResponse) {}
+  rpc processComment(CommentWebhookRequest) returns (CommentResponse) {}
+  rpc processLike(LikeWebhookRequest) returns (LikeResponse) {}
+  rpc processWebhookWithValidation(WebhookEventRequest) returns (WebhookEventResponse) {}
+  
+  // Monitoring & Health
+  rpc getWebhookHealth(WebhookEventRequest) returns (WebhookHealthResponse) {}
+  rpc getWebhookStats(WebhookStatsRequest) returns (WebhookStatsResponse) {}
+  
+  // Data Management
+  rpc getWebhookEvent(WebhookEventByIdRequest) returns (WebhookEventResponse) {}
+  rpc listWebhookEvents(ListWebhookEventsRequest) returns (WebhookEventListResponse) {}
+  rpc updateWebhookEvent(UpdateWebhookEventRequest) returns (WebhookEventResponse) {}
+  rpc getWebhookAnalytics(WebhookAnalyticsRequest) returns (WebhookAnalyticsResponse) {}
+  
+}
