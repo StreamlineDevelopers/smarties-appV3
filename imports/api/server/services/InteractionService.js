@@ -3,7 +3,7 @@ import { tmq as common } from "@tmq-dev-ph/tmq-dev-core-client/dist/static_codeg
 import { tmq as interaction } from "../../common/static_codegen/tmq/interaction";
 import Interactions from "../classes/dbTemplates/Interactions.js";
 import { toObjectId } from "../classes/db/helper.js";
-
+import { google as gp } from "../../common/static_codegen/google/protobuf/any";
 const { DefaultResponse } = common;
 const { GetInteractionsRequest, GetInteractionsResponse, Interaction, InteractionPayload, InteractionAttribute } = interaction;
 
@@ -64,21 +64,11 @@ export default {
                     interactionMsg.attributes = entry.attributes.map(attr => {
                         const attrMsg = new InteractionAttribute();
                         attrMsg.key = attr.key || "";
-
-                        // Handle different value types using oneof
-                        const valueType = typeof attr.value;
-                        if (valueType === 'string') {
-                            attrMsg.string_value = attr.value;
-                        } else if (valueType === 'number') {
-                            if (Number.isInteger(attr.value)) {
-                                attrMsg.int_value = attr.value;
-                            } else {
-                                attrMsg.double_value = attr.value;
-                            }
-                        } else if (valueType === 'boolean') {
-                            attrMsg.bool_value = attr.value;
-                        }
-
+                        const any = new gp.protobuf.Any();
+                        // choose a convention; here we mark it as a string-encoded value
+                        any.type_url = "type.googleapis.com/string";
+                        any.value = Buffer.from(String(attr.value ?? ""), "utf8"); // Uint8Array is fine too
+                        attrMsg.value = any;
                         return attrMsg;
                     });
                 } else {

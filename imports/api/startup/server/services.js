@@ -15,6 +15,10 @@ Package.addService({
 Package.addService({
     file: "tmq/interaction.proto", ServiceNames: ["InteractionService"], auth: false
 }, "interaction", { InteractionService: require("../../server/services/InteractionService").default });
+
+Package.addService({
+    file: "tmq/config.proto", ServiceNames: ["ConfigService"], auth: false
+}, "configuration", { ConfigService: require("../../server/services/ConfigService").default });
 Package.addService({
     file: "tmq/SalesEnablement.proto", ServiceNames: ["SalesEnablementService"], auth: false
 }, "sales", { SalesEnablementService: require("../../server/services/SalesEnablement").default });
