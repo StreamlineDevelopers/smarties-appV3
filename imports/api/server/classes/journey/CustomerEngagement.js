@@ -6,7 +6,7 @@ class CustomerEngagement {
     constructor(config) {
         this.config = config;
         this.client = new CustomerEngagementClient(config);
-        this.db = Core.getDB("customer_engagement", true);
+        this.db = Core.getDB("customerEngagement", true);
     }
 
     /**
@@ -50,13 +50,26 @@ class CustomerEngagement {
     /**
      * Process a webhook event
      * @param {Object} webhookEvent - Webhook event data
-     * @param {string} webhookEvent.account_id - Account ID
-     * @param {string} webhookEvent.type - Event type (comment, like, etc.)
-     * @param {string} webhookEvent.source - Event source
-     * @param {Object} webhookEvent.social - Social media information
-     * @param {Object} webhookEvent.data - Event data
-     * @param {Array} webhookEvent.tags - Event tags
-     * @param {number} webhookEvent.priority - Event priority
+     * @param {string} webhookEvent.account_id - Account ID (required)
+     * @param {string} webhookEvent.type - Event type (required)
+     * @param {string} webhookEvent.source - Event source (required)
+     * @param {string} webhookEvent.customer_id - Customer ID (optional, alternative to social)
+     * @param {Object} webhookEvent.social - Social media information (optional, alternative to customer_id)
+     * @param {Object} webhookEvent.social.platform - Social platform (instagram, whatsapp, email, web, internal_bot, other)
+     * @param {string} webhookEvent.social.handle - User handle or identifier
+     * @param {string} webhookEvent.social.identifier - Additional identifier
+     * @param {Object} webhookEvent.data - Event-specific data and metadata
+     * @param {string} webhookEvent.data.content - Event content
+     * @param {string} webhookEvent.data.author - Event author
+     * @param {string} webhookEvent.data.postId - Post ID for social media events
+     * @param {string} webhookEvent.data.commentId - Comment ID for comment events
+     * @param {string} webhookEvent.data.likeId - Like ID for like events
+     * @param {Object} webhookEvent.data.metadata - Additional event metadata
+     * @param {Array} webhookEvent.tags - Event tags for categorization
+     * @param {number} webhookEvent.priority - Event priority (0.0 to 1.0, defaults to 0.5)
+     * @param {Object} webhookEvent.metadata - Additional webhook metadata
+     * @param {string} webhookEvent.intent - Customer intent or purpose
+     * @param {boolean} webhookEvent.generate_response - Whether to generate AI response
      * @returns {Object} Processing result
      */
     async processWebhook(webhookEvent) {
@@ -64,26 +77,35 @@ class CustomerEngagement {
             throw new Error('Account ID, type, and source are required');
         }
 
+        // Validate that either customer_id or social is provided
+        if (!webhookEvent.customer_id && !webhookEvent.social) {
+            throw new Error('Either customer_id or social information must be provided');
+        }
+
         try {
             const response = await this.client.webhooks.processWebhook(webhookEvent);
             
-            if (response.data) {
+            if (response.success && response.event) {
+                const data = new TextDecoder().decode(webhookEvent.data);
+                const metadata = new TextDecoder().decode(webhookEvent.metadata)
                 // Store webhook event in local database
                 const now = new Date().valueOf();
                 const webhookRecord = {
-                    _id: Core.generateId(),
-                    webhookId: response.data._id || response.data.id,
+                    webhookId: response.event._id || response.event.id,
                     accountId: webhookEvent.account_id,
+                    customerId: webhookEvent.customer_id || null,
                     type: webhookEvent.type,
                     source: webhookEvent.source,
                     social: webhookEvent.social || null,
-                    data: webhookEvent.data || null,
+                    data: data || null,
                     tags: webhookEvent.tags || [],
                     priority: webhookEvent.priority || 0.5,
-                    status: response.data.status || 'processed',
+                    intent: webhookEvent.intent || null,
+                    generateResponse: webhookEvent.generate_response || false,
+                    status: 'processed',
                     processedAt: now,
                     createdAt: now,
-                    metadata: webhookEvent.metadata || {}
+                    metadata: metadata || {}
                 };
 
                 await this.db.insertOne(webhookRecord);
@@ -92,14 +114,24 @@ class CustomerEngagement {
                     status: "success",
                     webhook: {
                         id: webhookRecord._id,
-                        webhookId: response.data._id || response.data.id,
+                        webhookId: response.event._id || response.event.id,
                         accountId: webhookEvent.account_id,
+                        customerId: webhookEvent.customer_id || null,
                         type: webhookEvent.type,
                         source: webhookEvent.source,
-                        status: response.data.status || 'processed',
+                        social: webhookEvent.social || null,
+                        data: null,
+                        tags: webhookEvent.tags || [],
+                        priority: webhookEvent.priority || 0.5,
+                        intent: webhookEvent.intent || null,
+                        generateResponse: webhookEvent.generate_response || false,
+                        status: 'processed',
                         processedAt: webhookRecord.processedAt,
-                        success: response.data.success || true
-                    }
+                        success: response.success
+                    },
+                    processing: response.processing || null,
+                    customer: response.customer || null,
+                    message: response.message || 'Webhook processed successfully'
                 };
             } else {
                 throw new Error('Failed to process webhook via client');
@@ -275,271 +307,85 @@ class CustomerEngagement {
         }
     }
 
+    // ===== WEBHOOK RESPONSE GENERATION METHODS =====
+
     /**
-     * Get webhook statistics for a specific time period
-     * @param {number} hours - Number of hours to look back
-     * @returns {Object} Webhook statistics
+     * Generate response using webhooks
+     * @param {string} accountId - Account ID
+     * @param {string} customerId - Customer ID
+     * @returns {Object} Generated response with analysis data
      */
-    async getWebhookStats(hours) {
-        if (!hours || hours <= 0) {
-            throw new Error('Hours must be a positive number');
+    async generateResponse(accountId, customerId) {
+        if (!accountId || !customerId) {
+            throw new Error('Account ID and Customer ID are required');
         }
 
         try {
-            const response = await this.client.webhooks.getWebhookStats(hours);
-            
-            if (response.data) {
+            const generatedResponse = await this.client.webhooks.generateResponse(accountId, customerId);
+
+            console.log(generatedResponse);
+            if (generatedResponse.success) {
+                // Log successful response generation
+                console.log('✅ Response generated successfully:', generatedResponse.success);
+
+                // Validate response structure
+                if (generatedResponse.response) {
+                    console.log('📤 Generated Response Details:');
+                    console.log(`   - Selected Response: ${generatedResponse.response.selectedResponse ? '✅' : '❌'}`);
+                    console.log(`   - Total Options: ${generatedResponse.response.totalOptions}`);
+                    console.log(`   - Lead Quality: ${generatedResponse.response.leadQuality || 'N/A'}`);
+                }
+                
+                // Validate analysis data
+                if (generatedResponse.analysis) {
+                    console.log('📊 Analysis Results:');
+                    console.log(`   - Lead Qualification: ${generatedResponse.analysis.leadQualification?.leadQuality || 'N/A'}`);
+                    console.log(`   - Confidence: ${generatedResponse.analysis.leadQualification?.confidence || 'N/A'}`);
+                    console.log(`   - Product Recommendations: ${generatedResponse.analysis.productRecommendations ? '✅' : '❌'}`);
+                    console.log(`   - Summary Generated: ${generatedResponse.analysis.summaryResult?.summaryGenerated || false}`);
+                }
+
                 return {
                     status: "success",
-                    stats: response.data,
-                    timePeriod: `${hours} hours`
+                    success: generatedResponse.success,
+                    response: generatedResponse.response,
+                    analysis: generatedResponse.analysis
                 };
             } else {
-                throw new Error('Failed to get webhook stats via client');
+                throw new Error(generatedResponse.error || 'Failed to generate response');
             }
         } catch (error) {
-            console.error('Error getting webhook stats:', error);
-            throw new Error(`Failed to get webhook stats: ${error.message}`);
+            console.error('Error generating response:', error);
+            throw new Error(`Failed to generate response: ${error.message}`);
         }
     }
 
-    /**
-     * Get webhook event by ID
-     * @param {string} webhookId - Webhook event ID
-     * @returns {Object} Webhook event object
-     */
-    async getWebhookEvent(webhookId) {
-        if (!webhookId) {
-            throw new Error('Webhook ID is required');
+    // ===== CUSTOMER ENGAGEMENT METHODS =====
+
+    async createCustomCustomerEvent(customerId, eventData) {
+        if (!customerId || !eventData) {
+            throw new Error('Customer ID and event data are required');
         }
 
         try {
-            const webhookEvent = await this.db.findOne({ _id: webhookId });
-            
-            if (!webhookEvent) {
-                throw new Error('Webhook event not found');
-            }
-
-            return {
-                status: "success",
-                webhook: {
-                    id: webhookEvent._id,
-                    webhookId: webhookEvent.webhookId,
-                    accountId: webhookEvent.accountId,
-                    type: webhookEvent.type,
-                    source: webhookEvent.source,
-                    social: webhookEvent.social,
-                    data: webhookEvent.data,
-                    tags: webhookEvent.tags,
-                    priority: webhookEvent.priority,
-                    status: webhookEvent.status,
-                    processedAt: webhookEvent.processedAt,
-                    createdAt: webhookEvent.createdAt
-                }
-            };
-        } catch (error) {
-            console.error('Error getting webhook event:', error);
-            throw new Error(`Failed to get webhook event: ${error.message}`);
-        }
-    }
-
-    /**
-     * List webhook events with optional filtering
-     * @param {Object} filters - Optional filters
-     * @param {string} filters.accountId - Filter by account ID
-     * @param {string} filters.type - Filter by event type
-     * @param {string} filters.source - Filter by source
-     * @param {string} filters.status - Filter by status
-     * @param {number} filters.minPriority - Filter by minimum priority
-     * @returns {Object} List of webhook events
-     */
-    async listWebhookEvents(filters = {}) {
-        try {
-            const query = {};
-            
-            if (filters.accountId) {
-                query.accountId = filters.accountId;
-            }
-            
-            if (filters.type) {
-                query.type = filters.type;
-            }
-            
-            if (filters.source) {
-                query.source = filters.source;
-            }
-            
-            if (filters.status) {
-                query.status = filters.status;
-            }
-            
-            if (filters.minPriority !== undefined) {
-                query.priority = { $gte: filters.minPriority };
-            }
-
-            const webhookEvents = await this.db.find(query).toArray();
-            
-            return {
-                status: "success",
-                webhooks: webhookEvents.map(webhook => ({
-                    id: webhook._id,
-                    webhookId: webhook.webhookId,
-                    accountId: webhook.accountId,
-                    type: webhook.type,
-                    source: webhook.source,
-                    tags: webhook.tags,
-                    priority: webhook.priority,
-                    status: webhook.status,
-                    processedAt: webhook.processedAt,
-                    createdAt: webhook.createdAt
-                })),
-                count: webhookEvents.length
-            };
-        } catch (error) {
-            console.error('Error listing webhook events:', error);
-            throw new Error(`Failed to list webhook events: ${error.message}`);
-        }
-    }
-
-    /**
-     * Update webhook event status
-     * @param {string} webhookId - Webhook event ID to update
-     * @param {Object} updateData - Data to update
-     * @returns {Object} Updated webhook event object
-     */
-    async updateWebhookEvent(webhookId, updateData) {
-        if (!webhookId) {
-            throw new Error('Webhook ID is required');
-        }
-
-        try {
-            // Get existing webhook record
-            const existingWebhook = await this.db.findOne({ _id: webhookId });
-            if (!existingWebhook) {
-                throw new Error('Webhook event not found');
-            }
-
-            const allowedFields = [
-                'status', 'tags', 'priority', 'metadata'
-            ];
-
-            const updateFields = {};
-            allowedFields.forEach(field => {
-                if (updateData[field] !== undefined) {
-                    updateFields[field] = updateData[field];
-                }
-            });
-
-            if (Object.keys(updateFields).length === 0) {
-                throw new Error('No valid fields to update');
-            }
-
-            updateFields.updatedAt = new Date().valueOf();
-
-            // Update local database
-            const result = await this.db.updateOne(
-                { _id: webhookId },
-                { $set: updateFields }
+            const response = await this.client.customerEvents.createManualCustomerContextEvent(
+                customerId, 
+                eventData.type, 
+                eventData.source, 
+                eventData.data, 
+                eventData.tags, 
+                eventData.intent, 
+                eventData.priority
             );
 
-            if (result.modifiedCount > 0) {
-                const updatedWebhook = await this.db.findOne({ _id: webhookId });
-                return {
-                    status: "success",
-                    webhook: {
-                        id: updatedWebhook._id,
-                        webhookId: updatedWebhook.webhookId,
-                        accountId: updatedWebhook.accountId,
-                        type: updatedWebhook.type,
-                        source: updatedWebhook.source,
-                        tags: updatedWebhook.tags,
-                        priority: updatedWebhook.priority,
-                        status: updatedWebhook.status,
-                        updatedAt: updatedWebhook.updatedAt
-                    }
-                };
-            } else {
-                throw new Error('No changes were made to the webhook event');
-            }
-        } catch (error) {
-            console.error('Error updating webhook event:', error);
-            throw new Error(`Failed to update webhook event: ${error.message}`);
-        }
-    }
-
-    /**
-     * Get webhook event analytics
-     * @param {string} accountId - Account ID (optional)
-     * @param {number} days - Number of days to analyze
-     * @returns {Object} Analytics data
-     */
-    async getWebhookAnalytics(accountId = null, days = 30) {
-        try {
-            const query = {};
-            
-            if (accountId) {
-                query.accountId = accountId;
-            }
-            
-            const cutoffDate = new Date(Date.now() - (days * 24 * 60 * 60 * 1000)).valueOf();
-            query.createdAt = { $gte: cutoffDate };
-
-            const webhookEvents = await this.db.find(query).toArray();
-            
-            // Calculate analytics
-            const analytics = {
-                totalEvents: webhookEvents.length,
-                eventsByType: {},
-                eventsBySource: {},
-                averagePriority: 0,
-                eventsByDay: {},
-                topTags: {}
-            };
-
-            let totalPriority = 0;
-
-            webhookEvents.forEach(webhook => {
-                // Count by type
-                analytics.eventsByType[webhook.type] = (analytics.eventsByType[webhook.type] || 0) + 1;
-                
-                // Count by source
-                analytics.eventsBySource[webhook.source] = (analytics.eventsBySource[webhook.source] || 0) + 1;
-                
-                // Sum priority
-                totalPriority += webhook.priority || 0;
-                
-                // Count by day
-                const day = new Date(webhook.createdAt).toISOString().split('T')[0];
-                analytics.eventsByDay[day] = (analytics.eventsByDay[day] || 0) + 1;
-                
-                // Count tags
-                if (webhook.tags && Array.isArray(webhook.tags)) {
-                    webhook.tags.forEach(tag => {
-                        analytics.topTags[tag] = (analytics.topTags[tag] || 0) + 1;
-                    });
-                }
-            });
-
-            // Calculate average priority
-            analytics.averagePriority = webhookEvents.length > 0 ? totalPriority / webhookEvents.length : 0;
-
-            // Sort top tags
-            analytics.topTags = Object.entries(analytics.topTags)
-                .sort(([,a], [,b]) => b - a)
-                .slice(0, 10)
-                .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+            console.log(response);
 
             return {
                 status: "success",
-                analytics: {
-                    ...analytics,
-                    timePeriod: `${days} days`,
-                    accountId: accountId || 'all'
-                }
             };
         } catch (error) {
-            console.error('Error getting webhook analytics:', error);
-            throw new Error(`Failed to get webhook analytics: ${error.message}`);
+            console.error('Error creating custom customer event:', error);
+            throw new Error(`Failed to create custom customer event: ${error.message}`);
         }
     }
 }

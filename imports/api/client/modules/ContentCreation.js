@@ -533,16 +533,68 @@ class ContentCreationClient {
         return response;
     }
 
+    // ===== TRENDS METHODS =====
+
     /**
-     * Generate response using webhooks
-     * @param {string} accountId - Account ID
-     * @param {string} customerId - Customer ID
-     * @returns {Promise<Object>} Generated response with analysis data
+     * Get latest trends based on categories
+     * @param {Object} trendsData - Trends parameters
+     * @param {Array|string} trendsData.categories - Categories to analyze (can be array or single string)
+     * @param {string} trendsData.model - AI model to use (optional)
+     * @param {number} trendsData.temperature - AI temperature (optional)
+     * @param {string} trendsData.userId - User ID
+     * @returns {Promise<Object>} Latest trends data
      */
-    async generateResponse(accountId, customerId) {
-        // For webhook methods, we might not have protobuf classes
-        // Pass the data directly
-        const response = await this.callFunction(0x8d3e59be, { accountId, customerId });
+    async getLatestTrends(trendsData) {
+        // Create protobuf request
+        const request = new contentCreation.TrendsRequest();
+        
+        // Set the main request fields
+        if (Array.isArray(trendsData.categories)) {
+            request.setCategoriesList(trendsData.categories);
+        } else {
+            request.setCategoriesList([trendsData.categories]);
+        }
+        request.setModel(trendsData.model || 'gpt-3.5-turbo');
+        request.setTemperature(trendsData.temperature || 0.7);
+        request.setUserid(trendsData.userId);
+
+        // Send request
+        const response = await this.callFunction(0x7c3483f, request);
+        
+        // Deserialize response
+        if (response && response.result) {
+            const trendsResponse = contentCreation.TrendsResponse.deserializeBinary(response.result);
+            
+            // Extract trend items
+            const trendsData = [];
+            const dataList = trendsResponse.getDataList();
+            dataList.forEach(trendItem => {
+                trendsData.push({
+                    topic_label: trendItem.getTopicLabel(),
+                    topic_description: trendItem.getTopicDescription(),
+                    topic_strength: trendItem.getTopicStrength(),
+                    top_subreddits: trendItem.getTopSubredditsList(),
+                    trend_direction: trendItem.getTrendDirection(),
+                    engagement_score: trendItem.getEngagementScore(),
+                    ai_generated: trendItem.getAiGenerated(),
+                    keywords: trendItem.getKeywordsList(),
+                    post_count: trendItem.getPostCount(),
+                    sentiment: trendItem.getSentiment(),
+                    evidence: trendItem.getEvidenceList(),
+                    summary: trendItem.getSummary()
+                });
+            });
+
+            return {
+                success: trendsResponse.getSuccess(),
+                message: trendsResponse.getMessage(),
+                data: trendsData,
+                categories_analyzed: trendsResponse.getCategoriesAnalyzedList(),
+                total_posts: trendsResponse.getTotalPosts(),
+                timestamp: trendsResponse.getTimestamp()
+            };
+        }
+        
         return response;
     }
 

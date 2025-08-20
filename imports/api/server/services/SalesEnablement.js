@@ -1,15 +1,29 @@
 import { Adapter, Core, Logger } from "@tmq-dev-ph/tmq-dev-core-server";
 import { status } from "@grpc/grpc-js";
 import { tmq as sales } from "../../common/static_codegen/tmq/SalesEnablement";
-const { CustomerResponse, UpdateCustomerRequest, CustomerRequest, ListCustomersRequest, ListCustomersResponse, DiscountCodeResponse, UpdateDiscountCodeRequest, GetDiscountCodeRequest, GetDiscountCodeResponse, ListDiscountCodesRequest, ListDiscountCodesResponse, InvoiceResponse, UpdateInvoiceRequest, GetInvoiceRequest, GetInvoiceResponse, ListInvoicesRequest, ListInvoicesResponse, LoyaltyPointsResponse, UpdateLoyaltyPointsRequest, CustomerLoyaltyStatusRequest, CustomerLoyaltyStatusResponse, ProductResponse, UpdateSalesProductRequest, DeleteSalesProductRequest, AddSalesProductRequest } = sales;
+const { CustomerResponse, ConnectStripeResponse, UpdateCustomerRequest, CustomerRequest, ListCustomersRequest, ListCustomersResponse, DiscountCodeData, DiscountCodeResponse, UpdateDiscountCodeRequest, GetDiscountCodeRequest, GetDiscountCodeResponse, ListDiscountCodesRequest, ListDiscountCodesResponse, InvoiceResponse, UpdateInvoiceRequest, GetInvoiceRequest, GetInvoiceResponse, ListInvoicesRequest, ListInvoicesResponse, LoyaltyPointsResponse, UpdateLoyaltyPointsRequest, CustomerLoyaltyStatusRequest, CustomerLoyaltyStatusResponse, ProductResponse, UpdateSalesProductRequest, DeleteSalesProductRequest, AddSalesProductRequest } = sales;
 
 import Server from "../Server";
-import { SalesEnablement } from "../classes/journey/SalesEnablement";
+import SalesEnablement from "../classes/journey/SalesEnablement";
 
 export default {
+    connectStripe: async function ({ request }, callback) {
+        const response = new ConnectStripeResponse();
+        try {
+            const { ServerInstance } = Adapter;
+            
+        } catch (error) {
+            console.error("Error connecting Stripe:", error);
+            callback({
+                code: 500,
+                message: error.message || "Error connecting Stripe",
+                status: status.INTERNAL
+            });
+        }
+    },
     /**
     * @param {Object} call
-    * @param {widget.WidgetConfigRequest} call.request
+    * @param {sales.CreateCustomerRequest} call.request
     * @param {function} callback 
     */
     createCustomer: async function ({ request }, callback) {
@@ -33,18 +47,25 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
+            
 
             const customerData = {
                 email: request.email,
                 firstName: request.firstName,
                 lastName: request.lastName,
                 phone: request.phone || null,
+                company: request.company || null,
+                status: request.status || 'active',
+                source: request.source || 'memory_center',
+                assignedTo: request.assignedTo || null,
+                tags: request.tags || [],
+                notes: request.notes || null,
                 billingAddress: request.billingAddress || null,
                 userId: request.userId || null,
                 accountId: request.accountId || 'default',
@@ -70,7 +91,7 @@ export default {
 
             callback(null, response);
         } catch (error) {
-            Logger.error("Error creating customer:", error);
+            console.error("Error creating customer:", error);
             callback({
                 code: 500,
                 message: error.message || "Error creating customer",
@@ -90,13 +111,13 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
 
+            const salesEnablement = new SalesEnablement(config);
+            
             const filters = {
                 status: request.status || null,
                 userId: request.userId || null
@@ -162,12 +183,12 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
 
             const updateData = {
                 firstName: request.firstName,
@@ -226,12 +247,12 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
 
             const discountData = {
                 name: request.name,
@@ -249,19 +270,21 @@ export default {
             const result = await salesEnablement.createDiscountCode(discountData);
             
             if (result.status === "success") {
+                const discountCodeData = new DiscountCodeData();
                 response.success = true;
                 response.message = "Discount code created successfully";
-                response.discountId = result.discount.id;
-                response.name = result.discount.name;
-                response.code = result.discount.code;
-                response.type = result.discount.type;
-                response.value = result.discount.value;
-                response.currency = result.discount.currency;
-                response.maxUses = result.discount.maxUses;
-                response.currentUses = result.discount.currentUses;
-                response.expiresAt = result.discount.expiresAt;
-                response.minimumAmount = result.discount.minimumAmount;
-                response.isActive = result.discount.isActive;
+                discountCodeData.discountId = result.discount.id;
+                discountCodeData.name = result.discount.name;
+                discountCodeData.code = result.discount.code;
+                discountCodeData.type = result.discount.type;
+                discountCodeData.value = result.discount.value;
+                discountCodeData.currency = result.discount.currency;
+                discountCodeData.maxUses = result.discount.maxUses;
+                discountCodeData.currentUses = result.discount.currentUses;
+                discountCodeData.expiresAt = result.discount.expiresAt;
+                discountCodeData.minimumAmount = result.discount.minimumAmount;
+                discountCodeData.isActive = result.discount.isActive;
+                response.discount = discountCodeData;
             } else {
                 response.success = false;
                 response.message = "Failed to create discount code";
@@ -269,7 +292,7 @@ export default {
 
             callback(null, response);
         } catch (error) {
-            Logger.error("Error creating discount code:", error);
+            console.error("Error creating discount code:", error);
             callback({
                 code: 500,
                 message: error.message || "Error creating discount code",
@@ -298,12 +321,12 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
 
             const updateData = {
                 name: request.name,
@@ -377,12 +400,12 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
 
             const invoiceData = {
                 customerId: request.customerId,
@@ -447,12 +470,12 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
 
             // For now, we'll just return success since updateInvoice method is not implemented in the class
             // TODO: Implement updateInvoice method in SalesEnablement class
@@ -491,12 +514,12 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
 
             const loyaltyData = {
                 customerId: request.customerId,
@@ -511,7 +534,7 @@ export default {
             if (result.status === "success") {
                 response.success = true;
                 response.message = "Loyalty points created successfully";
-                response.data = result.loyalty;
+                response.loyalty = new TextEncoder().encode(JSON.stringify(result.loyalty));
             } else {
                 response.success = false;
                 response.message = "Failed to create loyalty points";
@@ -523,6 +546,65 @@ export default {
             callback({
                 code: 500,
                 message: error.message || "Error creating loyalty points",
+                status: status.INTERNAL
+            });
+        }
+    },
+
+    spendLoyaltyPoints: async function ({ request }, callback) {
+        const response = new LoyaltyPointsResponse();
+        try {
+            const { ServerInstance } = Adapter;
+            if (!ServerInstance) {
+                return callback({
+                    code: 500,
+                    message: "Server instance not initialized!",
+                    status: status.INTERNAL
+                });
+            }
+
+            // Validate required fields
+            if (!request.customerId || !request.pointsToSpend) {
+                return callback({
+                    code: 400,
+                    message: "Customer ID and points are required",
+                    status: status.INVALID_ARGUMENT
+                });
+            }
+
+            const config = {
+                baseURL: "http://localhost:3005",
+                domain: ServerInstance.Config.domain,
+                ...ServerInstance.Config.salesEnablement
+            }
+
+            const salesEnablement = new SalesEnablement(config);
+
+            const loyaltyData = {
+                customerId: request.customerId,
+                pointsToSpend: request.pointsToSpend,
+                orderId: request.orderId || null,
+                invoiceId: request.invoiceId || null,
+                transactionId: request.transactionId || null
+            };
+
+            const result = await salesEnablement.spendLoyaltyPoints(loyaltyData);
+            
+            if (result.status === "success") {
+                response.success = true;
+                response.message = "Loyalty points spent successfully";
+                response.loyalty = new TextEncoder().encode(JSON.stringify(result.loyalty));
+            } else {
+                response.success = false;
+                response.message = "Failed to spend loyalty points";
+            }
+
+            callback(null, response);
+        } catch (error) {   
+            console.log(error);
+            callback({
+                code: 500,
+                message: error.message || "Error spending loyalty points",
                 status: status.INTERNAL
             });
         }
@@ -548,12 +630,12 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
 
             const result = await salesEnablement.getCustomerLoyaltyStatus(request.customerId);
             
@@ -597,12 +679,12 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
 
             // For now, we'll just return success since updateLoyaltyPoints method is not implemented in the class
             // TODO: Implement updateLoyaltyPoints method in SalesEnablement class
@@ -641,12 +723,12 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
 
             // For now, we'll just return success since addProduct method is not implemented in the class
             // TODO: Implement addProduct method in SalesEnablement class
@@ -685,12 +767,14 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
+            
+
 
             // For now, we'll just return success since updateProduct method is not implemented in the class
             // TODO: Implement updateProduct method in SalesEnablement class
@@ -729,12 +813,12 @@ export default {
                 });
             }
 
-            const salesEnablement = new SalesEnablement(ServerInstance.config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                salesEnablement.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3005",
+                ...ServerInstance.Config.salesEnablement
             }
+
+            const salesEnablement = new SalesEnablement(config);
 
             // For now, we'll just return success since deleteProduct method is not implemented in the class
             // TODO: Implement deleteProduct method in SalesEnablement class

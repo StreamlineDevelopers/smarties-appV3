@@ -1,4 +1,4 @@
-import { tmq as salesEnablement } from '../../common/static_codegen/tmq/SalesEnablement';
+import salesEnablement from '../../common/static_codegen/tmq/SalesEnablement_pb';
 
 /**
  * Client-side SalesEnablement class that interfaces with SalesEnablementService
@@ -227,12 +227,22 @@ class SalesEnablementClient {
         // Deserialize response
         if (response && response.result) {
             const discountResponse = salesEnablement.DiscountCodeResponse.deserializeBinary(response.result);
-            const stringData = new TextDecoder().decode(discountResponse.getData());
-            const objData = JSON.parse(stringData);
+
+            const discountCodeData = discountResponse.getDiscount();
+
             return {
                 success: discountResponse.getSuccess(),
                 message: discountResponse.getMessage(),
-                discount: objData
+                code: discountCodeData.getCode(),
+                name: discountCodeData.getName(),
+                type: discountCodeData.getType(),
+                value: discountCodeData.getValue(),
+                currency: discountCodeData.getCurrency(),
+                maxUses: discountCodeData.getMaxuses(),
+                currentUses: discountCodeData.getCurrentuses(),
+                expiresAt: discountCodeData.getExpiresat(),
+                minimumAmount: discountCodeData.getMinimumamount(),
+                isActive: discountCodeData.getIsactive()
             };
         }
         
@@ -569,7 +579,52 @@ class SalesEnablementClient {
         // Deserialize response
         if (response && response.result) {
             const loyaltyResponse = salesEnablement.LoyaltyPointsResponse.deserializeBinary(response.result);
-            const stringData = new TextDecoder().decode(loyaltyResponse.getData());
+            const stringData = new TextDecoder().decode(loyaltyResponse.getLoyalty());
+            const objData = JSON.parse(stringData);
+            return {
+                success: loyaltyResponse.getSuccess(),
+                message: loyaltyResponse.getMessage(),
+                loyalty: objData
+            };
+        }
+        
+        return response;
+    }
+
+    /**
+     * Spend loyalty points for a customer
+     * @param {Object} loyaltyData - Loyalty data
+     * @param {string} loyaltyData.customerId - Customer ID
+     * @param {number} loyaltyData.points - Points to spend
+     * @param {string} loyaltyData.orderId - Order ID
+     * @param {string} loyaltyData.invoiceId - Invoice ID
+     * @param {string} loyaltyData.transactionId - Transaction ID
+     * @returns {Promise<Object>} Loyalty points result
+     */
+    async spendLoyaltyPoints(loyaltyData) {
+        // Create protobuf request
+        const request = new salesEnablement.LoyaltyPointsSpendRequest();
+        request.setCustomerid(loyaltyData.customerId);
+        request.setPointstospend(loyaltyData.points);
+        request.setOrderid(loyaltyData.orderId);
+        request.setInvoiceid(loyaltyData.invoiceId);
+        request.setTransactionid(loyaltyData.transactionId);
+
+        if (loyaltyData.points < 100) {
+            return {
+                success: false,
+                message: "Points to spend must be greater than 100",
+                loyalty: null
+            };
+        }
+
+        // Send request
+        const response = await this.callFunction(0xe4e2a953, request);
+        
+        // Deserialize response
+        if (response && response.result) {
+            const loyaltyResponse = salesEnablement.LoyaltyPointsResponse.deserializeBinary(response.result);
+            const stringData = new TextDecoder().decode(loyaltyResponse.getLoyalty());
             const objData = JSON.parse(stringData);
             return {
                 success: loyaltyResponse.getSuccess(),

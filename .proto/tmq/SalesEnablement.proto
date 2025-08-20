@@ -4,6 +4,17 @@ option optimize_for = CODE_SIZE;
 
 package tmq;
 
+// Stripe Connect Messages
+message ConnectUrlRequest {
+  string userId = 1;
+}
+
+message ConnectUrlResponse {
+  bool success = 1;
+  string message = 2;
+  bytes oauth = 3;
+}
+
 // Customer Management Messages
 message CustomerRequest {
   string email = 1;
@@ -229,6 +240,14 @@ message LoyaltyPointsRequest {
   string transactionId = 5;
 }
 
+message LoyaltyPointsSpendRequest {
+  string customerId = 1;
+  double pointsToSpend = 2;
+  string orderId = 3;
+  string invoiceId = 4;
+  string transactionId = 5;
+}
+
 message LoyaltyPointsResponse {
   bool success = 1;
   string message = 2;
@@ -296,6 +315,9 @@ message DeleteSalesProductRequest {
 
 // Service definition
 service SalesEnablementService {
+  // Stripe Connect
+  rpc connectStripe(ConnectUrlRequest) returns (ConnectUrlResponse) {}
+
   // Customer Management
   rpc createCustomer(CustomerRequest) returns (CustomerResponse) {}
   rpc updateCustomer(UpdateCustomerRequest) returns (CustomerResponse) {}
@@ -318,6 +340,7 @@ service SalesEnablementService {
   rpc createLoyaltyPoints(LoyaltyPointsRequest) returns (LoyaltyPointsResponse) {}
   rpc getCustomerLoyaltyStatus(CustomerLoyaltyStatusRequest) returns (CustomerLoyaltyStatusResponse) {}
   rpc updateLoyaltyPoints(UpdateLoyaltyPointsRequest) returns (LoyaltyPointsResponse) {}
+  rpc spendLoyaltyPoints(LoyaltyPointsSpendRequest) returns (LoyaltyPointsResponse) {}
   
   // Product Management
   rpc addProduct(ProductRequest) returns (SalesProductResponse) {}

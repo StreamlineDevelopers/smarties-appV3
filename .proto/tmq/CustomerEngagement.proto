@@ -7,13 +7,16 @@ package tmq;
 // Webhook Event Request Messages
 message WebhookEventRequest {
   string account_id = 1;
-  string type = 2;
-  string source = 3;
-  SocialMediaInfo social = 4;
-  bytes data = 5;
-  repeated string tags = 6;
-  double priority = 7;
-  bytes metadata = 8;
+  string customer_id = 2;
+  string type = 3;
+  string source = 4;
+  SocialMediaInfo social = 5;
+  bytes data = 6;
+  repeated string tags = 7;
+  double priority = 8;
+  bytes metadata = 9;
+  string intent = 10;
+  bool generate_response = 11;
 }
 
 message CommentWebhookRequest {
@@ -92,16 +95,22 @@ message WebhookEventResponse {
   string id = 1;
   string webhookId = 2;
   string accountId = 3;
-  string type = 4;
-  string source = 5;
-  SocialMediaInfo social = 6;
-  WebhookEventData data = 7;
-  repeated string tags = 8;
-  double priority = 9;
-  string status = 10;
-  uint64 processedAt = 11;
-  uint64 createdAt = 12;
-  bool success = 13;
+  string customerId = 4;
+  string type = 5;
+  string source = 6;
+  SocialMediaInfo social = 7;
+  WebhookEventData data = 8;
+  repeated string tags = 9;
+  double priority = 10;
+  string intent = 11;
+  bool generateResponse = 12;
+  string status = 13;
+  uint64 processedAt = 14;
+  uint64 createdAt = 15;
+  bool success = 16;
+  bytes processing = 17;
+  bytes customer = 18;
+  string message = 19;
 }
 
 // Comment Response
@@ -162,6 +171,21 @@ message SuccessResponse {
   string message = 2;
 }
 
+// ===== WEBHOOK RESPONSE GENERATION MESSAGES =====
+
+message GenerateResponseRequest {
+  string accountId = 1;
+  string customerId = 2;
+  string apiKey = 3;
+}
+
+message GenerateResponseResponse {
+  bool success = 1;
+  string message = 2;
+  bytes response = 3;
+  bytes analysis = 4;
+}
+
 // Service definition
 service CustomerEngagementService {
   // Webhook Processing
@@ -179,5 +203,8 @@ service CustomerEngagementService {
   rpc listWebhookEvents(ListWebhookEventsRequest) returns (WebhookEventListResponse) {}
   rpc updateWebhookEvent(UpdateWebhookEventRequest) returns (WebhookEventResponse) {}
   rpc getWebhookAnalytics(WebhookAnalyticsRequest) returns (WebhookAnalyticsResponse) {}
+  
+  // Webhook Response Generation
+  rpc generateResponse(GenerateResponseRequest) returns (GenerateResponseResponse) {}
   
 }

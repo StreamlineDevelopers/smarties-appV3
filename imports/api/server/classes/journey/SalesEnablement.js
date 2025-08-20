@@ -3,10 +3,11 @@ import { Core } from "@tmq-dev-ph/tmq-dev-core-server";
 import { Customer } from "../dbTemplates/Customer";
 
 class SalesEnablement {
-    constructor(config) {
+    constructor(config, domain) {
         this.config = config;
+        this.domain = domain;
         this.client = new SalesEnablementClient(config);
-        this.db = Core.getDB("sales", true);
+        this.db = Core.getDB("salesEnablement", true);
     }
 
     /**
@@ -17,12 +18,23 @@ class SalesEnablement {
         this.client.setApiKey(apiKey);
     }
 
+
     /**
-     * Get the axios instance from the client
-     * @returns {Object} Axios instance
+     * Sign up with Stripe Connect
+     * @param {Object} signUpData - Sign up data
+     * @param {string} signUpData.email - Customer email
+     * @param {string} signUpData.firstName - Customer first name
+     * @param {string} signUpData.lastName - Customer last name
+     * @param {string} signUpData.phone - Customer phone number
+     * @param {Object} signUpData.billingAddress - Billing address information
+     * @returns {Object} Signed up customer object
      */
-    getAxiosInstance() {
-        return this.client.getAxiosInstance();
+    async connectStripe(userId) {
+        const url = new URL(this.domain);
+        const redirectUrl = `${url.origin}/api/sales-enablement/stripe/callback`;
+        const response = await this.client.stripeOAuth.getConnectUrl(userId, redirectUrl);
+        console.log(response);
+        return response;
     }
 
     /**
@@ -42,34 +54,30 @@ class SalesEnablement {
         }
 
         try {
-            // Use the Stripe OAuth customer endpoint via the client
-            const response = await this.client.getAxiosInstance().post(
-                `/api/stripe-oauth/customers?userId=${customerData.userId || 'default'}`,
-                {
-                    email: customerData.email,
-                    name: `${customerData.firstName} ${customerData.lastName}`,
-                    phone: customerData.phone,
-                    metadata: {
-                        source: 'sales_enablement_class',
-                        firstName: customerData.firstName,
-                        lastName: customerData.lastName,
-                        userId: customerData.userId
-                    },
-                    description: `Customer created via SalesEnablement class`
+            // Use the client's createCustomer method instead of direct axios
+            const response = await this.client.stripeOAuth.createCustomer(customerData.userId, {
+                email: customerData.email,
+                name: `${customerData.firstName} ${customerData.lastName}`,
+                phone: customerData.phone,
+                metadata: {
+                    source: 'sales_enablement_class',
+                    userId: customerData.userId
                 }
-            )
+            });
 
-            if (response.data && response.data.customer) {
-                const stripeCustomer = response.data.customer;
-                const databaseCustomer = response.data.newCustomer || response.data.existingCustomer;
+            console.log(response);
 
-                // Create or update customer using the Customer template
-                let customer = await Customer.findByStripeCustomerId(stripeCustomer.id);
+            if (response.newCustomer) {
+                const customer = response.newCustomer;
                 
-                if (!customer) {
+                // Create or update customer using the Customer template
+                let dbCustomer = await Customer.findByStripeCustomerId(customer.id) || 
+                                await Customer.findByCustomerId(customer.id);
+                
+                if (!dbCustomer) {
                     // Create new customer
-                    customer = new Customer({
-                        customerId: stripeCustomer.id, // Use Stripe ID as external customer ID
+                    dbCustomer = new Customer({
+                        customerId: customer.id,
                         accountId: customerData.accountId || 'default',
                         userId: customerData.userId || null,
                         customerType: 'sales',
@@ -79,7 +87,7 @@ class SalesEnablement {
                         email: customerData.email,
                         phone: customerData.phone || null,
                         billingAddress: customerData.billingAddress || null,
-                        stripeCustomerId: stripeCustomer.id,
+                        stripeCustomerId: customer.id,
                         status: 'active',
                         lifecycleStage: 'customer',
                         tags: ['stripe', 'sales'],
@@ -87,35 +95,35 @@ class SalesEnablement {
                     });
                 } else {
                     // Update existing customer
-                    customer.firstName = customerData.firstName;
-                    customer.lastName = customerData.lastName;
-                    customer.email = customerData.email;
-                    customer.phone = customerData.phone || customer.phone;
-                    customer.billingAddress = customerData.billingAddress || customer.billingAddress;
-                    customer.metadata = { ...customer.metadata, ...customerData.metadata };
+                    dbCustomer.firstName = customerData.firstName;
+                    dbCustomer.lastName = customerData.lastName;
+                    dbCustomer.email = customerData.email;
+                    dbCustomer.phone = customerData.phone || dbCustomer.phone;
+                    dbCustomer.billingAddress = customerData.billingAddress || dbCustomer.billingAddress;
+                    dbCustomer.metadata = { ...dbCustomer.metadata, ...customerData.metadata };
                 }
 
                 // Save customer to database
-                await customer.save();
+                await dbCustomer.save();
 
                 return {
                     status: "success",
                     customer: {
-                        id: customer.id,
-                        customerId: customer.customerId,
-                        stripeCustomerId: customer.stripeCustomerId,
-                        email: customer.email,
-                        firstName: customer.firstName,
-                        lastName: customer.lastName,
-                        phone: customer.phone,
-                        billingAddress: customer.billingAddress,
-                        status: customer.status,
-                        customerType: customer.customerType,
-                        createdAt: customer.createdAt
+                        id: dbCustomer.id,
+                        customerId: dbCustomer.customerId,
+                        stripeCustomerId: dbCustomer.stripeCustomerId,
+                        email: dbCustomer.email,
+                        firstName: dbCustomer.firstName,
+                        lastName: dbCustomer.lastName,
+                        phone: dbCustomer.phone,
+                        billingAddress: dbCustomer.billingAddress,
+                        status: dbCustomer.status,
+                        customerType: dbCustomer.customerType,
+                        createdAt: dbCustomer.createdAt
                     }
                 };
             } else {
-                throw new Error('Failed to create customer via Stripe OAuth');
+                throw new Error('Failed to create customer via client');
             }
         } catch (error) {
             console.error('Error creating customer:', error);
@@ -135,63 +143,76 @@ class SalesEnablement {
         }
 
         try {
-            // Get existing customer using Customer template
-            const customer = await Customer.findByStripeCustomerId(customerId) || 
-                           await Customer.findByCustomerId(customerId);
-            
-            if (!customer) {
-                throw new Error('Customer not found');
-            }
-
-            // Update customer fields
-            if (updateData.firstName !== undefined) customer.firstName = updateData.firstName;
-            if (updateData.lastName !== undefined) customer.lastName = updateData.lastName;
-            if (updateData.phone !== undefined) customer.phone = updateData.phone;
-            if (updateData.billingAddress !== undefined) customer.billingAddress = updateData.billingAddress;
-            if (updateData.status !== undefined) customer.status = updateData.status;
-            if (updateData.metadata !== undefined) {
-                customer.metadata = { ...customer.metadata, ...updateData.metadata };
-            }
-
-            // If Stripe customer ID exists, update Stripe as well
-            if (customer.stripeCustomerId) {
-                try {
-                    await this.client.getAxiosInstance().post(
-                        `/api/stripe-oauth/customers/${customer.stripeCustomerId}?userId=${customer.userId || 'default'}`,
-                        {
-                            name: customer.firstName && customer.lastName ? 
-                                `${customer.firstName} ${customer.lastName}` : 
-                                `${customer.firstName} ${customer.lastName}`,
-                            phone: customer.phone,
-                            metadata: {
-                                ...customer.metadata,
-                                updatedAt: new Date().valueOf()
-                            }
-                        }
-                    );
-                } catch (stripeError) {
-                    console.warn('Failed to update Stripe customer, but local update succeeded:', stripeError.message);
+            // Use the client's updateCustomer method
+            const response = await this.client.customers.updateCustomer(customerId, {
+                firstName: updateData.firstName,
+                lastName: updateData.lastName,
+                phone: updateData.phone,
+                billingAddress: updateData.billingAddress,
+                metadata: {
+                    ...updateData.metadata,
+                    updatedAt: new Date().valueOf()
                 }
-            }
+            });
 
-            // Save updated customer
-            await customer.save();
-
-            return {
-                status: "success",
-                customer: {
-                    id: customer.id,
-                    customerId: customer.customerId,
-                    stripeCustomerId: customer.stripeCustomerId,
-                    email: customer.email,
-                    firstName: customer.firstName,
-                    lastName: customer.lastName,
-                    phone: customer.phone,
-                    billingAddress: customer.billingAddress,
-                    status: customer.status,
-                    updatedAt: customer.updatedAt
+            if (response.data) {
+                const updatedCustomer = response.data;
+                
+                // Create or update customer using the Customer template
+                let dbCustomer = await Customer.findByStripeCustomerId(customerId) || 
+                                await Customer.findByCustomerId(customerId);
+                
+                if (!dbCustomer) {
+                    // This case should ideally not happen if updateCustomer works correctly
+                    // but as a fallback, we can create a new customer if it doesn't exist
+                    dbCustomer = new Customer({
+                        customerId: customerId,
+                        accountId: 'default', // Assuming accountId is not part of updateData
+                        userId: null, // Assuming userId is not part of updateData
+                        customerType: 'sales',
+                        source: 'stripe',
+                        firstName: updatedCustomer.firstName,
+                        lastName: updatedCustomer.lastName,
+                        email: updatedCustomer.email,
+                        phone: updatedCustomer.phone,
+                        billingAddress: updatedCustomer.billingAddress,
+                        stripeCustomerId: customerId,
+                        status: 'active',
+                        lifecycleStage: 'customer',
+                        tags: ['stripe', 'sales'],
+                        metadata: updatedCustomer.metadata || {}
+                    });
+                } else {
+                    // Update existing customer
+                    dbCustomer.firstName = updatedCustomer.firstName;
+                    dbCustomer.lastName = updatedCustomer.lastName;
+                    dbCustomer.email = updatedCustomer.email;
+                    dbCustomer.phone = updatedCustomer.phone || dbCustomer.phone;
+                    dbCustomer.billingAddress = updatedCustomer.billingAddress || dbCustomer.billingAddress;
+                    dbCustomer.metadata = { ...dbCustomer.metadata, ...updatedCustomer.metadata };
                 }
-            };
+
+                // Save updated customer
+                await dbCustomer.save();
+
+                return {
+                    status: "success",
+                    customer: {
+                        id: dbCustomer.id,
+                        customerId: dbCustomer.customerId,
+                        stripeCustomerId: dbCustomer.stripeCustomerId,
+                        email: dbCustomer.email,
+                        firstName: dbCustomer.firstName,
+                        lastName: dbCustomer.lastName,
+                        phone: dbCustomer.phone,
+                        billingAddress: dbCustomer.billingAddress,
+                        status: dbCustomer.status,
+                        updatedAt: dbCustomer.updatedAt
+                    }
+                };
+            } else {
+                throw new Error('Failed to update customer via client');
+            }
         } catch (error) {
             console.error('Error updating customer:', error);
             throw new Error(`Failed to update customer: ${error.message}`);
@@ -225,12 +246,12 @@ class SalesEnablement {
         try {
             // Use the client's transactions.createDiscountCode method
             const response = await this.client.transactions.createDiscountCode(discountData, discountData.userId);
+            console.log(response);
             
             if (response.data) {
                 // Store additional discount data in local database
                 const now = new Date().valueOf();
                 const discountRecord = {
-                    _id: Core.generateId(),
                     discountId: response.data._id || response.data.id,
                     name: discountData.name,
                     code: discountData.code.toUpperCase(),
@@ -459,35 +480,75 @@ class SalesEnablement {
         }
 
         try {
-            // Try to find customer by various IDs
-            let customer = await Customer.findByStripeCustomerId(customerId) || 
-                          await Customer.findByCustomerId(customerId) ||
-                          await Customer.findByEmail(customerId);
+            // Use the client's getCustomerById method
+            const response = await this.client.customers.getCustomerById(customerId);
             
-            if (!customer) {
-                throw new Error('Customer not found');
+            if (response.data) {
+                const customer = response.data;
+                
+                return {
+                    status: "success",
+                    customer: {
+                        id: customer.id,
+                        customerId: customer.customerId,
+                        stripeCustomerId: customer.stripeCustomerId,
+                        email: customer.email,
+                        firstName: customer.firstName,
+                        lastName: customer.lastName,
+                        phone: customer.phone,
+                        billingAddress: customer.billingAddress,
+                        status: customer.status,
+                        customerType: customer.customerType,
+                        createdAt: customer.createdAt,
+                        updatedAt: customer.updatedAt
+                    }
+                };
+            } else {
+                throw new Error('Customer not found via client');
             }
-
-            return {
-                status: "success",
-                customer: {
-                    id: customer.id,
-                    customerId: customer.customerId,
-                    stripeCustomerId: customer.stripeCustomerId,
-                    email: customer.email,
-                    firstName: customer.firstName,
-                    lastName: customer.lastName,
-                    phone: customer.phone,
-                    billingAddress: customer.billingAddress,
-                    status: customer.status,
-                    customerType: customer.customerType,
-                    createdAt: customer.createdAt,
-                    updatedAt: customer.updatedAt
-                }
-            };
         } catch (error) {
             console.error('Error getting customer:', error);
             throw new Error(`Failed to get customer: ${error.message}`);
+        }
+    }
+
+    /**
+     * Delete customer by ID
+     * @param {string} customerId - Customer ID to delete
+     * @returns {Object} Deletion result
+     */
+    async deleteCustomer(customerId) {
+        if (!customerId) {
+            throw new Error('Customer ID is required');
+        }
+
+        try {
+            // Use the client's deleteCustomer method
+            const response = await this.client.customers.deleteCustomer(customerId);
+            
+            if (response.data) {
+                // Also remove from local database if it exists
+                try {
+                    const dbCustomer = await Customer.findByStripeCustomerId(customerId) || 
+                                      await Customer.findByCustomerId(customerId);
+                    if (dbCustomer) {
+                        await dbCustomer.remove();
+                    }
+                } catch (dbError) {
+                    console.warn('Failed to remove customer from local database:', dbError.message);
+                }
+
+                return {
+                    status: "success",
+                    message: response.data.message || "Customer deleted successfully",
+                    requestId: response.data.requestId
+                };
+            } else {
+                throw new Error('Failed to delete customer via client');
+            }
+        } catch (error) {
+            console.error('Error deleting customer:', error);
+            throw new Error(`Failed to delete customer: ${error.message}`);
         }
     }
 
@@ -586,42 +647,32 @@ class SalesEnablement {
      */
     async listCustomers(filters = {}) {
         try {
-            let customers = [];
+            // Use the client's getCustomers method with filters
+            const response = await this.client.customers.getCustomers(filters);
             
-            if (filters.status && filters.userId) {
-                // Use Customer template static methods
-                customers = await Customer.findByStatus(filters.status);
-                customers = customers.filter(customer => customer.userId === filters.userId);
-            } else if (filters.status) {
-                customers = await Customer.findByStatus(filters.status);
-            } else if (filters.userId) {
-                // Find by userId (this would need a new static method)
-                const db = Core.getDB("customers", false);
-                if (db) {
-                    const docs = await db.findAsync({ userId: filters.userId });
-                    customers = docs.map(doc => new Customer(doc));
-                }
+            if (response.data) {
+                const customers = response.data.data || response.data;
+                const count = response.data.total || customers.length;
+                
+                return {
+                    status: "success",
+                    customers: customers.map(customer => ({
+                        id: customer.id,
+                        customerId: customer.customerId,
+                        stripeCustomerId: customer.stripeCustomerId,
+                        email: customer.email,
+                        firstName: customer.firstName,
+                        lastName: customer.lastName,
+                        phone: customer.phone,
+                        status: customer.status,
+                        customerType: customer.customerType,
+                        createdAt: customer.createdAt
+                    })),
+                    count: count
+                };
             } else {
-                // Get all sales customers
-                customers = await Customer.findSalesCustomers();
+                throw new Error('Failed to get customers via client');
             }
-            
-            return {
-                status: "success",
-                customers: customers.map(customer => ({
-                    id: customer.id,
-                    customerId: customer.customerId,
-                    stripeCustomerId: customer.stripeCustomerId,
-                    email: customer.email,
-                    firstName: customer.firstName,
-                    lastName: customer.lastName,
-                    phone: customer.phone,
-                    status: customer.status,
-                    customerType: customer.customerType,
-                    createdAt: customer.createdAt
-                })),
-                count: customers.length
-            };
         } catch (error) {
             console.error('Error listing customers:', error);
             throw new Error(`Failed to list customers: ${error.message}`);
@@ -739,11 +790,30 @@ class SalesEnablement {
         try {
             // Use the client's loyalty.earnPointsFromPurchase method
             const response = await this.client.loyalty.earnPointsFromPurchase(loyaltyData);
+
+            console.log(response);
             
             if (response.data) {
+                this.db.insertOne({
+                    customerId: loyaltyData.customerId,
+                    totalAmount: loyaltyData.totalAmount,
+                    orderId: loyaltyData.orderId,
+                    invoiceId: loyaltyData.invoiceId,
+                    transactionId: loyaltyData.transactionId,
+                    pointsEarned: response.data.pointsEarned,
+                    newBalance: response.data.newBalance,
+                    newLevel: response.data.newLevel,
+                    totalSpent: response.data.totalSpent
+                });
+                
                 return {
                     status: "success",
-                    loyalty: response.data
+                    loyalty: {
+                        pointsEarned: response.data.pointsEarned,
+                        newBalance: response.data.newBalance,
+                        newLevel: response.data.newLevel,
+                        totalSpent: response.data.totalSpent
+                    }
                 };
             } else {
                 throw new Error('Failed to create loyalty points via client');
@@ -751,6 +821,48 @@ class SalesEnablement {
         } catch (error) {
             console.error('Error creating loyalty points:', error);
             throw new Error(`Failed to create loyalty points: ${error.message}`);
+        }
+    }
+
+    /**
+     * Spend loyalty points for a customer
+     * @param {Object} loyaltyData - Loyalty data
+     * @param {string} loyaltyData.customerId - Customer ID
+     * @param {number} loyaltyData.points - Points to spend
+     * @returns {Object} Loyalty points result
+     */
+    async spendLoyaltyPoints(loyaltyData) {
+        if (!loyaltyData.customerId || !loyaltyData.pointsToSpend) {
+            throw new Error('Customer ID and points are required');
+        }
+        
+        try {
+            // Use the client's loyalty.spendPoints method
+            const response = await this.client.loyalty.spendPointsForDiscount(loyaltyData);
+            
+            if (response && response.pointsSpent) {
+                this.db.insertOne({
+                    customerId: loyaltyData.customerId,
+                    pointsSpent: response.pointsSpent,
+                    remainingPoints: response.remainingPoints,
+                    discountAmount: response.discountAmount,
+                    message: response.message
+                });
+                return {
+                    status: "success",
+                    loyalty: {
+                        pointsSpent: response.pointsSpent,
+                        remainingPoints: response.remainingPoints,
+                        discountAmount: response.discountAmount,
+                        message: response.message
+                    }
+                };
+            } else {
+                throw new Error('Failed to spend loyalty points via client');
+            }
+        } catch (error) {
+            console.error('Error spending loyalty points:', error);
+            throw new Error(`Failed to spend loyalty points: ${error.message}`);
         }
     }
 

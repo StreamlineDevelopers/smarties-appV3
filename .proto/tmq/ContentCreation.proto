@@ -224,19 +224,40 @@ message ContentItem {
   uint64 createdAt = 5;
 }
 
-// ===== WEBHOOK MESSAGES =====
 
-message GenerateResponseRequest {
-  string accountId = 1;
-  string customerId = 2;
-  string apiKey = 3;
+
+// ===== TRENDS MESSAGES =====
+
+message TrendsRequest {
+  repeated string categories = 1;
+  string model = 2;
+  float temperature = 3;
+  string userId = 4;
+  string apiKey = 5;
 }
 
-message GenerateResponseResponse {
+message TrendsResponse {
   bool success = 1;
   string message = 2;
-  bytes response = 3;
-  bytes analysis = 4;
+  repeated TrendItem data = 3;
+  repeated string categories_analyzed = 4;
+  int32 total_posts = 5;
+  string timestamp = 6;
+}
+
+message TrendItem {
+  string topic_label = 1;
+  string topic_description = 2;
+  float topic_strength = 3;
+  repeated string top_subreddits = 4;
+  string trend_direction = 5;
+  float engagement_score = 6;
+  bool ai_generated = 7;
+  repeated string keywords = 8;
+  int32 post_count = 9;
+  string sentiment = 10;
+  repeated string evidence = 11;
+  string summary = 12;
 }
 
 // Service definition
@@ -260,8 +281,8 @@ service ContentCreationService {
   rpc analyzeCriterion(CriterionAnalysisRequest) returns (ContentAnalysisResponse) {}
   rpc getCriteria(CriteriaRequest) returns (CriteriaResponse) {}
   
-  // Webhooks
-  rpc generateResponse(GenerateResponseRequest) returns (GenerateResponseResponse) {}
+  // Trends
+  rpc getLatestTrends(TrendsRequest) returns (TrendsResponse) {}
   
   // Health Checks
   rpc healthCheck(HealthCheckRequest) returns (HealthCheckResponse) {}

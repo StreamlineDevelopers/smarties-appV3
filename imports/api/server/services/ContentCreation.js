@@ -13,8 +13,9 @@ const {
     ContentAnalysisResponse,
     BatchGenerationResponse,
     HealthCheckResponse,
-    GenerateResponseRequest,
-    GenerateResponseResponse
+    TrendsRequest,
+    TrendsResponse,
+    TrendItem
 } = content;
 
 export default {
@@ -237,79 +238,16 @@ export default {
         }
     },
 
-    /**
-     * Perform quick analysis
-     * @param {Object} call
-     * @param {content.QuickAnalysisRequest} call.request
-     * @param {function} callback 
-     */
-    quickAnalysis: async function ({ request }, callback) {
-        const response = new ContentAnalysisResponse();
-        try {
-            const { ServerInstance } = Adapter;
-            if (!ServerInstance) {
-                return callback({
-                    code: 500,
-                    message: "Server instance not initialized!",
-                    status: status.INTERNAL
-                });
-            }
 
-            if (!request.content) {
-                return callback({
-                    code: 400,
-                    message: "Content is required",
-                    status: status.INVALID_ARGUMENT
-                });
-            }
-
-            const contentGen = new ContentGeneration(ServerInstance.Config);
-            
-            if (request.apiKey) {
-                contentGen.setApiKey(request.apiKey);
-            }
-
-            const quickData = {
-                content: request.content,
-                targetAudience: request.targetAudience,
-                contentType: request.contentType,
-                userId: request.userId
-            };
-
-            const result = await contentGen.quickAnalysis(quickData);
-            
-            if (result.status === "success") {
-                response.success = true;
-                response.message = "Quick analysis completed";
-                // Convert analysis to Uint8Array (bytes) as expected by protobuf
-                response.analysis = new TextEncoder().encode(JSON.stringify(result.analysis));
-                response.analysisType = result.analysisType;
-                response.criteriaUsed = result.criteriaUsed;
-                response.id = result.id;
-            } else {
-                response.success = false;
-                response.message = "Failed to perform quick analysis";
-            }
-
-            callback(null, response);
-        } catch (error) {
-            Logger.error("Error performing quick analysis:", error);
-            callback({
-                code: 500,
-                message: error.message || "Error performing quick analysis",
-                status: status.INTERNAL
-            });
-        }
-    },
 
     /**
-     * Generate response using webhooks
+     * Get latest trends based on categories
      * @param {Object} call
-     * @param {content.GenerateResponseRequest} call.request
+     * @param {content.TrendsRequest} call.request
      * @param {function} callback 
      */
-    generateResponse: async function ({ request }, callback) {
-        const response = new GenerateResponseResponse();
+    getLatestTrends: async function ({ request }, callback) {
+        const response = new TrendsResponse();
         try {
             const { ServerInstance } = Adapter;
             if (!ServerInstance) {
@@ -321,41 +259,76 @@ export default {
             }
 
             // Validate required fields
-            if (!request.accountId || !request.customerId) {
+            if (!request.categories || request.categories.length === 0) {
                 return callback({
                     code: 400,
-                    message: "Account ID and Customer ID are required",
+                    message: "Categories are required",
                     status: status.INVALID_ARGUMENT
                 });
             }
 
-            // Initialize ContentGeneration class
-            const contentGen = new ContentGeneration(ServerInstance.Config);
-            
-            // Set API key if provided
-            if (request.apiKey) {
-                contentGen.setApiKey(request.apiKey);
+            const config = {
+                baseURL: "http://localhost:3003",
+                timeout: 60000,
+                ...ServerInstance.Config.contentCreation
             }
 
-            const result = await contentGen.generateResponse(request.accountId, request.customerId);
+            // Initialize ContentGeneration class
+            const contentGen = new ContentGeneration(config);
+
+            // TODO Fix request categories to be a string
+            const chosenCategories = Array.isArray(request.categories) && request.categories.length === 1 ? request.categories[0] : request.categories;
             
+            console.log(chosenCategories);
+            const trendsData = {
+                categories: chosenCategories,
+                model: request.model || 'gpt-3.5-turbo',
+                temperature: request.temperature || 0.7,
+                userId: request.userId
+            };
+
+            const result = await contentGen.getLatestTrends(trendsData);
+
             if (result.status === "success") {
                 response.success = true;
-                response.message = "Response generated successfully";
-                // Convert response and analysis to Uint8Array (bytes) as expected by protobuf
-                response.response = new TextEncoder().encode(JSON.stringify(result.response));
-                response.analysis = new TextEncoder().encode(JSON.stringify(result.analysis));
+                response.message = "Latest trends retrieved successfully";
+                
+                // Set the data array
+                if (result.data && Array.isArray(result.data)) {
+                    result.data.forEach(trend => {
+                        const trendItem = new TrendItem();
+                        trendItem.topic_label = trend.topic_label || '';
+                        trendItem.topic_description = trend.topic_description || '';
+                        trendItem.topic_strength = trend.topic_strength || 0;
+                        trendItem.top_subreddits = trend.top_subreddits || [];
+                        trendItem.trend_direction = trend.trend_direction || '';
+                        trendItem.engagement_score = trend.engagement_score || 0;
+                        trendItem.ai_generated = trend.ai_generated || false;
+                        trendItem.keywords = trend.keywords || [];
+                        trendItem.post_count = trend.post_count || 0;
+                        trendItem.sentiment = trend.sentiment || '';
+                        trendItem.evidence = trend.evidence || [];
+                        trendItem.summary = trend.summary || '';
+                        
+                        response.data.push(trendItem);
+                    });
+                }
+                
+                // Set other response fields
+                response.categories_analyzed = result.categories_analyzed || [];
+                response.total_posts = result.total_posts || 0;
+                response.timestamp = result.timestamp || new Date().toISOString();
             } else {
                 response.success = false;
-                response.message = "Failed to generate response";
+                response.message = "Failed to retrieve latest trends";
             }
 
             callback(null, response);
         } catch (error) {
-            Logger.error("Error generating response:", error);
+            console.log(error);
             callback({
                 code: 500,
-                message: error.message || "Error generating response",
+                message: error.message || "Error retrieving latest trends",
                 status: status.INTERNAL
             });
         }

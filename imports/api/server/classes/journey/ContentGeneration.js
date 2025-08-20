@@ -606,6 +606,182 @@ class ContentGeneration {
         }
     }
 
+    // ===== TRENDS METHODS =====
+
+    /**
+     * Get latest trends based on categories
+     * @param {Object} trendsData - Trends parameters
+     * @param {Array|string} trendsData.categories - Categories to analyze (can be array or single string)
+     * @param {string} trendsData.model - AI model to use (optional)
+     * @param {number} trendsData.temperature - AI temperature (optional)
+     * @param {string} trendsData.userId - User ID
+     * @returns {Object} Latest trends data
+     */
+    async getLatestTrends(trendsData) {
+        if (!trendsData.categories) {
+            throw new Error('Categories are required');
+        }
+
+        try {
+            console.log(trendsData);
+            const response = await this.client.redditTrends.analyzeSingleTopic(trendsData.categories, {
+                model: trendsData.model || 'gpt-4',
+                userId: trendsData.userId
+            });
+            
+            if (response.success) {
+                // Store trends record
+                const now = new Date().valueOf();
+                const trendsRecord = {
+                    type: "trends",
+                    categories: trendsData.categories,
+                    model: trendsData.model || 'gpt-4',
+                    results: response.data || [],
+                    categoriesAnalyzed: response.categories_analyzed || trendsData.categories,
+                    totalPosts: response.total_posts || 0,
+                    timestamp: response.timestamp || new Date().toISOString(),
+                    status: 'completed',
+                    createdBy: trendsData.userId || null,
+                    createdAt: now,
+                    updatedAt: now
+                };
+
+                await this.db.insertOne(trendsRecord);
+
+                return {
+                    status: "success",
+                    data: response.data || [],
+                    categories_analyzed: response.categories_analyzed || Array.isArray(trendsData.categories) ? trendsData.categories : [trendsData.categories],
+                    total_posts: response.total_posts || 0,
+                    timestamp: response.timestamp || new Date().toISOString()
+                };
+            } else {
+                throw new Error(response.error || 'Failed to get latest trends');
+            }
+        } catch (error) {
+            console.error('Error getting latest trends:', error);
+            throw new Error(`Failed to get latest trends: ${error.message}`);
+        }
+    }
+
+    /**
+     * Analyze trends for specific categories with custom parameters
+     * @param {Array} categories - Array of categories to analyze
+     * @param {Object} options - Analysis options
+     * @param {string} options.model - AI model to use
+     * @param {number} options.temperature - AI temperature
+     * @param {string} options.userId - User ID
+     * @returns {Object} Analysis results for specific categories
+     */
+    async analyzeSpecificCategories(categories, options = {}) {
+        if (!categories || !Array.isArray(categories) || categories.length === 0) {
+            throw new Error('Categories array is required');
+        }
+
+        try {
+            const response = await this.client.redditTrends.analyzeSpecificTopics(
+                categories,
+                {
+                    model: options.model || 'gpt-3.5-turbo',
+                    temperature: options.temperature || 0.7
+                }
+            );
+            
+            if (response.success) {
+                // Store analysis record
+                const now = new Date().valueOf();
+                const analysisRecord = {
+                    type: "trends-analysis",
+                    categories: categories,
+                    model: options.model || 'gpt-3.5-turbo',
+                    temperature: options.temperature || 0.7,
+                    results: response.data || [],
+                    categoriesAnalyzed: response.categories_analyzed || categories,
+                    totalPosts: response.total_posts || 0,
+                    timestamp: response.timestamp || new Date().toISOString(),
+                    status: 'completed',
+                    createdBy: options.userId || null,
+                    createdAt: now,
+                    updatedAt: now
+                };
+
+                await this.db.insertOne(analysisRecord);
+
+                return {
+                    status: "success",
+                    data: response.data || [],
+                    categories_analyzed: response.categories_analyzed || categories,
+                    total_posts: response.total_posts || 0,
+                    timestamp: response.timestamp || new Date().toISOString()
+                };
+            } else {
+                throw new Error(response.error || 'Failed to analyze specific categories');
+            }
+        } catch (error) {
+            console.error('Error analyzing specific categories:', error);
+            throw new Error(`Failed to analyze specific categories: ${error.message}`);
+        }
+    }
+
+    /**
+     * Analyze trends for a single category
+     * @param {string} category - Single category to analyze
+     * @param {Object} options - Analysis options
+     * @param {string} options.model - AI model to use
+     * @param {number} options.temperature - AI temperature
+     * @param {string} options.userId - User ID
+     * @returns {Object} Analysis results for single category
+     */
+    async analyzeSingleCategory(category, options = {}) {
+        if (!category || typeof category !== 'string') {
+            throw new Error('Category string is required');
+        }
+
+        try {
+            const response = await this.client.redditTrends.analyzeSingleTopic(
+                category,
+                {
+                    model: options.model || 'gpt-4',
+                    temperature: options.temperature || 0.5
+                }
+            );
+            
+            if (response.success) {
+                // Store single category analysis record
+                const now = new Date().valueOf();
+                const analysisRecord = {
+                    type: "trends-single-category",
+                    category: category,
+                    model: options.model || 'gpt-4',
+                    temperature: options.temperature || 0.5,
+                    results: response.data || [],
+                    categoriesAnalyzed: [category],
+                    totalPosts: response.total_posts || 0,
+                    timestamp: response.timestamp || new Date().toISOString(),
+                    status: 'completed',
+                    createdBy: options.userId || null,
+                    createdAt: now,
+                    updatedAt: now
+                };
+
+                await this.db.insertOne(analysisRecord);
+
+                return {
+                    status: "success",
+                    data: response.data || [],
+                    categories_analyzed: [category],
+                    total_posts: response.total_posts || 0,
+                    timestamp: response.timestamp || new Date().toISOString()
+                };
+            } else {
+                throw new Error(response.error || 'Failed to analyze single category');
+            }
+        } catch (error) {
+            console.error('Error analyzing single category:', error);
+            throw new Error(`Failed to analyze single category: ${error.message}`);
+        }
+    }
+
     // ===== HEALTH CHECK METHODS =====
 
     /**
@@ -680,57 +856,7 @@ class ContentGeneration {
         }
     }
 
-    // ===== WEBHOOK METHODS =====
 
-    /**
-     * Generate response using webhooks
-     * @param {string} accountId - Account ID
-     * @param {string} customerId - Customer ID
-     * @returns {Object} Generated response with analysis data
-     */
-    async generateResponse(accountId, customerId) {
-        if (!accountId || !customerId) {
-            throw new Error('Account ID and Customer ID are required');
-        }
-
-        try {
-            const generatedResponse = await this.client.webhooks.generateResponse(accountId, customerId);
-            
-            if (generatedResponse.success) {
-                // Log successful response generation
-                console.log('✅ Response generated successfully:', generatedResponse.success);
-
-                // Validate response structure
-                if (generatedResponse.response) {
-                    console.log('📤 Generated Response Details:');
-                    console.log(`   - Selected Response: ${generatedResponse.response.selectedResponse ? '✅' : '❌'}`);
-                    console.log(`   - Total Options: ${generatedResponse.response.totalOptions}`);
-                    console.log(`   - Lead Quality: ${generatedResponse.response.leadQuality || 'N/A'}`);
-                }
-                
-                // Validate analysis data
-                if (generatedResponse.analysis) {
-                    console.log('📊 Analysis Results:');
-                    console.log(`   - Lead Qualification: ${generatedResponse.analysis.leadQualification?.leadQuality || 'N/A'}`);
-                    console.log(`   - Confidence: ${generatedResponse.analysis.leadQualification?.confidence || 'N/A'}`);
-                    console.log(`   - Product Recommendations: ${generatedResponse.analysis.productRecommendations ? '✅' : '❌'}`);
-                    console.log(`   - Summary Generated: ${generatedResponse.analysis.summaryResult?.summaryGenerated || false}`);
-                }
-
-                return {
-                    status: "success",
-                    success: generatedResponse.success,
-                    response: generatedResponse.response,
-                    analysis: generatedResponse.analysis
-                };
-            } else {
-                throw new Error(generatedResponse.error || 'Failed to generate response');
-            }
-        } catch (error) {
-            console.error('Error generating response:', error);
-            throw new Error(`Failed to generate response: ${error.message}`);
-        }
-    }
 
     // ===== UTILITY METHODS =====
 
