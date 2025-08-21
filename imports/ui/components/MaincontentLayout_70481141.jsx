@@ -47,13 +47,20 @@ import RowenrichmentItem_074d9266 from './RowenrichmentItem_074d9266';
 import MessagingWatcher, { INTERACTION, POPUP, TAB, TOGGLE } from '../../api/client/watchers/MessagingWatcher';
 import { useWatcher } from '../../api/client/Watcher2';
 import moment from 'moment';
+import { useParams } from 'react-router-dom';
+import Loader from './common/Loader';
 
 const MaincontentLayout_70481141 = ({ }) => {
   const watcher = useRef(MessagingWatcher).current;
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
   const [inbox, setInbox] = useState([]);
+  const [isSuggestionOpen, setIsSuggestionOpen] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
+  const [aiResponseText, setAiResponseText] = useState("");
+  const [aiResponseDraft, setAiResponseDraft] = useState('');
   const conversationDivRef = useRef(null);
+  const aiInputRef = useRef(null);
   useWatcher(watcher);
   const isInboxActive = watcher.getValue("inboxActive") ?? false;
 
@@ -137,8 +144,6 @@ const MaincontentLayout_70481141 = ({ }) => {
     }
   }, [isInboxActive]);
 
-
-
   const isSmartiesAssistantToggled = watcher.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? true;
   const isScriptInjectionPopupOpen = watcher.getValue(POPUP.SCRIPT_INJECTION);
   const activeMessageTab = watcher.getValue(TAB.MESSAGES);
@@ -147,15 +152,39 @@ const MaincontentLayout_70481141 = ({ }) => {
   const messageList = watcher.getValue(INTERACTION.MESSAGES);
   const inboxList = watcher.getValue(INTERACTION.INBOX);
   const currentInteraction = watcher.getValue(INTERACTION.CURRENT);
-
+  const predefinedAnswers = watcher.getValue(INTERACTION.PREDEFINED_ANSWERS);
   const loadingMessage = watcher.getValue(INTERACTION.LOADING_MESSAGE);
   const loadingInbox = watcher.getValue(INTERACTION.LOADING_INBOX);
+  const suggestions = watcher.getValue(INTERACTION.SUGGESTIONS);
+  const loadingSuggestions = watcher.getValue(INTERACTION.LOADING_SUGGESTIONS);
   // Auto-scroll to bottom when new messages are added
   useEffect(() => {
     if (conversationDivRef.current && messageList.length > 0) {
       conversationDivRef.current.scrollTop = conversationDivRef.current.scrollHeight;
     }
   }, [messageList.length]);
+
+  useEffect(() => {
+    if (suggestions && suggestions.length > 0) setAiResponseText(suggestions[0]);
+  }, [suggestions]);
+
+  useEffect(() => {
+    if (isEditable && aiInputRef.current) {
+      const el = aiInputRef.current;
+      const { value } = el;
+      el.focus();
+      const end = value.length;
+      try {
+        el.setSelectionRange(end, end);
+      } catch (_) {
+        // Non-text inputs may not support selection; ignore.
+      }
+    }
+  }, [isEditable]);
+
+  const truncateText = (text, limit = 45) => {
+    return text.length > limit ? text.substring(0, limit) + "..." : text;
+  }
 
   return (
     <div
@@ -345,7 +374,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                               <MessaginginboxtextcontentItem_485da7aa
                                 divText={data.name}
                                 divText1={
-                                  data.latestSnippet
+                                  truncateText(data.latestSnippet)
                                 }
                                 divText2={data.topic}
                                 dataWId={'5412962f-dc78-9f6c-9b1b-5129db7c78df'}
@@ -787,7 +816,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                     </div> */}
                     <div className={'reply-row'}
                       style={{ pointerEvents: isSmartiesAssistantToggled ? 'none' : 'auto', opacity: isSmartiesAssistantToggled ? 0.5 : 1 }}>
-                      <div className={'reply-row-aisuggestion-row'}>
+                      <div className={'reply-row-aisuggestion-row'} style={{ display: isSmartiesAssistantToggled ? 'none' : 'block' }}>
                         <div className={'message-chat-div'}>
                           <div className={'message-chat-left'}>
                             <div>
@@ -796,6 +825,8 @@ const MaincontentLayout_70481141 = ({ }) => {
                                   'c48cdb12-9fb9-f2df-92c5-a704498a5c23'
                                 }
                                 className={'btn-suggestion-hide'}
+                                style={{ display: isSuggestionOpen ? 'flex' : 'none' }}
+                                onClick={() => setIsSuggestionOpen(false)}
                               >
                                 <div>{'Hide AI Suggestion'}</div>
                                 <div className={'icon-dropdown'}>
@@ -811,6 +842,8 @@ const MaincontentLayout_70481141 = ({ }) => {
                                   'c48cdb12-9fb9-f2df-92c5-a704498a5c28'
                                 }
                                 className={'btn-suggestion-show'}
+                                style={{ display: isSuggestionOpen ? 'none' : 'flex' }}
+                                onClick={() => setIsSuggestionOpen(true)}
                               >
                                 <div>{'Show AI Suggestion'}</div>
                                 <div className={'icon-small'}>
@@ -824,7 +857,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                             </div>
                           </div>
                         </div>
-                        <div className={'card-ai-suggest'}>
+                        <div className={'card-ai-suggest'} style={{ display: isSuggestionOpen ? 'flex' : 'none' }}>
                           <div className={'card-ai-suggest-div'}>
                             <div className={'div-block-27'}>
                               <div className={'div-block-26'}>
@@ -836,22 +869,88 @@ const MaincontentLayout_70481141 = ({ }) => {
                               </div>
                               <div>{'AI Suggested Response'}</div>
                             </div>
-                            <div className={'div-block-14'}>
-                              <a href={'#'} className={'link-text'}>
-                                {'Edit'}
-                              </a>
-                              <a href={'#'} className={'btn-small w-button'}>
-                                {'Send'}
-                              </a>
-                            </div>
+                            {!loadingSuggestions && <div className={'div-block-14'}>
+                              {isEditable ? (
+                                <>
+                                  <a
+                                    href={'#'}
+                                    className={'link-text'}
+                                    onClick={() => {
+                                      setIsEditable(false);
+                                      setAiResponseDraft('');
+                                    }}
+                                  >
+                                    {'Cancel Edit'}
+                                  </a>
+                                  <a
+                                    href={'#'}
+                                    className={'btn-small w-button'}
+                                    style={{
+                                      backgroundColor: 'rgb(60, 128, 51)',
+                                      color: 'rgb(255, 255, 255)',
+                                    }}
+                                    onClick={() => {
+                                      setAiResponseText(aiResponseDraft);
+                                      setIsEditable(false);
+                                      setAiResponseDraft('');
+                                    }}
+                                  >
+                                    {'Save'}
+                                  </a>
+                                </>
+                              ) : (
+                                <>
+                                  <a
+                                    href={'#'}
+                                    className={'link-text'}
+                                    onClick={() => {
+                                      if (!Array.isArray(suggestions) || suggestions.length === 0) return;
+                                      setAiResponseDraft(aiResponseText);
+                                      setIsEditable(true);
+                                    }}
+                                    style={{
+                                      pointerEvents: !Array.isArray(suggestions) || suggestions.length === 0 ? 'none' : 'auto',
+                                      opacity: !Array.isArray(suggestions) || suggestions.length === 0 ? 0.5 : 1,
+                                    }}
+                                  >
+                                    {'Edit'}
+                                  </a>
+                                  <a href={'#'} className={'btn-small w-button'} onClick={() => {
+                                    if (!Array.isArray(suggestions) || suggestions.length === 0) return;
+                                    watcher.setValue(INTERACTION.MESSAGE_TEXT, aiResponseText);
+                                    watcher.sendMessage()
+                                  }}
+                                    style={{
+                                      pointerEvents: !Array.isArray(suggestions) || suggestions.length === 0 ? 'none' : 'auto',
+                                      opacity: !Array.isArray(suggestions) || suggestions.length === 0 ? 0.5 : 1,
+                                    }}
+                                  >
+                                    {'Send'}
+                                  </a>
+                                </>
+                              )}
+                            </div>}
                           </div>
-                          <div className={'ai-response-div'}>
-                            <p className={'ai-response'}>
-                              {
-                                "I'd be happy to help you with your order! Could you please provide your order number or the email address you used for the purchase?"
-                              }
-                            </p>
-                          </div>
+                          {loadingSuggestions ? <Loader text="Thinking..." size={12} /> : <div className={'ai-response-div'}>
+                            {isEditable ? (
+                              <input
+                                className={'ai-response'}
+                                type={'text'}
+                                value={aiResponseDraft}
+                                onChange={(e) => setAiResponseDraft(e.target.value)}
+                                ref={aiInputRef}
+                                style={{
+                                  backgroundColor: 'white',
+                                  border: '1px solid rgb(122, 122, 122)',
+                                  width: '100%'
+                                }}
+                              />
+                            ) : (
+                              <p className={'ai-response'}>
+                                {!Array.isArray(suggestions) || suggestions.length === 0 ? 'No suggestions available - no latest response from the consumer' : aiResponseText}
+                              </p>
+                            )}
+                          </div>}
                         </div>
                       </div>
                       <div className={'reply-row-main'}>
@@ -873,7 +972,6 @@ const MaincontentLayout_70481141 = ({ }) => {
                           value={watcher.getValue(INTERACTION.MESSAGE_TEXT)}
                           onChange={(e) => {
                             watcher.setValue(INTERACTION.MESSAGE_TEXT, e.target.value)
-
                           }}
                         />
                         <div className={'reply-btn-container'}>
@@ -1010,16 +1108,15 @@ const MaincontentLayout_70481141 = ({ }) => {
                         </div>
                       </div>
                     </div>
-                    <div className={'quick-reply-row'}>
-                      <div className={'quickreply-chip'}>
-                        {'Thank you for contacting us'}
-                      </div>
-                      <div className={'quickreply-chip'}>
-                        {"I'll check that for you"}
-                      </div>
-                      <div className={'quickreply-chip'}>
-                        {'Is there anything else?'}
-                      </div>
+                    <div className={'quick-reply-row'} style={{ pointerEvents: isSmartiesAssistantToggled ? 'none' : 'auto', opacity: isSmartiesAssistantToggled ? 0.5 : 1 }}>
+                      {predefinedAnswers && predefinedAnswers.length > 0 && predefinedAnswers.map((answer, index) => (
+                        <div className={'quickreply-chip'} key={index} onClick={() => {
+                          watcher.setValue(INTERACTION.MESSAGE_TEXT, answer.body);
+                          watcher.sendMessage()
+                        }}>
+                          {answer.body}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>

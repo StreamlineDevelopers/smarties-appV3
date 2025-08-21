@@ -73,16 +73,133 @@ export namespace tmq {
             return SmartiesAssistantConfig.deserialize(bytes);
         }
     }
+    export class SuggestionConfig extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            url?: string;
+            min?: number;
+            max?: number;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("url" in data && data.url != undefined) {
+                    this.url = data.url;
+                }
+                if ("min" in data && data.min != undefined) {
+                    this.min = data.min;
+                }
+                if ("max" in data && data.max != undefined) {
+                    this.max = data.max;
+                }
+            }
+        }
+        get url() {
+            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+        }
+        set url(value: string) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get min() {
+            return pb_1.Message.getFieldWithDefault(this, 2, 0) as number;
+        }
+        set min(value: number) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get max() {
+            return pb_1.Message.getFieldWithDefault(this, 3, 0) as number;
+        }
+        set max(value: number) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        static fromObject(data: {
+            url?: string;
+            min?: number;
+            max?: number;
+        }): SuggestionConfig {
+            const message = new SuggestionConfig({});
+            if (data.url != null) {
+                message.url = data.url;
+            }
+            if (data.min != null) {
+                message.min = data.min;
+            }
+            if (data.max != null) {
+                message.max = data.max;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                url?: string;
+                min?: number;
+                max?: number;
+            } = {};
+            if (this.url != null) {
+                data.url = this.url;
+            }
+            if (this.min != null) {
+                data.min = this.min;
+            }
+            if (this.max != null) {
+                data.max = this.max;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.url.length)
+                writer.writeString(1, this.url);
+            if (this.min != 0)
+                writer.writeInt32(2, this.min);
+            if (this.max != 0)
+                writer.writeInt32(3, this.max);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): SuggestionConfig {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new SuggestionConfig();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.url = reader.readString();
+                        break;
+                    case 2:
+                        message.min = reader.readInt32();
+                        break;
+                    case 3:
+                        message.max = reader.readInt32();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): SuggestionConfig {
+            return SuggestionConfig.deserialize(bytes);
+        }
+    }
     export class ClientConfig extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
             smarties_assistant?: SmartiesAssistantConfig;
+            suggestion?: SuggestionConfig;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
             if (!Array.isArray(data) && typeof data == "object") {
                 if ("smarties_assistant" in data && data.smarties_assistant != undefined) {
                     this.smarties_assistant = data.smarties_assistant;
+                }
+                if ("suggestion" in data && data.suggestion != undefined) {
+                    this.suggestion = data.suggestion;
                 }
             }
         }
@@ -95,21 +212,38 @@ export namespace tmq {
         get has_smarties_assistant() {
             return pb_1.Message.getField(this, 1) != null;
         }
+        get suggestion() {
+            return pb_1.Message.getWrapperField(this, SuggestionConfig, 2) as SuggestionConfig;
+        }
+        set suggestion(value: SuggestionConfig) {
+            pb_1.Message.setWrapperField(this, 2, value);
+        }
+        get has_suggestion() {
+            return pb_1.Message.getField(this, 2) != null;
+        }
         static fromObject(data: {
             smarties_assistant?: ReturnType<typeof SmartiesAssistantConfig.prototype.toObject>;
+            suggestion?: ReturnType<typeof SuggestionConfig.prototype.toObject>;
         }): ClientConfig {
             const message = new ClientConfig({});
             if (data.smarties_assistant != null) {
                 message.smarties_assistant = SmartiesAssistantConfig.fromObject(data.smarties_assistant);
+            }
+            if (data.suggestion != null) {
+                message.suggestion = SuggestionConfig.fromObject(data.suggestion);
             }
             return message;
         }
         toObject() {
             const data: {
                 smarties_assistant?: ReturnType<typeof SmartiesAssistantConfig.prototype.toObject>;
+                suggestion?: ReturnType<typeof SuggestionConfig.prototype.toObject>;
             } = {};
             if (this.smarties_assistant != null) {
                 data.smarties_assistant = this.smarties_assistant.toObject();
+            }
+            if (this.suggestion != null) {
+                data.suggestion = this.suggestion.toObject();
             }
             return data;
         }
@@ -119,6 +253,8 @@ export namespace tmq {
             const writer = w || new pb_1.BinaryWriter();
             if (this.has_smarties_assistant)
                 writer.writeMessage(1, this.smarties_assistant, () => this.smarties_assistant.serialize(writer));
+            if (this.has_suggestion)
+                writer.writeMessage(2, this.suggestion, () => this.suggestion.serialize(writer));
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -130,6 +266,9 @@ export namespace tmq {
                 switch (reader.getFieldNumber()) {
                     case 1:
                         reader.readMessage(message.smarties_assistant, () => message.smarties_assistant = SmartiesAssistantConfig.deserialize(reader));
+                        break;
+                    case 2:
+                        reader.readMessage(message.suggestion, () => message.suggestion = SuggestionConfig.deserialize(reader));
                         break;
                     default: reader.skipField();
                 }
@@ -233,11 +372,125 @@ export namespace tmq {
             return AuthConfig.deserialize(bytes);
         }
     }
+    export class PredefinedConfig extends pb_1.Message {
+        #one_of_decls: number[][] = [];
+        constructor(data?: any[] | {
+            serverUrl?: string;
+            apiKey?: string;
+            refreshEndpoint?: string;
+        }) {
+            super();
+            pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
+            if (!Array.isArray(data) && typeof data == "object") {
+                if ("serverUrl" in data && data.serverUrl != undefined) {
+                    this.serverUrl = data.serverUrl;
+                }
+                if ("apiKey" in data && data.apiKey != undefined) {
+                    this.apiKey = data.apiKey;
+                }
+                if ("refreshEndpoint" in data && data.refreshEndpoint != undefined) {
+                    this.refreshEndpoint = data.refreshEndpoint;
+                }
+            }
+        }
+        get serverUrl() {
+            return pb_1.Message.getFieldWithDefault(this, 1, "") as string;
+        }
+        set serverUrl(value: string) {
+            pb_1.Message.setField(this, 1, value);
+        }
+        get apiKey() {
+            return pb_1.Message.getFieldWithDefault(this, 2, "") as string;
+        }
+        set apiKey(value: string) {
+            pb_1.Message.setField(this, 2, value);
+        }
+        get refreshEndpoint() {
+            return pb_1.Message.getFieldWithDefault(this, 3, "") as string;
+        }
+        set refreshEndpoint(value: string) {
+            pb_1.Message.setField(this, 3, value);
+        }
+        static fromObject(data: {
+            serverUrl?: string;
+            apiKey?: string;
+            refreshEndpoint?: string;
+        }): PredefinedConfig {
+            const message = new PredefinedConfig({});
+            if (data.serverUrl != null) {
+                message.serverUrl = data.serverUrl;
+            }
+            if (data.apiKey != null) {
+                message.apiKey = data.apiKey;
+            }
+            if (data.refreshEndpoint != null) {
+                message.refreshEndpoint = data.refreshEndpoint;
+            }
+            return message;
+        }
+        toObject() {
+            const data: {
+                serverUrl?: string;
+                apiKey?: string;
+                refreshEndpoint?: string;
+            } = {};
+            if (this.serverUrl != null) {
+                data.serverUrl = this.serverUrl;
+            }
+            if (this.apiKey != null) {
+                data.apiKey = this.apiKey;
+            }
+            if (this.refreshEndpoint != null) {
+                data.refreshEndpoint = this.refreshEndpoint;
+            }
+            return data;
+        }
+        serialize(): Uint8Array;
+        serialize(w: pb_1.BinaryWriter): void;
+        serialize(w?: pb_1.BinaryWriter): Uint8Array | void {
+            const writer = w || new pb_1.BinaryWriter();
+            if (this.serverUrl.length)
+                writer.writeString(1, this.serverUrl);
+            if (this.apiKey.length)
+                writer.writeString(2, this.apiKey);
+            if (this.refreshEndpoint.length)
+                writer.writeString(3, this.refreshEndpoint);
+            if (!w)
+                return writer.getResultBuffer();
+        }
+        static deserialize(bytes: Uint8Array | pb_1.BinaryReader): PredefinedConfig {
+            const reader = bytes instanceof pb_1.BinaryReader ? bytes : new pb_1.BinaryReader(bytes), message = new PredefinedConfig();
+            while (reader.nextField()) {
+                if (reader.isEndGroup())
+                    break;
+                switch (reader.getFieldNumber()) {
+                    case 1:
+                        message.serverUrl = reader.readString();
+                        break;
+                    case 2:
+                        message.apiKey = reader.readString();
+                        break;
+                    case 3:
+                        message.refreshEndpoint = reader.readString();
+                        break;
+                    default: reader.skipField();
+                }
+            }
+            return message;
+        }
+        serializeBinary(): Uint8Array {
+            return this.serialize();
+        }
+        static deserializeBinary(bytes: Uint8Array): PredefinedConfig {
+            return PredefinedConfig.deserialize(bytes);
+        }
+    }
     export class Config extends pb_1.Message {
         #one_of_decls: number[][] = [];
         constructor(data?: any[] | {
             client?: ClientConfig;
             auth?: AuthConfig;
+            predefined?: PredefinedConfig;
         }) {
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [], this.#one_of_decls);
@@ -247,6 +500,9 @@ export namespace tmq {
                 }
                 if ("auth" in data && data.auth != undefined) {
                     this.auth = data.auth;
+                }
+                if ("predefined" in data && data.predefined != undefined) {
+                    this.predefined = data.predefined;
                 }
             }
         }
@@ -268,9 +524,19 @@ export namespace tmq {
         get has_auth() {
             return pb_1.Message.getField(this, 2) != null;
         }
+        get predefined() {
+            return pb_1.Message.getWrapperField(this, PredefinedConfig, 3) as PredefinedConfig;
+        }
+        set predefined(value: PredefinedConfig) {
+            pb_1.Message.setWrapperField(this, 3, value);
+        }
+        get has_predefined() {
+            return pb_1.Message.getField(this, 3) != null;
+        }
         static fromObject(data: {
             client?: ReturnType<typeof ClientConfig.prototype.toObject>;
             auth?: ReturnType<typeof AuthConfig.prototype.toObject>;
+            predefined?: ReturnType<typeof PredefinedConfig.prototype.toObject>;
         }): Config {
             const message = new Config({});
             if (data.client != null) {
@@ -279,18 +545,25 @@ export namespace tmq {
             if (data.auth != null) {
                 message.auth = AuthConfig.fromObject(data.auth);
             }
+            if (data.predefined != null) {
+                message.predefined = PredefinedConfig.fromObject(data.predefined);
+            }
             return message;
         }
         toObject() {
             const data: {
                 client?: ReturnType<typeof ClientConfig.prototype.toObject>;
                 auth?: ReturnType<typeof AuthConfig.prototype.toObject>;
+                predefined?: ReturnType<typeof PredefinedConfig.prototype.toObject>;
             } = {};
             if (this.client != null) {
                 data.client = this.client.toObject();
             }
             if (this.auth != null) {
                 data.auth = this.auth.toObject();
+            }
+            if (this.predefined != null) {
+                data.predefined = this.predefined.toObject();
             }
             return data;
         }
@@ -302,6 +575,8 @@ export namespace tmq {
                 writer.writeMessage(1, this.client, () => this.client.serialize(writer));
             if (this.has_auth)
                 writer.writeMessage(2, this.auth, () => this.auth.serialize(writer));
+            if (this.has_predefined)
+                writer.writeMessage(3, this.predefined, () => this.predefined.serialize(writer));
             if (!w)
                 return writer.getResultBuffer();
         }
@@ -316,6 +591,9 @@ export namespace tmq {
                         break;
                     case 2:
                         reader.readMessage(message.auth, () => message.auth = AuthConfig.deserialize(reader));
+                        break;
+                    case 3:
+                        reader.readMessage(message.predefined, () => message.predefined = PredefinedConfig.deserialize(reader));
                         break;
                     default: reader.skipField();
                 }
