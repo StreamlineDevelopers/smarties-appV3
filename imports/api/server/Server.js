@@ -17,7 +17,6 @@ Adapter.Vent = Vent;
 
 class Server extends Core {
     #redisVentServer = null;
-    #isInitialized = false;
     constructor(settings) {
         super(settings);
         // this.settings = settings;
@@ -25,32 +24,27 @@ class Server extends Core {
         this.onLogin((user) => {
             console.log("onLogin", user);
         });
-
-        this.#redisVentServer = new RedisVentServer();
-
     }
-
+    /**
+     * @returns {RedisVentServer}
+     */
     get RedisVentServer() {
         return this.#redisVentServer;
     }
 
-    get IsRedisVentInitialized() {
-        return this.#isInitialized;
-    }
-
-
     async startRedis() {
-        if (this.#isInitialized) return;
+        if (this.#redisVentServer) return;
         try {
-            await this.#redisVentServer.initialize({
+            const redisVentServer = new RedisVentServer();
+            await redisVentServer.initialize({
                 redis: {
                     host: this.Config.redisOplog.redis.host || 'localhost',
                     port: this.Config.redisOplog.redis.port || 6379
                 },
                 wsPort: this.Config.server.wsPort || 3502,
-                debug: true
+                debug: false
             });
-            this.#isInitialized = true;
+            this.#redisVentServer = redisVentServer;
             Logger.showStatus('✓ RedisVent server initialized');
         } catch (error) {
             Logger.showError('Failed to initialize RedisVent:', error);

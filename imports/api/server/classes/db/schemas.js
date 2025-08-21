@@ -329,6 +329,92 @@ const schemas = {
             }
         }
     }
+    ,
+    people: {
+        "bsonType": "object",
+        "title": "people",
+        "description": "golden identity per business",
+        "properties": {
+            "businessId": { "bsonType": "objectId" },
+            "active": { "bsonType": "bool" },
+            "mergedInto": { "bsonType": "objectId" },
+            "name": {
+                "bsonType": "object",
+                "title": "object",
+                "properties": {
+                    "given": { "bsonType": "string" },
+                    "family": { "bsonType": "string" },
+                    "source": { "bsonType": "string" },
+                    "updatedAt": { "bsonType": "double" }
+                }
+            },
+            "emails": {
+                "bsonType": "array",
+                "items": {
+                    "title": "object",
+                    "properties": {
+                        "label": { "bsonType": "string" },
+                        "valueHash": { "bsonType": "string" },
+                        "isPrimary": { "bsonType": "bool" },
+                        "verified": { "bsonType": "bool" },
+                        "source": { "bsonType": "string" },
+                        "updatedAt": { "bsonType": "double" }
+                    }
+                }
+            },
+            "phones": {
+                "bsonType": "array",
+                "items": {
+                    "title": "object",
+                    "properties": {
+                        "label": { "bsonType": "string" },
+                        "valueHash": { "bsonType": "string" },
+                        "isPrimary": { "bsonType": "string" },
+                        "verified": { "bsonType": "bool" },
+                        "source": { "bsonType": "string" },
+                        "updatedAt": { "bsonType": "double" }
+                    }
+                }
+            },
+            "identifiers": {
+                "bsonType": "array",
+                "items": {
+                    "title": "object",
+                    "properties": {
+                        "type": { "bsonType": "string" },
+                        "valueHash": { "bsonType": "string" },
+                        "updatedAt": { "bsonType": "double" }
+                    }
+                }
+            },
+            "fingerprints": {
+                "bsonType": "object",
+                "title": "object",
+                "properties": {
+                    "deviceIds": { "bsonType": "array", "items": { "bsonType": "string" } },
+                    "cookies": { "bsonType": "array", "items": { "bsonType": "string" } }
+                }
+            },
+            "firstSeenAt": { "bsonType": "double" },
+            "lastSeenAt": { "bsonType": "double" },
+            "createdAt": { "bsonType": "double" }
+        }
+    },
+    person_profile_links: {
+        "bsonType": "object",
+        "title": "person_profile_links",
+        "required": ["businessId"],
+        "properties": {
+            "businessId": { "bsonType": "objectId" },
+            "personId": { "bsonType": "objectId" },
+            "profileId": { "bsonType": "objectId" },
+            "linkType": { "bsonType": "string" },
+            "isHardLink": { "bsonType": "bool" },
+            "confidence": { "bsonType": "double" },
+            "signals": { "bsonType": "object", "title": "object" },
+            "createdAt": { "bsonType": "double" }
+        }
+    }
 };
 
 // Index definitions for all collections
@@ -412,6 +498,20 @@ const indexes = {
             keys: { "businessId": 1, "channelIds": 1 },
             options: { name: "index2" }
         }
+    ]
+    ,
+    people: [
+        { keys: { "businessId": 1, "lastSeenAt": -1 }, options: { name: "people_idx1" } },
+        { keys: { "businessId": 1, "emails.valueHash": 1, "emails.verified": 1 }, options: { name: "people_idx2" } },
+        { keys: { "businessId": 1, "phones.valueHash": 1, "phones.verified": 1 }, options: { name: "people_idx3" } },
+        { keys: { "businessId": 1, "identifiers.type": 1, "identifiers.valueHash": 1 }, options: { name: "people_idx4" } },
+        { keys: { "businessId": 1, "fingerprints.deviceIds": 1 }, options: { name: "people_idx5" } },
+        { keys: { "businessId": 1, "fingerprints.cookies": 1 }, options: { name: "people_idx6" } }
+    ],
+    person_profile_links: [
+        { keys: { "businessId": 1, "personId": 1, "profileId": 1 }, options: { name: "ppl_idx1", unique: true } },
+        { keys: { "businessId": 1, "profileId": 1, "confidence": -1 }, options: { name: "ppl_idx2" } },
+        { keys: { "businessId": 1, "personId": 1, "linkType": 1, "confidence": -1 }, options: { name: "ppl_idx3", partialFilterExpression: { linkType: "soft" } } }
     ]
 };
 

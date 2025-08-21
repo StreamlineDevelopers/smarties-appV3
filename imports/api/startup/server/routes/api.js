@@ -8,6 +8,8 @@ import SchemaErrorHandler from '../../../server/utils/schemaErrorHandler.js';
 import InteractionManager from '../../../server/classes/interactions/InteractionManager.js';
 import Server from '../../../server/Server.js';
 import Interactions from '../../../server/classes/dbTemplates/Interactions.js';
+import { IdentityResolution } from '../../../server/classes/identity/IdentityResolution.js';
+import { rankPersonsForConsumer } from '../../../server/classes/identity/IdentityRanker.js';
 
 Logger.setLogLevel(LogLevel.DEBUG);
 
@@ -66,6 +68,23 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
 
             const channel = await InteractionManager.resolveChannel({ businessId: biz._id, type, identifier, provider, metadata: req.body?.meta });
             const consumer = await InteractionManager.resolveOrCreateConsumer({ businessId: biz._id, externalId });
+            const metaRaw = req.body?.meta || {};
+            const meta = {
+                deviceId: metaRaw.dev || metaRaw.deviceId || null,
+                cookieId: metaRaw.smrtid || metaRaw.urid || metaRaw.cookieId || null, // prefer stable first-party cookie if available
+                ipAsn: metaRaw.asn || metaRaw.ipAsn || null,
+                email: metaRaw.email || null,
+                phone: metaRaw.phone || null,
+                timeProximitySec: metaRaw.timeProximitySec // optional
+            };
+            const person = await IdentityResolution.resolveOrCreatePersonFromSignals({ businessId: biz._id, meta });
+
+            await IdentityResolution.writeSoftLink({
+                businessId: biz._id,
+                personId: person._id,
+                consumerId: consumer._id,
+                signals: meta
+            });
             const { inbox, isNew: isNewInbox } = await InteractionManager.ensureInbox({ businessId: biz._id, consumerId: consumer._id, channelId: channel._id });
             const attributes = [];
             if (req.body.meta) {
@@ -97,6 +116,10 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
                 Server.RedisVentServer.triggers.update('inboxapp', 'inbox', businessId, inboxid, updatedInbox || inbox);
             }
             Server.RedisVentServer.triggers.insert('interactionapp', 'interaction', inboxid, interactionid, interaction);
+
+            // #NOTES: FOR FUTURE USE
+            // const rankedPersons = await rankPersonsForConsumer({ businessId: biz._id, consumerId: consumer._id, meta });
+            // console.log("rankedPersons =>>", rankedPersons);
 
             InteractionManager.ok(res, {
                 businessId: biz._id,

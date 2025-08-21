@@ -236,6 +236,40 @@ const permissiveSchemas = {
         },
         "additionalProperties": true
     }
+    ,
+    people: {
+        "bsonType": "object",
+        "title": "people",
+        "properties": {
+            "businessId": { "bsonType": ["objectId", "string"] },
+            "active": { "bsonType": ["bool", "null"] },
+            "mergedInto": { "bsonType": ["objectId", "string", "null"] },
+            "name": { "bsonType": ["object", "null"], "additionalProperties": true },
+            "emails": { "bsonType": ["array", "null"], "items": { "bsonType": "object", "additionalProperties": true } },
+            "phones": { "bsonType": ["array", "null"], "items": { "bsonType": "object", "additionalProperties": true } },
+            "identifiers": { "bsonType": ["array", "null"], "items": { "bsonType": "object", "additionalProperties": true } },
+            "fingerprints": { "bsonType": ["object", "null"], "additionalProperties": true },
+            "firstSeenAt": { "bsonType": ["double", "long", "int"] },
+            "lastSeenAt": { "bsonType": ["double", "long", "int"] },
+            "createdAt": { "bsonType": ["double", "long", "int"] }
+        },
+        "additionalProperties": true
+    },
+    person_profile_links: {
+        "bsonType": "object",
+        "title": "person_profile_links",
+        "properties": {
+            "businessId": { "bsonType": ["objectId", "string"] },
+            "personId": { "bsonType": ["objectId", "string", "null"] },
+            "profileId": { "bsonType": ["objectId", "string", "null"] },
+            "linkType": { "bsonType": ["string", "null"] },
+            "isHardLink": { "bsonType": ["bool", "null"] },
+            "confidence": { "bsonType": ["double", "long", "int", "null"] },
+            "signals": { "bsonType": ["object", "null"], "additionalProperties": true },
+            "createdAt": { "bsonType": ["double", "long", "int", "null"] }
+        },
+        "additionalProperties": true
+    }
 };
 
 // Keep the original strict schemas for reference
