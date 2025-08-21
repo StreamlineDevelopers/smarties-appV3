@@ -15,6 +15,7 @@ import {
     subscriptionManager
 } from 'redisvent-module';
 import axios from "axios";
+import PredefinedAnswerClient from 'predefined-answer-client';
 
 const messageData = [
     {
@@ -74,10 +75,14 @@ export const TAB = {
 export const INTERACTION = {
     LOADING_MESSAGE: "loadingMessage",
     LOADING_INBOX: "loadingInbox",
+    LOADING_SUGGESTIONS: "loadingSuggestions",
     INBOX: "inbox",
     CURRENT: "currentInteraction",
     MESSAGE_TEXT: 'text',
     MESSAGES: "messages",
+    PREDEFINED_ANSWERS: "predefinedAnswers",
+    SUGGESTIONS: "suggestions",
+    LATEST_INTERACTION: "latestInteraction",
 }
 
 // Global initialization state
@@ -141,6 +146,8 @@ class MessagingWatcher extends Watcher2 {
     #sessionId = null;
     #businessId = "63b81a722f8146be93163e3e";
     #interactionData = null;
+    #pamClient = null;
+    #predefinedAnswers = [];
     constructor(parent) {
         super(parent);
         this.setValue(TAB.MESSAGES, 'all');
@@ -159,6 +166,7 @@ class MessagingWatcher extends Watcher2 {
 
         this.listening = false;
         this.initialized = false;
+
     }
     get DB() {
         return this.#data;
@@ -171,11 +179,44 @@ class MessagingWatcher extends Watcher2 {
     async initialize() {
         // Ensure RedisVent is connected
         await initializeRedisVent();
+        if (!this.#pamClient) {
+            await this.initializePredefinedAnswer();
+            // check if there is any predefined answer
+            const res = await this.getPredefinedAnswersByBusinessId();
 
+            // #NOTE: remove if the adding of predefined answer in UI is made
+            if (res.length === 0) {
+                await this.addPredefinedAnswer({
+                    businessId: this.#businessId,
+                    title: "Sample Predefined Answer",
+                    body: "This is a sample predefined answer",
+                    status: "approved",
+                    locale: "en-US",
+                    tags: ["sample", "predefined", "answer"]
+                });
+
+                this.getPredefinedAnswersByBusinessId();
+            }
+        }
         // Subscribe to space
         if (!syncManager.subscribedSpaces.has('inboxapp')) {
             syncManager.subscribeToSpace('inboxapp');
         }
+    }
+
+    async initializePredefinedAnswer() {
+        if (this.#pamClient) return;
+        const data = await this.ensureConfig();
+        try {
+            this.#pamClient = new PredefinedAnswerClient({
+                serverUrl: data.predefinedAnswer.serverUrl,
+                apiKey: data.predefinedAnswer.apiKey,
+                refreshEndpoint: data.predefinedAnswer.refreshEndpoint
+            });
+        } catch (error) {
+            toast.error("Failed to initialize predefined answer", TOAST_STYLE.ERROR);
+        }
+
     }
 
     async getAll() {
@@ -318,6 +359,9 @@ class MessagingWatcher extends Watcher2 {
                 });
                 // get the latestInteraction from the latestInteractionId
                 const latestInteraction = transformedMessages.find(interaction => interaction.id.includes(latestInteractionId));
+                this.setValue(INTERACTION.LATEST_INTERACTION, latestInteraction);
+                const isAgent = this.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? false;
+                if (latestInteraction.direction === 'inbound' && !isAgent) this.fetchSuggestions(latestInteraction.message);
                 // get the sessionId in latestInteraction.attributes
                 // set latest interaction data
                 const sessionId = latestInteraction.attributes.find(attribute => attribute.key === 'sessionId')?.value;
@@ -419,6 +463,8 @@ class MessagingWatcher extends Watcher2 {
                 'Authorization': `Basic ${auth}`
             }
         })
+        const latestInteraction = this.getValue(INTERACTION.LATEST_INTERACTION);
+        if (res.data.status === 'human' && latestInteraction.direction === 'inbound') this.fetchSuggestions(latestInteraction.message);
         this.setValue(TOGGLE.SMARTIES_ASSISTANT, !(res.data.status === 'human'));
     }
 
@@ -431,17 +477,105 @@ class MessagingWatcher extends Watcher2 {
         const data = await this.ensureConfig();
         const auth = btoa(`${data.auth.username}:${data.auth.password}`);
         const res = await axios.get(data.smartiesAssistant.isHumanUrl, {
-            sessionId: this.#sessionId
-        }, {
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': `Basic ${auth}`
+                "Authorization": `Basic ${auth}`
+            },
+            params: {
+                sessionId: this.#sessionId,
             }
         });
         if (res.status === 200) {
             this.setValue(TOGGLE.SMARTIES_ASSISTANT, !(res.data.status === 'human'));
         } else {
             toast.error("Failed to check Smarties Assistant Status", TOAST_STYLE.ERROR);
+        }
+    }
+
+    async fetchSuggestions(query) {
+        try {
+            this.setValue(INTERACTION.LOADING_SUGGESTIONS, true);
+            const data = await this.ensureConfig();
+            const auth = btoa(`${data.auth.username}:${data.auth.password}`);
+            const res = await axios.post(data.suggestion.url,
+                {
+                    query,
+                    min: data.suggestion.min,
+                    max: data.suggestion.max
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Authorization': `Basic ${auth}`
+                    }
+                });
+            if (res.status === 200 && res.data.output) this.setValue(INTERACTION.SUGGESTIONS, res.data.output.suggestions);
+            else toast.error("Failed to fetch suggestions", TOAST_STYLE.ERROR);
+            this.setValue(INTERACTION.LOADING_SUGGESTIONS, false);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to fetch suggestions" + error, TOAST_STYLE.ERROR);
+            this.setValue(INTERACTION.LOADING_SUGGESTIONS, false);
+        }
+
+    }
+
+    /** Predefined Answer */
+
+    async addPredefinedAnswer({ title, body, locale, tags }) {
+        try {
+            if (!this.#pamClient) await this.initializePredefinedAnswer();
+            const res = await this.#pamClient.addPredefinedAnswer({
+                businessId: this.#businessId,
+                title,
+                body,
+                locale,
+                tags,
+            });
+            if (res) {
+                toast.success("Predefined answer added successfully", TOAST_STYLE.SUCCESS);
+                this.getPredefinedAnswersByBusinessId();
+            }
+            else toast.error("Failed to add predefined answer", TOAST_STYLE.ERROR);
+        } catch (error) {
+            toast.error("Failed to add predefined answer", TOAST_STYLE.ERROR);
+        }
+
+    }
+
+    async getPredefinedAnswersByBusinessId() {
+        try {
+            if (!this.#pamClient) await this.initializePredefinedAnswer();
+            const res = await this.#pamClient.getPredefinedAnswersByBusinessId(this.#businessId);
+            if (res.ok) {
+                this.setValue(INTERACTION.PREDEFINED_ANSWERS, res.data);
+                return res.data;
+            }
+            else toast.error("Failed to fetch predefined answers", TOAST_STYLE.ERROR);
+        } catch (error) {
+            toast.error("Failed to fetch predefined answers", TOAST_STYLE.ERROR);
+        }
+    }
+
+    async updatePredefinedAnswer(id, payload) {
+        try {
+            if (!this.#pamClient) await this.initializePredefinedAnswer();
+            const res = await this.#pamClient.updatePredefinedAnswer(id, payload);
+            if (res) toast.success("Predefined answer updated successfully", TOAST_STYLE.SUCCESS);
+            else toast.error("Failed to update predefined answer", TOAST_STYLE.ERROR);
+        } catch (error) {
+            toast.error("Failed to update predefined answer", TOAST_STYLE.ERROR);
+        }
+    }
+
+    async deletePredefinedAnswer(id) {
+        try {
+            if (!this.#pamClient) await this.initializePredefinedAnswer();
+            const res = await this.#pamClient.deletePredefinedAnswer(id);
+            if (res) toast.success("Predefined answer deleted successfully", TOAST_STYLE.SUCCESS);
+            else toast.error("Failed to delete predefined answer", TOAST_STYLE.ERROR);
+        } catch (error) {
+            toast.error("Failed to delete predefined answer", TOAST_STYLE.ERROR);
         }
     }
 
@@ -556,9 +690,17 @@ class MessagingWatcher extends Watcher2 {
                                 attachments: change.data.payload?.attachmentsList || [],
                                 status: change.data.status,
                                 timestamp: change.data.createdAt,
-                                attributes: decodeAttributeList(change.data.attributesList),
+                                attributes: change.data.attributes,
                                 sender: change.data.direction === 'inbound' ? 'User' : 'Agent'
                             }
+                            // find the sessionId in the attributes
+                            const sessionId = change.data.attributes.find(attribute => attribute.key === 'sessionId')?.value;
+                            if (sessionId !== this.#sessionId) {
+                                this.#sessionId = sessionId;
+                                await this.checkSmartiesAssistantStatus(sessionId);
+                            }
+                            const isAgent = this.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? false;
+                            if (data.direction === 'inbound' && data.message && !isAgent) this.fetchSuggestions(data.message);
                             await this.#interactionData.insert(data);
                         }
                         console.log('Interaction added:', change.data);

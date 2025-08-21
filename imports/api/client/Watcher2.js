@@ -32,6 +32,16 @@ class Watcher2 extends Watcher {
                     },
                     smartiesAssistant: {
                         isHumanUrl: cfg.client?.smartiesAssistant?.isHumanUrl || ""
+                    },
+                    suggestion: {
+                        url: cfg.client?.suggestion?.url || "",
+                        min: cfg.client?.suggestion?.min || 1,
+                        max: cfg.client?.suggestion?.max || 1
+                    },
+                    predefinedAnswer: {
+                        serverUrl: cfg.predefined?.serverurl || "",
+                        apiKey: cfg.predefined?.apikey || "",
+                        refreshEndpoint: cfg.predefined?.refreshendpoint || ""
                     }
                 };
                 Watcher2._config = mapped;
