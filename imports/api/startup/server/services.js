@@ -21,5 +21,17 @@ Package.addService({
 }, "configuration", { ConfigService: require("../../server/services/ConfigService").default });
 
 Package.addService({
+    file: "tmq/SalesEnablement.proto", ServiceNames: ["SalesEnablementService"], auth: false
+}, "sales", { SalesEnablementService: require("../../server/services/SalesEnablement").default });
+
+Package.addService({
+    file: "tmq/ContentCreation.proto", ServiceNames: ["ContentCreationService"], auth: false
+}, "content", { ContentCreationService: require("../../server/services/ContentCreation").default });
+
+Package.addService({
+    file: "tmq/CustomerEngagement.proto", ServiceNames: ["CustomerEngagementService"], auth: false
+}, "customer", { CustomerEngagementService: require("../../server/services/CustomerEngagement").default });
+
+Package.addService({
     file: "tmq/takeover.proto", ServiceNames: ["TakeoverService"], auth: false
 }, "takeover", { TakeoverService: require("../../server/services/TakeoverService").default });

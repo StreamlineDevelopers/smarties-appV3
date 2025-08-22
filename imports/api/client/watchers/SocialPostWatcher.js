@@ -6,6 +6,8 @@ import { toast } from 'sonner';
 import { TOAST_STYLE } from "../../common/const";
 import { Accounts } from 'meteor/tmq:accounts';
 import { socialContentItems, socialTopics } from "./data/social";
+import ContentCreation from "../modules/ContentCreation";
+
 const { Adapter, Logger } = core;
 
 Adapter.Meteor = Meteor;
@@ -60,6 +62,8 @@ export const SOCIAL_POST = {
     TOPICS: 'topics',
     CONTENT: 'content',
     CONTENT_GENERATED: 'contentGenerated',
+    ORIGINAL_AI_CONTENT: 'originalAiContent',
+    CONTENT_ARGUMENTS: 'contentArguments',
 }
 
 class SocialPost extends Watcher2 {
@@ -70,6 +74,7 @@ class SocialPost extends Watcher2 {
     constructor(parent) {
         super(parent);
         this.setValue(STEPS.CURRENT_POSITION, 0);
+        this.contentRequest = new ContentCreation((hex, data) => this.parent.callFunc(hex, data));
     }
 
     goNext() {
@@ -109,6 +114,7 @@ class SocialPost extends Watcher2 {
                     console.log("No frequency selected.");
                     return false;
                 }
+                this.getTopics({ categories: 'all' });
                 return true;
             }
 
@@ -118,6 +124,12 @@ class SocialPost extends Watcher2 {
                     console.log("No trending topic selected.");
                     return false;
                 }
+                console.log("Generating content...");
+                this.generateContent({
+                    topic: "Sustainable Living Tips",
+                    tone: "conversational",
+                    targetAudience: "environmentally conscious listeners",
+                });
                 return true;
             }
 
@@ -189,6 +201,123 @@ class SocialPost extends Watcher2 {
             frequency,
             topic,
             content
+        });
+    }
+
+
+    getTopics({ categories = "all" }) {
+        this.contentRequest.getLatestTrends({
+            categories: categories,
+            userId: "123"
+        }).then((res) => {
+            console.log(res);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+
+    /*
+    * Generate content with AI STEP 3 (to be used after selecting topics to generate content)
+    * @param {Object} params - Content generation parameters
+    * @param {string} params.topic - Content topic
+    * @param {string} params.tone - Content tone
+    * @param {string} params.targetAudience - Content target audience
+    */
+    generateContent({topic, tone = "conversational", targetAudience = "general public", currentTrends = []}) {
+        this.setValue(SOCIAL_POST.LOADING_CONTENT, true);
+        this.contentRequest.generateContent({
+            format: "social-media",
+            topic: topic,
+            currentTrends: currentTrends,
+            userId: "123",
+            options: {
+                tone: tone,
+                targetAudience: targetAudience,
+                length: "100",
+            }
+        }).then((res) => {
+            this.setValue(SOCIAL_POST.LOADING_CONTENT, false);
+            this.setValue(SOCIAL_POST.ORIGINAL_AI_CONTENT, res.content);
+            this.setValue(SOCIAL_POST.CONTENT_ARGUMENTS, {
+                tone: tone,
+                targetAudience: targetAudience,
+                length: "100",
+            });
+            this.analyzeContent({
+                content: res.content,
+                criteria: ["tone", "reading-level", "seo-optimization"],
+                targetAudience: targetAudience,
+                contentType: "social-media",
+                keywords: [],
+            });
+            console.log(res);
+        }).catch((err) => {
+            this.setValue(SOCIAL_POST.LOADING_CONTENT, false);
+            console.log(err);
+        });
+    }
+
+    /*
+    * Analyze content with AI (run when user wants to analyze content)
+    * @param {Object} params - Content analysis parameters
+    * @param {string} params.content - Content to analyze
+    * @param {Array} params.criteria - Content criteria
+    * @param {string} params.targetAudience - Content target audience
+    * @param {string} params.contentType - Content type
+    * @param {Array} params.keywords - Content keywords
+    */
+    analyzeContent({
+        content,
+        criteria = ["tone", "reading-level", "seo-optimization"],
+        targetAudience = "general public",
+        contentType = "social-media",
+        keywords = [],
+        userId = "123"
+    }) {
+        if (!content) {
+            toast.error("No content to analyze. Please generate content first.", {
+                style: TOAST_STYLE.ERROR,
+            });
+            return;
+        }
+        this.setValue(SOCIAL_POST.LOADING_CONTENT, true);
+        this.contentRequest.analyzeContent({
+            content: content,
+            criteria: criteria,
+            targetAudience: targetAudience,
+            contentType: contentType,
+            keywords: keywords,
+            userId: "123"
+        }).then((res) => {
+            console.log(res);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    /*
+    * Search images with AI (run when user wants to search images)
+    * @param {Object} params - Image search parameters
+    * @param {string} params.query - Image search query
+    * @param {Object} params.options - Image search options
+    */
+    searchImages({query, options}) {
+        const mergedOptions = {
+            perPage: options.perPage || 5,
+            orientation: options.orientation || "landscape",
+            size: options.size || "small",
+            color: options.color || "black"
+        }
+        contentRequest.searchImages({
+            query: query,
+            apiKey: "", // leave as empty string
+            userId: "", // leave as empty string
+            options: mergedOptions
+        }).then((res) => {
+            console.log(res);
+        }).catch((err) => {
+            console.log(err);
         });
     }
 }
