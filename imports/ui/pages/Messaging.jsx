@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import MaincontentLayout_a2a4d449 from '../components/MaincontentLayout_a2a4d449';
 import SidebarLayout from '../components/SidebarLayout';
 import TopbarLayout_e018487f from '../components/TopbarLayout_e018487f';
@@ -16,8 +16,15 @@ import PredefinedmessageitemcontentItem from '../components/Predefinedmessageite
 import PredefinedmessageitemeditItem from '../components/PredefinedmessageitemeditItem';
 import WformdoneItem from '../components/WformdoneItem';
 import WformfailItem from '../components/WformfailItem';
+import MessagingWatcher, { INTERACTION } from '../../api/client/watchers/MessagingWatcher';
+import { useWatcher } from '../../api/client/Watcher2';
 
 const Messaging = () => {
+  const watcher = useRef(MessagingWatcher).current;
+  useWatcher(watcher);
+
+  const isPredefinedAnswerPopup = watcher.getValue("POPUP.PREDEFINED_ANSWER") ?? false;
+  const predefinedAnswers = watcher.getValue(INTERACTION.PREDEFINED_ANSWERS);
   return (
     <>
       <div className={'page-wrap'}>
@@ -216,12 +223,13 @@ const Messaging = () => {
             </div>
           </div>
         </div>
-        <div className={'popup-predefinedmessagesmanage'}>
+        <div className={'popup-predefinedmessagesmanage'} style={{ display: isPredefinedAnswerPopup ? 'flex' : 'none' }}>
           <div className={'popup-card _w-50'}>
             <CardsettingshddivItem_3964fe2e divText={'Predefined Messages'} />
             <div
               data-w-id={'15a540b7-31e9-8d30-23a0-1780e9d44c18'}
               className={'popup-close'}
+              onClick={() => watcher.setValue("POPUP.PREDEFINED_ANSWER", false)}
             >
               <img src={'images/smarties-x.svg'} loading={'lazy'} alt={''} />
             </div>
@@ -245,16 +253,18 @@ const Messaging = () => {
                       placeholder={'+ Add New Message'}
                       type={'text'}
                       id={'addmessage'}
+                      onChange={(e) => watcher.setValue("PREDEFINED_ANSWER.BODY", e.target.value)}
                     />
                     <a
                       data-w-id={'a5a8b9a5-7b8d-f8eb-3219-5f06b744c7a0'}
                       href={'#'}
                       className={'btn-style1 w-inline-block'}
+                      onClick={() => watcher.addPredefinedAnswer({ body: watcher.getValue("PREDEFINED_ANSWER.BODY") })}
                     >
                       <div className={'btn-icon'}>
                         <img
                           loading={'lazy'}
-                          src={'images/Search.svg'}
+                          src={'/images/SearchPlus.svg'}
                           alt={''}
                         />
                       </div>
@@ -262,14 +272,21 @@ const Messaging = () => {
                     </a>
                   </div>
                   <div className={'predefinedmessage-list'}>
-                    <PredefinedmessageitemItem
-                      divText={'Thank you for Contacting Us'}
-                      dataWId={'29ed52c6-4b8b-54d0-8d09-eecab356bbd0'}
-                      dataWId1={'a8fd72d0-20c2-081c-fda7-5e6e895e1552'}
-                      dataWId2={'e9961061-815e-bc1d-0680-25a48e920598'}
-                      dataWId3={'e9961061-815e-bc1d-0680-25a48e92059a'}
-                    />
-                    <PredefinedmessageitemItem
+                    {predefinedAnswers && predefinedAnswers.length > 0 && predefinedAnswers.map((answer) => {
+                      return (
+                        <PredefinedmessageitemItem
+                          key={answer._id}
+                          id={answer._id}
+                          divText={answer.body}
+                          status={answer.status}
+                          dataWId={'29ed52c6-4b8b-54d0-8d09-eecab356bbd0'}
+                          dataWId1={'a8fd72d0-20c2-081c-fda7-5e6e895e1552'}
+                          dataWId2={'e9961061-815e-bc1d-0680-25a48e920598'}
+                          dataWId3={'e9961061-815e-bc1d-0680-25a48e92059a'}
+                        />
+                      )
+                    })}
+                    {/* <PredefinedmessageitemItem
                       divText={"I'll check that for you"}
                       dataWId={'a2f45c9b-47a5-3640-95a4-d6508887b6de'}
                       dataWId1={'a2f45c9b-47a5-3640-95a4-d6508887b6e6'}
@@ -282,7 +299,7 @@ const Messaging = () => {
                       dataWId1={'a4d0aa35-fb0d-9a99-cfde-d9b554c82c61'}
                       dataWId2={'a4d0aa35-fb0d-9a99-cfde-d9b554c82c68'}
                       dataWId3={'a4d0aa35-fb0d-9a99-cfde-d9b554c82c6a'}
-                    />
+                    /> */}
                     <div className={'predefinedmessage-item new'}>
                       <div className={'predefinedmessage-drag'}>
                         <img

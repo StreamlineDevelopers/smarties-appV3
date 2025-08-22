@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 import { TOAST_STYLE } from "../../common/const";
 // import { Accounts } from 'meteor/tmq:accounts';
 const { Adapter, Logger } = core;
-import messageService from "../../common/static_codegen/tmq/message_pb";
 import inboxService from "../../common/static_codegen/tmq/inbox_pb";
 import interactionService from "../../common/static_codegen/tmq/interaction_pb";
 import takeoverService from "../../common/static_codegen/tmq/takeover_pb";
@@ -522,7 +521,7 @@ class MessagingWatcher extends Watcher2 {
     }
 
     /** Predefined Answer */
-    async addPredefinedAnswer({ title, body, locale, tags }) {
+    async addPredefinedAnswer({ title = "", body = "", locale = "en-US", tags = [] }) {
         try {
             if (!this.#pamClient) await this.initializePredefinedAnswer();
             const res = await this.#pamClient.addPredefinedAnswer({
@@ -561,7 +560,10 @@ class MessagingWatcher extends Watcher2 {
         try {
             if (!this.#pamClient) await this.initializePredefinedAnswer();
             const res = await this.#pamClient.updatePredefinedAnswer(id, payload);
-            if (res) toast.success("Predefined answer updated successfully", TOAST_STYLE.SUCCESS);
+            if (res) {
+                toast.success("Predefined answer updated successfully", TOAST_STYLE.SUCCESS);
+                this.getPredefinedAnswersByBusinessId();
+            }
             else toast.error("Failed to update predefined answer", TOAST_STYLE.ERROR);
         } catch (error) {
             toast.error("Failed to update predefined answer", TOAST_STYLE.ERROR);
@@ -572,7 +574,10 @@ class MessagingWatcher extends Watcher2 {
         try {
             if (!this.#pamClient) await this.initializePredefinedAnswer();
             const res = await this.#pamClient.deletePredefinedAnswer(id);
-            if (res) toast.success("Predefined answer deleted successfully", TOAST_STYLE.SUCCESS);
+            if (res) {
+                toast.success("Predefined answer deleted successfully", TOAST_STYLE.SUCCESS);
+                this.getPredefinedAnswersByBusinessId();
+            }
             else toast.error("Failed to delete predefined answer", TOAST_STYLE.ERROR);
         } catch (error) {
             toast.error("Failed to delete predefined answer", TOAST_STYLE.ERROR);
