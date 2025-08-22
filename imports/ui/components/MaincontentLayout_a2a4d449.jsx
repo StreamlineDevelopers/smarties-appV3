@@ -374,9 +374,7 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                                   }
                                   dataWId={'2ee757d2-bd3e-4a12-ca0b-9190293817ff'}
                                 />
-                                <div className={'messaging-inbox-user-tag'}>
-                                  {data.tag}
-                                </div>
+                                <div className="messaging-inbox-user-tag">PROSPECT</div>
                               </div>
                               <div className={'messaging-inbox-textcontent'}>
                                 <div className={'messaging-inbox-textcontent-top'}>
@@ -392,16 +390,14 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                                       />
                                     </div>
                                     <div className={'messaging-inbox-preview'}>
-                                      {
-                                        'I’m having trouble with the system not saving...'
-                                      }
+                                      {truncateText(data.latestSnippet)}
                                     </div>
                                   </div>
                                 </div>
                                 <MessaginginboxtextcontentbotItem_6121060c
                                   divText={'Pricing inquiry'}
                                   dataWId={'b4729139-7f78-8afa-aaa9-4ab7545ae1b0'}
-                                  divText1={'2:15 PM'}
+                                  divText1={moment(data.latestAt).format('hh:mm A')}
                                 />
                               </div>
                             </div>
@@ -775,7 +771,100 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                         <div className={'messaging-handling-agent-bg'} style={{ display: isSmartiesAssistantToggled ? 'block' : 'none' }}></div>
                       </div>
                     </div>
-                    <div className={'messaging-main-conversation-div'}>
+                    <div className={'messaging-main-conversation-div'} ref={conversationDivRef}>
+                      <div className={'convo-divider'}>
+                        <div className={'convo-divider-content'}>
+                          <div>{'Conversation Started'}</div>
+                        </div>
+                      </div>
+                      {messageList.length && messageList.map((data, index) => {
+                        const previous = index > 0 ? messageList[index - 1] : null;
+                        const currentMedium = (data && data.medium) ? data.medium : 'chat';
+                        const previousMedium = (previous && previous.medium) ? previous.medium : null;
+                        const shouldShowDivider = index === 0 || previousMedium !== currentMedium;
+
+                        const inboundContent = (
+                          <div className="convo-inbound">
+                            <div className="convo-inbound-avatar">
+                              <img
+                                loading="lazy"
+                                src="/images/smarties-avatar-01_1smarties-avatar-01.png"
+                                alt=""
+                              />
+                              <div className="message-type-div">
+                                <div
+                                  data-w-id="915b5944-3838-0891-c296-c45dd45ff477"
+                                  className="message-type"
+                                >
+                                  <img
+                                    src={data.medium === 'chat' ? '/images/smarties-avatar-icon-chat.svg' : '/images/smarties-avatar-icon-call.svg'}
+                                    loading="lazy"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="message-type-tooltip" style={{ display: "none" }}>
+                                  <div>
+                                    {data.medium === 'chat' ? 'Chat' : 'Call'}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="convo-bubble-inbound">
+                              <div>
+                                {data.message}
+                              </div>
+                            </div>
+                            <ConvoinbounddurationItem
+                              dataWId="d2601b0f-93ed-ec78-d431-297ce3d04872"
+                              divText={moment(data.timestamp).format('h:mm A')}
+                            />
+                          </div>
+                        );
+
+                        const outboundContent = (
+                          <div className="convo-outbound">
+                            <ConvoinbounddurationItem
+                              dataWId="40de4617-1996-b595-f7c8-2ed436404f34"
+                              divText={moment(data.timestamp).format('h:mm A')}
+                            />
+                            <div className="convo-bubble-outbound">
+                              <div>
+                                {data.message}
+                              </div>
+                            </div>
+                            <div className="convo-bot-avatar">
+                              <img
+                                loading="lazy"
+                                src="images/smarties-head.png"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        );
+
+                        return (
+                          <React.Fragment key={index}>
+                            {shouldShowDivider && (
+                              currentMedium === 'call' ? (
+                                <CallconvodividerItem
+                                  src={'images/smarties-avatar-icon-call.svg'}
+                                  divText={`Call started • ${moment(data.timestamp).format('h:mm A')}`}
+                                />
+                              ) : (
+                                <ConvodividerItem
+                                  src={'images/smarties-head.png'}
+                                  divText={'SMARTIES is responding in real-time'}
+                                />
+                              )
+                            )}
+                            {data.direction === 'inbound' ? inboundContent : outboundContent}
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
+                    {/* <div className={'messaging-main-conversation-div'}>
+
                       <div className={'convo-divider'}>
                         <div className={'convo-divider-content'}>
                           <div>{'Conversation Started'}</div>
@@ -983,7 +1072,8 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                           divText={'10:30 AM'}
                         />
                       </div>
-                    </div>
+                   
+                    </div> */}
                   </div>
                   <div className={'messaging-main-bot'}>
                     <div className={'callinprogress-row'}>
@@ -1359,7 +1449,17 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                           {answer.body}
                         </div>
                       ))}
+                      <div className="quickreply-add" onClick={() => {
+                        watcher.setValue("POPUP.PREDEFINED_ANSWER", true)
+                      }}>
+                        <img
+                          src="/images/smarties-quickrep-icon-06.svg"
+                          loading="lazy"
+                          alt=""
+                        />
+                      </div>
                     </div>
+
                   </div>
                 </div>
               </form>

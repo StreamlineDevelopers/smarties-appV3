@@ -1,28 +1,59 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-const WcheckboxItem_6efddfff = ({ dataWId }) => {
+const WcheckboxItem_6efddfff = ({ status = "approved" }) => {
+  const [checked, setChecked] = useState(false);
+  const instanceIdRef = useRef(`toggle-${Math.random().toString(36).slice(2)}`);
+
+  useEffect(() => {
+    setChecked(status === "approved");
+  }, [status]);
+
   return (
-    <label className={'w-checkbox togglecheck_container'}>
+    <div
+      role="switch"
+      aria-checked={checked}
+      onClick={() => setChecked((prev) => !prev)}
+      data-instance-id={instanceIdRef.current}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        cursor: 'pointer',
+        userSelect: 'none'
+      }}
+    >
       <div
-        className={
-          'w-checkbox-input w-checkbox-input--inputType-custom togglecheck w--redirected-checked'
-        }
-        data-w-id={dataWId || '29ed52c6-4b8b-54d0-8d09-eecab356bbd0'}
-      ></div>
-      <input
-        type={'checkbox'}
-        name={'checkbox-8'}
-        id={'checkbox-8'}
-        data-name={'Checkbox 8'}
-        style={{ opacity: '0', position: 'absolute', zIndex: '-1' }}
-        checked
-      />
-      <span className={'checkbox-label-3 w-form-label'} htmlFor={'checkbox-8'}>
-        {'I Agree'}
-      </span>
-      <div className={'toggletext-active'}>{'Active'}</div>
-      <div className={'toggletext-inactive'}>{'Inactive'}</div>
-    </label>
+        style={{
+          position: 'relative',
+          width: 40,
+          minWidth: 40,
+          height: 20,
+          minHeight: 20,
+          borderRadius: 100,
+          backgroundColor: checked ? '#ff752b' : '#ced7e0',
+          transition: 'background-color .2s'
+        }}
+      >
+        <span
+          aria-hidden
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: checked ? 23 : 3,
+            transform: 'translateY(-50%)',
+            width: 14,
+            height: 14,
+            borderRadius: '50%',
+            background: '#fff',
+            boxShadow: '0 0 0 1px rgba(255,117,43,0.25)',
+            transition: 'left .2s'
+          }}
+        />
+      </div>
+      <div style={{ color: '#333c', fontSize: 12, lineHeight: 1.2 }}>
+        {checked ? 'Active' : 'Inactive'}
+      </div>
+    </div>
   );
 };
 
