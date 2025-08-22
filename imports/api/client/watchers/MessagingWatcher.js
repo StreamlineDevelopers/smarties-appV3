@@ -9,6 +9,7 @@ const { Adapter, Logger } = core;
 import messageService from "../../common/static_codegen/tmq/message_pb";
 import inboxService from "../../common/static_codegen/tmq/inbox_pb";
 import interactionService from "../../common/static_codegen/tmq/interaction_pb";
+import takeoverService from "../../common/static_codegen/tmq/takeover_pb";
 import {
     collectionManager,
     syncManager,
@@ -450,22 +451,21 @@ class MessagingWatcher extends Watcher2 {
     }
 
     async toggleSmartiesAssistant() {
-        const value = this.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? true;
-        const data = await this.ensureConfig();
-        const auth = btoa(`${data.auth.username}:${data.auth.password}`);
-        const res = await axios.post(data.smartiesAssistant.isHumanUrl, {
-            sessionId: this.#sessionId,
-            state: value ? 'human' : 'bot',
-            // takeover: !value
-        }, {
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Basic ${auth}`
-            }
-        })
-        const latestInteraction = this.getValue(INTERACTION.LATEST_INTERACTION);
-        if (res.data.status === 'human' && latestInteraction.direction === 'inbound') this.fetchSuggestions(latestInteraction.message);
-        this.setValue(TOGGLE.SMARTIES_ASSISTANT, !(res.data.status === 'human'));
+        try {
+            const value = this.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? true;
+            const req = new proto.tmq.ToggleStatusRequest();
+            req.setSessionid(this.#sessionId);
+            req.setState(value ? 'human' : 'bot');
+            const { err, result } = await this.Parent.callFunc(0x9e2202ca, req);
+            if (err) toast.error("Failed to toggle Smarties Assistant", TOAST_STYLE.ERROR);
+            const response = proto.tmq.StatusResponse.deserializeBinary(result);
+            const responseObj = response.toObject();
+            if (responseObj.success) this.setValue(TOGGLE.SMARTIES_ASSISTANT, !(responseObj.state === 'human'));
+            else toast.error("Failed to toggle Smarties Assistant", TOAST_STYLE.ERROR);
+        } catch (error) {
+            console.error("Error toggling Smarties Assistant:", error);
+            toast.error("Failed to toggle Smarties Assistant", TOAST_STYLE.ERROR);
+        }
     }
 
     async checkSmartiesAssistantStatus(sessionId = null) {
@@ -474,21 +474,22 @@ class MessagingWatcher extends Watcher2 {
             toast.warning("Session ID not found", TOAST_STYLE.WARNING);
             return;
         }
-        const data = await this.ensureConfig();
-        const auth = btoa(`${data.auth.username}:${data.auth.password}`);
-        const res = await axios.get(data.smartiesAssistant.isHumanUrl, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Basic ${auth}`
-            },
-            params: {
-                sessionId: this.#sessionId,
-            }
-        });
-        if (res.status === 200) {
-            this.setValue(TOGGLE.SMARTIES_ASSISTANT, !(res.data.status === 'human'));
-        } else {
+        try {
+            const req = new proto.tmq.CheckStatusRequest();
+            if (typeof sessionId === 'string') req.setSessionid(sessionId);
+            else req.setSessionid(sessionId.toString());
+            // req.setSessionid(sessionId);
+            const { err, result } = await this.Parent.callFunc(0x6f678e77, req);
+            if (err) toast.error("Failed to check Smarties Assistant Status", TOAST_STYLE.ERROR);
+            const response = proto.tmq.StatusResponse.deserializeBinary(result);
+            const responseObj = response.toObject();
+            if (responseObj.success) this.setValue(TOGGLE.SMARTIES_ASSISTANT, !(responseObj.state === 'human'));
+            else toast.error("Failed to check Smarties Assistant Status", TOAST_STYLE.ERROR);
+        } catch (error) {
+            console.error("Error checking Smarties Assistant Status:", error);
             toast.error("Failed to check Smarties Assistant Status", TOAST_STYLE.ERROR);
+        } finally {
+            this.setValue(INTERACTION.LOADING_SUGGESTIONS, false);
         }
     }
 
@@ -521,7 +522,6 @@ class MessagingWatcher extends Watcher2 {
     }
 
     /** Predefined Answer */
-
     async addPredefinedAnswer({ title, body, locale, tags }) {
         try {
             if (!this.#pamClient) await this.initializePredefinedAnswer();
