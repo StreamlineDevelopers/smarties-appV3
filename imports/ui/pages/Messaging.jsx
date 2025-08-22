@@ -1,7 +1,8 @@
 import React from 'react';
-import MaincontentLayout_70481141 from '../components/MaincontentLayout_70481141';
+import MaincontentLayout_a2a4d449 from '../components/MaincontentLayout_a2a4d449';
 import SidebarLayout from '../components/SidebarLayout';
-import TopbarLayout_bfbd8ad8 from '../components/TopbarLayout_bfbd8ad8';
+import TopbarLayout_e018487f from '../components/TopbarLayout_e018487f';
+import CardsettingshddivItem_3964fe2e from '../components/CardsettingshddivItem_3964fe2e';
 import TablecelldivItem from '../components/TablecelldivItem';
 import TablecelldivItem_1074fda0 from '../components/TablecelldivItem_1074fda0';
 import TablecelldivItem_e2b278af from '../components/TablecelldivItem_e2b278af';
@@ -10,20 +11,22 @@ import TablecelldivItem_32fbc566 from '../components/TablecelldivItem_32fbc566';
 import TablecelldivItem_131c18fd from '../components/TablecelldivItem_131c18fd';
 import TablecelldivItem_36735cb6 from '../components/TablecelldivItem_36735cb6';
 import TablecelldivItem_5d77e023 from '../components/TablecelldivItem_5d77e023';
-import { Toaster } from 'sonner';
+import PredefinedmessageitemItem from '../components/PredefinedmessageitemItem';
+import PredefinedmessageitemcontentItem from '../components/PredefinedmessageitemcontentItem';
+import PredefinedmessageitemeditItem from '../components/PredefinedmessageitemeditItem';
+import WformdoneItem from '../components/WformdoneItem';
+import WformfailItem from '../components/WformfailItem';
 
 const Messaging = () => {
   return (
     <>
       <div className={'page-wrap'}>
-        <MaincontentLayout_70481141 />
+        <MaincontentLayout_a2a4d449 />
         <SidebarLayout />
-        <TopbarLayout_bfbd8ad8 />
+        <TopbarLayout_e018487f />
         <div className={'popup-dataenrichment'}>
           <div className={'popup-card _w-70'}>
-            <div className={'card-settings-hd-div'}>
-              <div className={'card-settings-hd'}>{'Data Enrichment'}</div>
-            </div>
+            <CardsettingshddivItem_3964fe2e divText={'Data Enrichment'} />
             <div
               data-w-id={'01e36d25-1069-b8b4-9bb5-3938bbc89703'}
               className={'popup-close'}
@@ -213,8 +216,100 @@ const Messaging = () => {
             </div>
           </div>
         </div>
+        <div className={'popup-predefinedmessagesmanage'}>
+          <div className={'popup-card _w-50'}>
+            <CardsettingshddivItem_3964fe2e divText={'Predefined Messages'} />
+            <div
+              data-w-id={'15a540b7-31e9-8d30-23a0-1780e9d44c18'}
+              className={'popup-close'}
+            >
+              <img src={'images/smarties-x.svg'} loading={'lazy'} alt={''} />
+            </div>
+            <div className={'popup-predefinedmessage-body'}>
+              <div className={'predefinedmessage-formblock w-form'}>
+                <form
+                  id={'wf-form-predefined-message-form'}
+                  name={'wf-form-predefined-message-form'}
+                  data-name={'predefined message form'}
+                  method={'get'}
+                  className={'predefinedmessage-form'}
+                  data-wf-page-id={'68a6ed699293ec31a61d4e86'}
+                  data-wf-element-id={'beb81a9e-d666-ef0d-cd78-693dc255a4eb'}
+                >
+                  <div className={'addmessage-row'}>
+                    <input
+                      className={'textfield large w-input'}
+                      maxlength={'256'}
+                      name={'addmessage'}
+                      data-name={'addmessage'}
+                      placeholder={'+ Add New Message'}
+                      type={'text'}
+                      id={'addmessage'}
+                    />
+                    <a
+                      data-w-id={'a5a8b9a5-7b8d-f8eb-3219-5f06b744c7a0'}
+                      href={'#'}
+                      className={'btn-style1 w-inline-block'}
+                    >
+                      <div className={'btn-icon'}>
+                        <img
+                          loading={'lazy'}
+                          src={'images/Search.svg'}
+                          alt={''}
+                        />
+                      </div>
+                      <div>{'Add'}</div>
+                    </a>
+                  </div>
+                  <div className={'predefinedmessage-list'}>
+                    <PredefinedmessageitemItem
+                      divText={'Thank you for Contacting Us'}
+                      dataWId={'29ed52c6-4b8b-54d0-8d09-eecab356bbd0'}
+                      dataWId1={'a8fd72d0-20c2-081c-fda7-5e6e895e1552'}
+                      dataWId2={'e9961061-815e-bc1d-0680-25a48e920598'}
+                      dataWId3={'e9961061-815e-bc1d-0680-25a48e92059a'}
+                    />
+                    <PredefinedmessageitemItem
+                      divText={"I'll check that for you"}
+                      dataWId={'a2f45c9b-47a5-3640-95a4-d6508887b6de'}
+                      dataWId1={'a2f45c9b-47a5-3640-95a4-d6508887b6e6'}
+                      dataWId2={'a2f45c9b-47a5-3640-95a4-d6508887b6ed'}
+                      dataWId3={'a2f45c9b-47a5-3640-95a4-d6508887b6ef'}
+                    />
+                    <PredefinedmessageitemItem
+                      divText={'Is there anything else?'}
+                      dataWId={'a4d0aa35-fb0d-9a99-cfde-d9b554c82c59'}
+                      dataWId1={'a4d0aa35-fb0d-9a99-cfde-d9b554c82c61'}
+                      dataWId2={'a4d0aa35-fb0d-9a99-cfde-d9b554c82c68'}
+                      dataWId3={'a4d0aa35-fb0d-9a99-cfde-d9b554c82c6a'}
+                    />
+                    <div className={'predefinedmessage-item new'}>
+                      <div className={'predefinedmessage-drag'}>
+                        <img
+                          loading={'lazy'}
+                          src={'images/smarties-quickrep-icon-02.svg'}
+                          alt={''}
+                        />
+                      </div>
+                      <PredefinedmessageitemcontentItem
+                        divText={'Predefined Message 04'}
+                        dataWId={'41eed608-5bd3-9e70-918b-17ef5ea69911'}
+                        dataWId1={'41eed608-5bd3-9e70-918b-17ef5ea69919'}
+                      />
+                      <PredefinedmessageitemeditItem
+                        dataWId={'41eed608-5bd3-9e70-918b-17ef5ea69920'}
+                        dataWId1={'41eed608-5bd3-9e70-918b-17ef5ea69922'}
+                      />
+                    </div>
+                  </div>
+                </form>
+                <WformdoneItem />
+                <WformfailItem />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <Toaster closeButton />
     </>
   );
 };
