@@ -19,3 +19,7 @@ Package.addService({
 Package.addService({
     file: "tmq/config.proto", ServiceNames: ["ConfigService"], auth: false
 }, "configuration", { ConfigService: require("../../server/services/ConfigService").default });
+
+Package.addService({
+    file: "tmq/takeover.proto", ServiceNames: ["TakeoverService"], auth: false
+}, "takeover", { TakeoverService: require("../../server/services/TakeoverService").default });

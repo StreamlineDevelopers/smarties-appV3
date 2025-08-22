@@ -62,6 +62,8 @@
 0x2686675b		InboxService.GetInbox
 0x7626071f		InteractionService.GetInteractions
 0xbb9d4ba3		ConfigService.GetClientConfig
+0x6f678e77		TakeoverService.CheckStatus
+0x9e2202ca		TakeoverService.ToggleStatus
 
 
  -- Subscriptions --
