@@ -17,22 +17,31 @@ import MessaginginboxitemrightItem_d2b9f097 from './MessaginginboxitemrightItem_
 import MessaginginboxtextcontentItem_485da7aa from './MessaginginboxtextcontentItem_485da7aa';
 import ChatstatustooltipItem from './ChatstatustooltipItem';
 import MessaginginboxitemrightItem from './MessaginginboxitemrightItem';
-import Menuitem2Item from './Menuitem2Item';
+import Menuitem2Item_cee47b36 from './Menuitem2Item_cee47b36';
+import ConvodividerItem from './ConvodividerItem';
+import ConvoinboundItem from './ConvoinboundItem';
+import ConvooutboundItem from './ConvooutboundItem';
+import CallconvodividerItem from './CallconvodividerItem';
+import ConvoinboundItem_595b7e7e from './ConvoinboundItem_595b7e7e';
 import ConvoinbounddurationItem from './ConvoinbounddurationItem';
+import CalltranscriptdivItem from './CalltranscriptdivItem';
+import MessageplayerItem from './MessageplayerItem';
+import ConvobotavatarItem from './ConvobotavatarItem';
+import ConvoinboundavatarItem from './ConvoinboundavatarItem';
 import AttachmentimagenameinfowrapItem from './AttachmentimagenameinfowrapItem';
 import SmsattachmentpopupItem from './SmsattachmentpopupItem';
 import AttachmentsnopreviewItem from './AttachmentsnopreviewItem';
 import MessagepopupfilterselectItem from './MessagepopupfilterselectItem';
 import ScriptinjectorcarditemItem from './ScriptinjectorcarditemItem';
-import RowprofilecontactdetailsItem from './RowprofilecontactdetailsItem';
+import RowprofilecontactdetailsItem_1d103f16 from './RowprofilecontactdetailsItem_1d103f16';
 import TabsmenulinksidecolumnItem from './TabsmenulinksidecolumnItem';
-import CardsidecolumnhdItem from './CardsidecolumnhdItem';
-import RowprofilecontactdetailsItem_cc62efe2 from './RowprofilecontactdetailsItem_cc62efe2';
+import CardsidecolumnhdItem_562d999e from './CardsidecolumnhdItem_562d999e';
+import RowprofilecontactdetailsItem_5ad0bfac from './RowprofilecontactdetailsItem_5ad0bfac';
 import Assetsearchdiv2Item from './Assetsearchdiv2Item';
 import AssetitemItem from './AssetitemItem';
 import Divblock31Item from './Divblock31Item';
 import Divblock32Item from './Divblock32Item';
-import RowprofilecontactdetailsItem_ce61e6fb from './RowprofilecontactdetailsItem_ce61e6fb';
+import RowprofilecontactdetailsItem_ca66d080 from './RowprofilecontactdetailsItem_ca66d080';
 import CardjourneydurationItem from './CardjourneydurationItem';
 import SessionsummarycolItem from './SessionsummarycolItem';
 import Col2formItem from './Col2formItem';
@@ -50,7 +59,7 @@ import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import Loader from './common/Loader';
 
-const MaincontentLayout_70481141 = ({ }) => {
+const MaincontentLayout_a2a4d449 = ({ }) => {
   const watcher = useRef(MessagingWatcher).current;
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
@@ -365,21 +374,36 @@ const MaincontentLayout_70481141 = ({ }) => {
                                   }
                                   dataWId={'2ee757d2-bd3e-4a12-ca0b-9190293817ff'}
                                 />
-                                <div
-                                  className={'messaging-inbox-user-tag bg-yellow'}
-                                >
+                                <div className={'messaging-inbox-user-tag'}>
                                   {data.tag}
                                 </div>
                               </div>
-                              <MessaginginboxtextcontentItem_485da7aa
-                                divText={data.name}
-                                divText1={
-                                  truncateText(data.latestSnippet)
-                                }
-                                divText2={data.topic}
-                                dataWId={'5412962f-dc78-9f6c-9b1b-5129db7c78df'}
-                                divText3={moment(data.latestAt).format('h:mm A')}
-                              />
+                              <div className={'messaging-inbox-textcontent'}>
+                                <div className={'messaging-inbox-textcontent-top'}>
+                                  <MessaginginboxnamerowItem_c231de57
+                                    divText={'John Smith'}
+                                  />
+                                  <div className={'messaging-inbox-preview-div'}>
+                                    <div className={'messaging-inbox-icon-status'}>
+                                      <img
+                                        loading={'lazy'}
+                                        src={'images/smarties-inbox-icon-mic_1.svg'}
+                                        alt={''}
+                                      />
+                                    </div>
+                                    <div className={'messaging-inbox-preview'}>
+                                      {
+                                        'I’m having trouble with the system not saving...'
+                                      }
+                                    </div>
+                                  </div>
+                                </div>
+                                <MessaginginboxtextcontentbotItem_6121060c
+                                  divText={'Pricing inquiry'}
+                                  dataWId={'b4729139-7f78-8afa-aaa9-4ab7545ae1b0'}
+                                  divText1={'2:15 PM'}
+                                />
+                              </div>
                             </div>
                             <MessaginginboxitemrightItem_d2b9f097
                               dataWId={'2ee757d2-bd3e-4a12-ca0b-91902938181b'}
@@ -490,8 +514,8 @@ const MaincontentLayout_70481141 = ({ }) => {
                         <MessaginginboxitemrightItem
                           dataWId={'d640b168-e14b-d21f-cb34-702cefb626af'}
                         />
-                      </a> */}
-                      {/* <a
+                      </a>
+                      <a
                         href={'#'}
                         className={'messaging-inbox-item w-inline-block'}
                       >
@@ -690,43 +714,43 @@ const MaincontentLayout_70481141 = ({ }) => {
                               />
                             </div>
                             <div className={'menu-dropdown'}>
-                              <Menuitem2Item
+                              <Menuitem2Item_cee47b36
                                 src={
                                   'https://cdn.prod.website-files.com/688b6671a965c0c9a8b117a1/688b7fe296eb413c7eda8de5_mark-as-read.svg'
                                 }
                                 divText={'Mark as Read'}
                               />
-                              <Menuitem2Item
+                              <Menuitem2Item_cee47b36
                                 src={
                                   'https://cdn.prod.website-files.com/688b6671a965c0c9a8b117a1/688b7fe28433d6d3cf92e285_Mute%20Notifications.svg'
                                 }
                                 divText={'Mute Notifications'}
                               />
-                              <Menuitem2Item
+                              <Menuitem2Item_cee47b36
                                 src={
                                   'https://cdn.prod.website-files.com/688b6671a965c0c9a8b117a1/688b7fe2854556503e176ce6_Close%20Conversation.svg'
                                 }
                                 divText={'Close Conversation'}
                               />
-                              <Menuitem2Item
+                              <Menuitem2Item_cee47b36
                                 src={
                                   'https://cdn.prod.website-files.com/688b6671a965c0c9a8b117a1/688b7fe2787c0f456cb193a6_Block%20Customer.svg'
                                 }
                                 divText={'Block Customer'}
                               />
-                              <Menuitem2Item
+                              <Menuitem2Item_cee47b36
                                 src={
                                   'https://cdn.prod.website-files.com/688b6671a965c0c9a8b117a1/688b804529965eda4739367a_Report%20Conversation.svg'
                                 }
                                 divText={'Report Conversation'}
                               />
-                              <Menuitem2Item
+                              <Menuitem2Item_cee47b36
                                 src={
                                   'https://cdn.prod.website-files.com/688b6671a965c0c9a8b117a1/688b7fe201846cc31b113601_export%20transcription.svg'
                                 }
                                 divText={'Export Transcription'}
                               />
-                              <Menuitem2Item
+                              <Menuitem2Item_cee47b36
                                 src={
                                   'https://cdn.prod.website-files.com/688b6671a965c0c9a8b117a1/688b7fe234f6c4b4f038ee94_off%20ai.svg'
                                 }
@@ -751,58 +775,276 @@ const MaincontentLayout_70481141 = ({ }) => {
                         <div className={'messaging-handling-agent-bg'} style={{ display: isSmartiesAssistantToggled ? 'block' : 'none' }}></div>
                       </div>
                     </div>
-                    <div className="messaging-main-conversation-div" ref={conversationDivRef}>
-                      {messageList.length && messageList.map((data, index) => {
-                        if (data.direction === "inbound") {
-                          return (
-                            <div key={index} className="convo-inbound">
-                              <div className="convo-inbound-avatar">
-                                <img
-                                  loading="lazy"
-                                  src="images/smarties-avatar-01_1smarties-avatar-01.png"
-                                  alt=""
-                                />
-                              </div>
-                              <div className="convo-bubble-inbound">
-                                <div>
-                                  {data.message}
-                                </div>
-                              </div>
-                              <ConvoinbounddurationItem
-                                dataWId="d2601b0f-93ed-ec78-d431-297ce3d04872"
-                                divText={moment(data.timestamp).format('h:mm A')}
-                              />
-                            </div>
-                          );
-                        } else {
-                          return (
-                            <div key={index} className="convo-outbound">
-                              <ConvoinbounddurationItem
-                                dataWId="40de4617-1996-b595-f7c8-2ed436404f34"
-                                divText={moment(data.timestamp).format('h:mm A')}
-                              />
-                              <div className="convo-bubble-outbound">
-                                <div>
-                                  {data.message}
-                                </div>
-                              </div>
-                              <div className="convo-bot-avatar">
-                                <img
-                                  loading="lazy"
-                                  src="images/smarties-head.png"
-                                  alt=""
-                                />
-                              </div>
-                            </div>
-                          );
+                    <div className={'messaging-main-conversation-div'}>
+                      <div className={'convo-divider'}>
+                        <div className={'convo-divider-content'}>
+                          <div>{'Conversation Started'}</div>
+                        </div>
+                      </div>
+                      <ConvodividerItem
+                        src={'images/smarties-head.png'}
+                        divText={'SMARTIES is responding in real-time'}
+                      />
+                      <ConvoinboundItem
+                        dataWId={'915b5944-3838-0891-c296-c45dd45ff477'}
+                        divText={
+                          "Hi there! I'm having an issue with my recent purchase."
                         }
-                      })}
+                        dataWId1={'915b5944-3838-0891-c296-c45dd45ff481'}
+                      />
+                      <ConvooutboundItem
+                        dataWId={'40de4617-1996-b595-f7c8-2ed436404f34'}
+                        divText={
+                          "Hi John, I'm SMARTIES from the solutions team. I'm sorry to hear that. Could you please provide your order number so I can look into this for you?"
+                        }
+                        dataWId1={'40f9ab80-2190-4a62-869c-485ed785461a'}
+                      />
+                      <CallconvodividerItem
+                        src={'images/smarties-avatar-icon-call.svg'}
+                        divText={'Call started • 10:35 AM'}
+                      />
+                      <ConvoinboundItem_595b7e7e
+                        dataWId={'311fae33-37bb-b859-e12e-ed68bbc60ed4'}
+                        divText={
+                          "Sure, it's #12345-AB. I ordered a laptop but received a keyboard instead."
+                        }
+                        dataWId1={'d2601b0f-93ed-ec78-d431-297ce3d04872'}
+                      />
+                      <div className={'convo-outbound'}>
+                        <ConvoinbounddurationItem
+                          dataWId={'90e5ca4f-d96e-9028-8286-545f0f59c354'}
+                          divText={'2:35 PM • AI'}
+                        />
+                        <div className={'convo-bubble-outbound'}>
+                          <CalltranscriptdivItem />
+                          <div>
+                            {
+                              "Thank you for calling. I can see your order details now. It looks like there was a mix-up in our warehouse. I'll arrange for the correct item to be sent out immediately and provide a return label for the keyboard."
+                            }
+                          </div>
+                          <MessageplayerItem />
+                        </div>
+                        <ConvobotavatarItem
+                          dataWId={'90e5ca4f-d96e-9028-8286-545f0f59c35f'}
+                          src={'images/smarties-avatar-icon-call.svg'}
+                          divText={'Call'}
+                          src1={'images/smarties-head.png'}
+                        />
+                      </div>
+                      <ConvoinboundItem_595b7e7e
+                        dataWId={'a5c580d7-a8ff-2c93-7ea2-f18c7afc8dbd'}
+                        divText={
+                          "That's great, thank you. How long will it take for the laptop to arrive?"
+                        }
+                        dataWId1={'a5c580d7-a8ff-2c93-7ea2-f18c7afc8dd4'}
+                      />
+                      <ConvodividerItem
+                        src={
+                          'images/smarties_account_avatar_1smarties_account_avatar.png'
+                        }
+                        divText={'Anima is now handling the call'}
+                      />
+                      <div className={'convo-outbound'}>
+                        <ConvoinbounddurationItem
+                          dataWId={'b55c4f16-b574-6278-f347-60679bfb0642'}
+                          divText={'2:35 PM • Anima'}
+                        />
+                        <div className={'convo-bubble-outbound bg-blue'}>
+                          <CalltranscriptdivItem />
+                          <div>
+                            {
+                              "We'll ship it with expedited delivery, so you should receive it within 2 business days. We'll also add a $50 store credit to your account for the inconvenience."
+                            }
+                          </div>
+                          <MessageplayerItem />
+                        </div>
+                        <ConvobotavatarItem
+                          dataWId={'b4e45f10-014a-3c6e-5733-90aadaf2f6b9'}
+                          src={'images/smarties-avatar-icon-call.svg'}
+                          divText={'Call'}
+                          src1={
+                            'images/smarties_account_avatar_1smarties_account_avatar.png'
+                          }
+                        />
+                      </div>
+                      <CallconvodividerItem
+                        src={'images/smarties-avatar-icon-endcall.svg'}
+                        divText={'Call Ended • 10:35 AM'}
+                      />
+                      <div className={'convo-outbound'}>
+                        <ConvoinbounddurationItem
+                          dataWId={'ed25a2ca-ae5e-00d3-7e6d-6e13ad6e8413'}
+                          divText={'2:35 PM • Anima'}
+                        />
+                        <div className={'convo-bubble-outbound bg-blue'}>
+                          <div>
+                            {
+                              "I've sent you an email confirmation with the return label and tracking information for your new laptop. Is there anything else I can help you with today?"
+                            }
+                          </div>
+                        </div>
+                        <ConvobotavatarItem
+                          dataWId={'5c39fdfd-d2d9-7385-00a7-407ee7de73fd'}
+                          src={'images/smarties-avatar-icon-chat.svg'}
+                          divText={'Chat'}
+                          src1={
+                            'images/smarties_account_avatar_1smarties_account_avatar.png'
+                          }
+                        />
+                      </div>
+                      <ConvoinboundItem
+                        dataWId={'58d45b55-ca04-6333-6baf-1cef10bd3bf9'}
+                        divText={"No, that's all. Thanks for your help!"}
+                        dataWId1={'58d45b55-ca04-6333-6baf-1cef10bd3c03'}
+                      />
+                      <ConvodividerItem
+                        src={'images/smarties-head.png'}
+                        divText={'SMARTIES is responding in real-time'}
+                      />
+                      <ConvooutboundItem
+                        dataWId={'3647935d-525c-fb60-2f77-47f9a6926969'}
+                        divText={
+                          "You're welcome! If you have any other questions, feel free to reach out. Have a great day!"
+                        }
+                        dataWId1={'3647935d-525c-fb60-2f77-47f9a6926974'}
+                      />
+                      <div className={'convo-inbound'}>
+                        <ConvoinboundavatarItem
+                          dataWId={'c2a66d70-17b6-e98c-140c-70da4ca338f1'}
+                          src={'images/smarties-avatar-icon-chat.svg'}
+                          divText={'Chat'}
+                        />
+                        <div className={'convo-bubble-inbound attachment'}>
+                          <div className={'message-attachment-div'}>
+                            <div className={'attachments-image first'}>
+                              <div className={'attachment-lmage-info-block'}>
+                                <AttachmentimagenameinfowrapItem />
+                                <div>{'2.4 MB'}</div>
+                              </div>
+                              <div className={'attachment-lmage-info-icon'}>
+                                <div className={'icon_i'}>
+                                  <img
+                                    loading={'lazy'}
+                                    src={
+                                      'https://uploads-ssl.webflow.com/63086fbe0343fac5859fb3d5/630f1e623053b90c78b63dcf_a_media_43.svg'
+                                    }
+                                    alt={''}
+                                  />
+                                </div>
+                                <SmsattachmentpopupItem
+                                  header={'SampleFilename.jpg'}
+                                />
+                              </div>
+                            </div>
+                            <div className={'attachments-video'}>
+                              <div className={'attachment-video-time'}>
+                                <div>{'3:15'}</div>
+                              </div>
+                              <div className={'video-play'}>
+                                <img
+                                  loading={'lazy'}
+                                  src={
+                                    'https://uploads-ssl.webflow.com/625d3aea722faf41988e5366/625d3aea722fafb8638e54fa_Asset%202260.svg'
+                                  }
+                                  alt={''}
+                                />
+                              </div>
+                              <div className={'attachment-video-info-block'}>
+                                <AttachmentimagenameinfowrapItem />
+                                <div>{'2.4 MB'}</div>
+                              </div>
+                              <div className={'attachment-video-info-icon'}>
+                                <div className={'icon_i'}>
+                                  <img
+                                    loading={'lazy'}
+                                    src={
+                                      'https://uploads-ssl.webflow.com/63086fbe0343fac5859fb3d5/630f1e623053b90c78b63dcf_a_media_43.svg'
+                                    }
+                                    alt={''}
+                                  />
+                                </div>
+                                <SmsattachmentpopupItem
+                                  header={'SampleFilename.mp4'}
+                                />
+                              </div>
+                            </div>
+                            <AttachmentsnopreviewItem
+                              src={'images/smarties-icon-asset2.svg'}
+                              title={'sample.txt'}
+                            />
+                            <AttachmentsnopreviewItem
+                              src={'images/smarties-icon-asset3.svg'}
+                              title={'sample.csv'}
+                            />
+                          </div>
+                        </div>
+                        <ConvoinbounddurationItem
+                          dataWId={'7ad83e97-3523-a6ad-70cc-a20192b63609'}
+                          divText={'10:30 AM'}
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className={'messaging-main-bot'}>
-                    {/* comment this out for now */}
-                    {/* TODO: uncomment this when we have a way to show user typing */}
-                    {/* <div className={'user-typing-div'}>
+                    <div className={'callinprogress-row'}>
+                      <div className={'callinprogress-row-left'}>
+                        <div className={'convo-divider-avatar'}>
+                          <img
+                            loading={'lazy'}
+                            src={'images/smarties-avatar-icon-call.svg'}
+                            alt={''}
+                          />
+                        </div>
+                        <div className={'callinprogress-text'}>
+                          {'Call in Progress'}
+                        </div>
+                        <div>{'03:51'}</div>
+                      </div>
+                      <div className={'callinprogress-row-right'}>
+                        <div
+                          data-w-id={'fa22c22e-438d-312e-ba20-a1dd4c97343c'}
+                          className={'button-takeover-call'}
+                        >
+                          <div className={'fluentchat-28-regular'}>
+                            <img
+                              loading={'lazy'}
+                              src={'images/smarties-icon-take-over.svg'}
+                              alt={''}
+                            />
+                          </div>
+                          <div>{'Takeover Call'}</div>
+                        </div>
+                        <div
+                          data-w-id={'a6617ed8-f879-55c5-f746-8745523323fc'}
+                          className={'button-returncallai'}
+                        >
+                          <div>{'Return Call to AI'}</div>
+                          <div className={'fluentchat-28-regular'}>
+                            <img
+                              loading={'lazy'}
+                              src={'images/smarties-icon-ai.svg'}
+                              alt={''}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          data-w-id={'17ce7d24-5bba-54de-7e91-17d3acc22bd5'}
+                          className={'button-endcall'}
+                        >
+                          <div className={'fluentchat-28-regular'}>
+                            <img
+                              loading={'lazy'}
+                              src={
+                                'images/smarties-avatar-icon-endcall-white.svg'
+                              }
+                              alt={''}
+                            />
+                          </div>
+                          <div>{'End Call'}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className={'user-typing-div'}>
                       <div className={'usertyping-avatar'}>
                         <img
                           loading={'lazy'}
@@ -813,7 +1055,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                         />
                       </div>
                       <div>{'John Smith is typing...'}</div>
-                    </div> */}
+                    </div>
                     <div className={'reply-row'}
                       style={{ pointerEvents: isSmartiesAssistantToggled ? 'none' : 'auto', opacity: isSmartiesAssistantToggled ? 0.5 : 1 }}>
                       <div className={'reply-row-aisuggestion-row'} style={{ display: isSmartiesAssistantToggled ? 'none' : 'block' }}>
@@ -1141,13 +1383,13 @@ const MaincontentLayout_70481141 = ({ }) => {
                 </div>
                 <div>
                   <div className={'messaging-top-name'}>{'John Smith'}</div>
-                  <RowprofilecontactdetailsItem
+                  <RowprofilecontactdetailsItem_1d103f16
                     dataWId={'7e3b2409-eb94-64ea-0156-81f68ed54f29'}
                     src={'images/smarties-icon-position.svg'}
                     divText={'Position'}
                     divText1={'Marketing Director'}
                   />
-                  <RowprofilecontactdetailsItem
+                  <RowprofilecontactdetailsItem_1d103f16
                     dataWId={'96292107-e884-0717-f838-679f87c1e116'}
                     src={'images/smarties-icon-company.svg'}
                     divText={'Company'}
@@ -1241,13 +1483,13 @@ const MaincontentLayout_70481141 = ({ }) => {
                       <div className={'profile-tab-section'}>
                         <div className={'side-column-section'}>
                           <div className={'card-side-column'}>
-                            <CardsidecolumnhdItem
+                            <CardsidecolumnhdItem_562d999e
                               dataWId={'420b0f02-28d9-8e15-64f3-0d8b5aa4b10e'}
                               divText={'Contact Details'}
                             />
                             <div className={'card-side-column-content'}>
                               <div className={'profile-contact-details'}>
-                                <RowprofilecontactdetailsItem
+                                <RowprofilecontactdetailsItem_1d103f16
                                   dataWId={
                                     '420b0f02-28d9-8e15-64f3-0d8b5aa4b117'
                                   }
@@ -1255,7 +1497,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                                   divText={'Email Address'}
                                   divText1={'sarah.johnson@skytech.com'}
                                 />
-                                <RowprofilecontactdetailsItem
+                                <RowprofilecontactdetailsItem_1d103f16
                                   dataWId={
                                     '420b0f02-28d9-8e15-64f3-0d8b5aa4b120'
                                   }
@@ -1265,7 +1507,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                                 />
                                 <div className={'flex-contact-details'}>
                                   <div className={'col-contact-details'}>
-                                    <RowprofilecontactdetailsItem_cc62efe2
+                                    <RowprofilecontactdetailsItem_5ad0bfac
                                       dataWId={
                                         '420b0f02-28d9-8e15-64f3-0d8b5aa4b12b'
                                       }
@@ -1276,7 +1518,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                                         '420b0f02-28d9-8e15-64f3-0d8b5aa4b133'
                                       }
                                     />
-                                    <RowprofilecontactdetailsItem
+                                    <RowprofilecontactdetailsItem_1d103f16
                                       dataWId={
                                         '420b0f02-28d9-8e15-64f3-0d8b5aa4b139'
                                       }
@@ -1286,7 +1528,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                                       divText={'Location'}
                                       divText1={'San Francisco, CA'}
                                     />
-                                    <RowprofilecontactdetailsItem_cc62efe2
+                                    <RowprofilecontactdetailsItem_5ad0bfac
                                       dataWId={
                                         '420b0f02-28d9-8e15-64f3-0d8b5aa4b142'
                                       }
@@ -1366,7 +1608,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                         </div>
                         <div className={'side-column-section'}>
                           <div className={'card-side-column'}>
-                            <CardsidecolumnhdItem
+                            <CardsidecolumnhdItem_562d999e
                               dataWId={'420b0f02-28d9-8e15-64f3-0d8b5aa4b161'}
                               divText={'Tags'}
                             />
@@ -1428,7 +1670,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                         </div>
                         <div className={'side-column-section'}>
                           <div className={'card-side-column'}>
-                            <CardsidecolumnhdItem
+                            <CardsidecolumnhdItem_562d999e
                               dataWId={'f9e95120-0291-ae33-0e7f-b1c13dd5731c'}
                               divText={'Account Details'}
                             />
@@ -1472,7 +1714,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                         </div>
                         <div className={'side-column-section'}>
                           <div className={'card-side-column'}>
-                            <CardsidecolumnhdItem
+                            <CardsidecolumnhdItem_562d999e
                               dataWId={'420b0f02-28d9-8e15-64f3-0d8b5aa4b16e'}
                               divText={'Assets'}
                             />
@@ -1534,19 +1776,19 @@ const MaincontentLayout_70481141 = ({ }) => {
                             <div>{'Current Session'}</div>
                             <div className={'tag-live'}>{'Live'}</div>
                           </div>
-                          <RowprofilecontactdetailsItem_ce61e6fb
+                          <RowprofilecontactdetailsItem_ca66d080
                             dataWId={'420b0f02-28d9-8e15-64f3-0d8b5aa4b1b3'}
                             src={'images/smarties-icon-journey-started.svg'}
                             divText={'Started'}
                             divText1={'2:15 PM (19 min ago)'}
                           />
-                          <RowprofilecontactdetailsItem_ce61e6fb
+                          <RowprofilecontactdetailsItem_ca66d080
                             dataWId={'420b0f02-28d9-8e15-64f3-0d8b5aa4b1bf'}
                             src={'images/smarties-icon-journey-device.svg'}
                             divText={'Device'}
                             divText1={'Desktop • Chrome'}
                           />
-                          <RowprofilecontactdetailsItem_ce61e6fb
+                          <RowprofilecontactdetailsItem_ca66d080
                             dataWId={'420b0f02-28d9-8e15-64f3-0d8b5aa4b1cb'}
                             src={'images/smarties-icon-journey-referrer.svg'}
                             divText={'Referrer'}
@@ -1555,7 +1797,7 @@ const MaincontentLayout_70481141 = ({ }) => {
                         </div>
                         <div className={'side-column-section'}>
                           <div className={'card-side-column'}>
-                            <CardsidecolumnhdItem
+                            <CardsidecolumnhdItem_562d999e
                               dataWId={'420b0f02-28d9-8e15-64f3-0d8b5aa4b1d7'}
                               divText={'Customer Journey'}
                             />
@@ -2209,4 +2451,4 @@ const MaincontentLayout_70481141 = ({ }) => {
   );
 };
 
-export default MaincontentLayout_70481141;
+export default MaincontentLayout_a2a4d449;

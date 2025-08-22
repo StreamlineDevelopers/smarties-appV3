@@ -147,18 +147,24 @@ export const SIDEBARBOT_SETTINGS = [
 
 export const TOAST_STYLE = {
     SUCCESS: {
-        backgroundColor: "green",
-        color: "white",
-        border: "1px solid green"
+        style: {
+            backgroundColor: "green",
+            color: "white",
+            border: "1px solid green"
+        }
     },
     ERROR: {
-        backgroundColor: "red",
-        color: "white",
-        border: "1px solid red"
+        style: {
+            backgroundColor: "red",
+            color: "white",
+            border: "1px solid red"
+        }
     },
     WARNING: {
-        backgroundColor: "yellow",
-        color: "black",
-        border: "1px solid yellow"
+        style: {
+            backgroundColor: "yellow",
+            color: "black",
+            border: "1px solid yellow"
+        }
     }
 };

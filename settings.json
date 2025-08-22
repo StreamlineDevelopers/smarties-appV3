@@ -22,13 +22,18 @@
     "client": {
         "smartiesAssistant": {
             "isHumanUrl": ""
+        },
+        "suggestion": {
+            "url": "",
+            "min": 1,
+            "max": 1
         }
     },
     "auth": {
         "username": "tmq",
         "password": "P@ssword1"
     },
-	"contentCreation": {
+    "contentCreation": {
         "baseURL": "http://localhost:3003"
     },
     "customerEngagement": {
@@ -36,5 +41,10 @@
     },
     "salesEnablement": {
         "baseURL": "http://localhost:3005"
+    },
+    "predefinedAnswer": {
+        "serverUrl": "http://localhost:6111",
+        "apiKey": "your-client-api-key-change-in-production",
+        "refreshEndpoint": "/auth/token"
     }
 }

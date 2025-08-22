@@ -7,7 +7,9 @@ const {
     Config,
     ClientConfig,
     SmartiesAssistantConfig,
-    AuthConfig
+    AuthConfig,
+    PredefinedConfig,
+    SuggestionConfig
 } = config;
 
 export default {
@@ -31,7 +33,6 @@ export default {
             }
 
             const settings = ServerInstance.Config || {};
-            console.log('settings', settings);
 
             const clientSettings = settings.client || {};
             const smartiesSettings = clientSettings.smartiesAssistant || {};
@@ -42,24 +43,35 @@ export default {
             response.error_message = "";
 
             const smartiesAssistantMsg = new SmartiesAssistantConfig();
+            const suggestionMsg = new SuggestionConfig();
             smartiesAssistantMsg.is_human_url = smartiesSettings.isHumanUrl || "";
+            suggestionMsg.url = clientSettings.suggestion.url || "";
+            suggestionMsg.min = clientSettings.suggestion.min || 1;
+            suggestionMsg.max = clientSettings.suggestion.max || 1;
 
             const clientMsg = new ClientConfig();
             clientMsg.smarties_assistant = smartiesAssistantMsg;
+            clientMsg.suggestion = suggestionMsg;
 
             const authMsg = new AuthConfig();
             authMsg.username = authSettings.username || "";
             authMsg.password = authSettings.password || "";
 
+            const predefinedConfig = settings.predefinedAnswer || {};
+            const predefinedMsg = new PredefinedConfig();
+            predefinedMsg.serverUrl = predefinedConfig.serverUrl || "";
+            predefinedMsg.apiKey = predefinedConfig.apiKey || "";
+            predefinedMsg.refreshEndpoint = predefinedConfig.refreshEndpoint || "";
+
             const cfgMsg = new Config();
             cfgMsg.client = clientMsg;
             cfgMsg.auth = authMsg;
+            cfgMsg.predefined = predefinedMsg;
 
             response.config = cfgMsg;
 
             callback(null, response);
         } catch (error) {
-            console.log('error', error);
             Logger.showError("ConfigService.GetClientConfig: Error - %s", error.message);
             const response = new GetClientConfigResponse();
             response.success = false;
