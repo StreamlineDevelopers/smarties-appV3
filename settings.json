@@ -27,5 +27,14 @@
     "auth": {
         "username": "tmq",
         "password": "P@ssword1"
+    },
+	"contentCreation": {
+        "baseURL": "http://localhost:3003"
+    },
+    "customerEngagement": {
+        "baseURL": "http://localhost:3004"
+    },
+    "salesEnablement": {
+        "baseURL": "http://localhost:3005"
     }
 }
