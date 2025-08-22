@@ -833,12 +833,34 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                                 {data.message}
                               </div>
                             </div>
-                            <div className="convo-bot-avatar">
+                            {/* <div className="convo-bot-avatar">
                               <img
                                 loading="lazy"
                                 src="images/smarties-head.png"
                                 alt=""
                               />
+                            </div> */}
+                            <div className="convo-bot-avatar">
+                              <img
+                                loading="lazy"
+                                src={"/images/smarties-head.png"}
+                                alt=""
+                              />
+                              <div className="message-type-div">
+                                <div
+                                  data-w-id="40f9ab80-2190-4a62-869c-485ed785461a"
+                                  className="message-type"
+                                >
+                                  <img
+                                    src={data.medium === 'chat' ? "/images/smarties-avatar-icon-chat.svg" : "/images/smarties-avatar-icon-call.svg"}
+                                    loading="lazy"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="message-type-tooltip" style={{ display: "none" }}>
+                                  <div>Chat</div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         );
