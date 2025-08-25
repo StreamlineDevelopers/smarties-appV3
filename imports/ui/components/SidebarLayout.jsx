@@ -6,6 +6,7 @@ import SidemenuitemItem_7fda227d from './SidemenuitemItem_7fda227d';
 import SidemenuitemItem_a68a49aa from './SidemenuitemItem_a68a49aa';
 import SvgiconItem from './SvgiconItem';
 import { SIDEBARTOP_JOURNEY, SIDEBARTOP_OVERVIEW, SIDEBARTOP_SETTINGS } from '../../api/common/const';
+import Client from '../../api/client/Client';
 
 const SidebarLayout = ({ }) => {
   return (
@@ -54,15 +55,18 @@ const SidebarLayout = ({ }) => {
           ))}
         </div>
         <div className={'sidemenu-bot'}>
-          <a
-            href={'../login.html'}
+          <button
+            // href={'../login.html'}
             className={'sidemenu-item signout w-inline-block'}
+            onClick={() => {
+              Client.SignOut();
+            }}
           >
             <SvgiconItem
               iconSrc={'/svgs/icon-984edc8262bc76223145b01156bcd0f1.svg'}
             />
             <div>Sign out</div>
-          </a>
+          </button>
         </div>
       </div>
     </div>

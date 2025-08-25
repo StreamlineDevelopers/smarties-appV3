@@ -1,7 +1,38 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import FormrowItem_e8606e74 from '../components/FormrowItem_e8606e74';
+import { useWatcher } from '../../api/client/Watcher2';
+import { useNavigate } from 'react-router-dom';
+import AccountWatcher from '../../api/client/watchers/AccountWatcher';
 
 const Signup = () => {
+  const formRef = useRef(null);
+  const navigate = useNavigate()
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: ''
+  });
+
+  const watcher = useRef(AccountWatcher).current;
+  useWatcher(watcher);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    AccountWatcher.signup(formData.email, formData.password)
+  }
+
   return (
     <>
       <div className={'page-wrap-signin'}>
@@ -34,6 +65,8 @@ const Signup = () => {
                   placeholder={'Enter Email'}
                   type={'email'}
                   id={'email'}
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
                 <FormrowItem_e8606e74
                   label={'Password'}
@@ -42,15 +75,14 @@ const Signup = () => {
                   placeholder={'Enter Password'}
                   type={'password'}
                   id={'password'}
+                  value={formData.password}
+                  onChange={handleInputChange}
                 />
                 <div className={'signin-formbtn-div'}>
-                  <a
-                    href={'index.html'}
-                    className={'btn-style1 w-inline-block'}
-                  >
-                    <div>{'Sign In'}</div>
-                  </a>
-                  <a href={'#'} className={'btn-style1 google w-inline-block'}>
+                  <button onClick={handleSignup} className="btn-style1 w-inline-block">
+                    <div>Sign Up</div>
+                  </button>
+                  {/* <a href={'#'} className={'btn-style1 google w-inline-block'}>
                     <div className={'icon-google'}>
                       <img
                         width={'24'}
@@ -64,8 +96,8 @@ const Signup = () => {
                       />
                     </div>
                     <div>{'Sign in with Google'}</div>
-                  </a>
-                  <div className={'upgrade-divblock'}>
+                  </a> */}
+                  {/* <div className={'upgrade-divblock'}>
                     <div className={'upgrade-left'}>
                       <div className={'icon-pro-div large'}>
                         <img
@@ -90,24 +122,20 @@ const Signup = () => {
                         {'Upgrade after Login'}
                       </a>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className={'form-row-small'}>
                   <div className={'signup-cta-text'}>
                     {'Already have an account?'}
                   </div>
-                  <a href={'login.html'} className={'link-style2'}>
-                    {'Sign In'}
-                  </a>
+                  <button onClick={() => navigate('/login')} className="link-style2">Sign In</button>
                 </div>
               </form>
               <div className={'w-form-done'}>
                 <div>{'Thank you! Your submission has been received!'}</div>
               </div>
               <div className={'w-form-fail'}>
-                <div>
-                  {'Oops! Something went wrong while submitting the form.'}
-                </div>
+                <div>{error}</div>
               </div>
             </div>
           </div>

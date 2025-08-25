@@ -71,6 +71,7 @@ export class KnowledgeBaseFile {
     async save() {
         await this.check();
         const db = Core.getDB("knowledgeBase", this.#raw);
+        console.log(doc);
         if (db) {
             const doc = this.toObject();
             if (this.#id)

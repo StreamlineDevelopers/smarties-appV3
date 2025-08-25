@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+message createKnowledgeBaseRequest {
+    string userId = 1;
+    string collectionName = 2;
+    string collectionId = 3;
+    string createAt = 4;
+    string updateAt = 5;
+    string isDeleted = 6;
+    repeated string files = 7;
+}
+
+message KnowledgeBaseResponse {
+    string success = 1;
+    bool message = 2;
+}
+
+message KnowledgeBaseUploadRequest {
+    string userId = 1;
+    string collectionId = 2;
+    repeated string fileIdList = 3; 
+}
+
+message KnowledgeBaseUploadResponse {
+    string success = 1;
+    bool message = 2;
+}
+
+message FetchKnowledgeBaseRequest {
+    string userId = 1;
+    string searchQuery = 2;
+    int64 lastBasis = 3;
+}
+
+message File {
+  string id = 1;
+  string name = 2;
+}
+
+message AllKnowledgeBase {
+    string collectionId = 1;
+    string userId = 2;
+    string collectionName = 3;
+    string id = 4;
+    uint64 createdAt = 5;
+    uint64 updatedAt = 6;
+    repeated File files = 7;
+}
+
+message FetchKnowledgeBaseResponse {
+    repeated AllKnowledgeBase knowledgeBases = 1;
+    int64 lastBasis = 2;
+}
+
+message FetchKbUrlRequest {
+    string collectionId = 1;
+}
+
+message FetchKbUrlResponse {
+    string url = 1;
+    bool success = 2;
+}
+
+service KnowledgeBaseService {
+  rpc createKnowledgeBase (createKnowledgeBaseRequest) returns (KnowledgeBaseResponse) {}
+  rpc uploadKnowledgeBase (KnowledgeBaseUploadRequest) returns (KnowledgeBaseUploadResponse) {}
+  rpc fetchKnowledgeBase (FetchKnowledgeBaseRequest) returns (FetchKnowledgeBaseResponse) {}
+  rpc generateUrl (FetchKbUrlRequest) returns (FetchKbUrlResponse) {}
+}

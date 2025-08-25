@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+message FetchFilesRequest {
+    string userId = 1;
+    int64 lastBasis = 2;
+}
+
+message AllFiles {
+    string id = 1;
+    string name = 2;
+    string type = 3;
+    string size = 4;
+    string path = 5;
+    int64 lastBasis = 6;
+    uint64 createdAt = 7;
+    uint64 updatedAt = 8;
+}
+
+message FetchFilesResponse {
+   repeated AllFiles files = 1;  
+    int64 lastBasis = 2;
+}
+
+service FileService {
+    rpc fetchFiles (FetchFilesRequest) returns (FetchFilesResponse) {}
+}

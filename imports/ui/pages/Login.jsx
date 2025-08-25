@@ -1,7 +1,86 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import FormrowItem_e8606e74 from '../components/FormrowItem_e8606e74';
+import { useNavigate } from 'react-router-dom';
+import { useWatcher } from '../../api/client/Watcher2';
+import Client from '../../api/client/Client';
+import { toast } from "sonner";
+import { TOAST_STYLE } from '../../api/common/const';
+import { Toaster } from 'sonner';
+import { Logger } from '@tmq-dev-ph/tmq-dev-core-client';
 
 const Login = () => {
+  // const watcher = useRef(BillingWatcher).current;
+  // useWatcher(watcher);
+  const formRef = useRef(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSmartiesFreePlan = async (email) => {
+    if (!email) {
+      toast.error('There was an error logging in, please try again', {
+        style: TOAST_STYLE.ERROR
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const user = await watcher.fetchAccountDetails(email);
+
+      if (user?.customerid) {
+        window.location.reload();
+      } else {
+        const url = await watcher.handleSmartiesFreePlan(user || null);
+        window.location.href = url;
+      }
+
+    } catch (err) {
+      Logger.showError("Smarties Plan Error", err);
+      toast.error("Something went wrong while processing the plan", {
+        style: TOAST_STYLE.ERROR
+      });
+    } finally {
+      // Only unset loading if no redirect happened
+      // If redirect happens, this line won't execute anyway
+      setIsLoading(false);
+    }
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const res = await Client.loginWithPassword(email, password);
+      toast.success('Login Successfully', {
+        style: TOAST_STYLE.SUCCESS
+      });
+      // await handleSmartiesFreePlan(res.email);
+      if (res.email) {
+        setTimeout(() => {
+          window.location.reload();
+        }
+          , 1000);
+      }
+    } catch (err) {
+      setError(err.message || "Login failed, please check your email and password");
+      Logger.showError("Login failed", err);
+      setIsLoading(false);
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
   return (
     <>
       <div className={'page-wrap-signin'}>
@@ -37,6 +116,8 @@ const Login = () => {
                   placeholder={'Enter Email'}
                   type={'email'}
                   id={'email'}
+                  value={email}
+                  onChange={handleEmailChange}
                 />
                 <FormrowItem_e8606e74
                   label={'Password'}
@@ -45,8 +126,10 @@ const Login = () => {
                   placeholder={'Enter Password'}
                   type={'password'}
                   id={'password'}
+                  value={password}
+                  onChange={handlePasswordChange}
                 />
-                <div className={'form-row horizontal'}>
+                {/* <div className={'form-row horizontal'}>
                   <label className={'w-checkbox remember-checkfield'}>
                     <input
                       type={'checkbox'}
@@ -65,15 +148,12 @@ const Login = () => {
                   <a href={'forgot-password.html'} className={'link-style2'}>
                     {'Forgot Password'}
                   </a>
-                </div>
+                </div> */}
                 <div className={'signin-formbtn-div'}>
-                  <a
-                    href={'index.html'}
-                    className={'btn-style1 w-inline-block'}
-                  >
-                    <div>{'Sign In'}</div>
-                  </a>
-                  <a href={'#'} className={'btn-style1 google w-inline-block'}>
+                  <button onClick={handleLogin} className="btn-style1 w-inline-block">
+                    <div>Sign In</div>
+                  </button>
+                  {/* <a href={'#'} className={'btn-style1 google w-inline-block'}>
                     <div className={'icon-google'}>
                       <img
                         width={'24'}
@@ -107,29 +187,28 @@ const Login = () => {
                         />
                       </div>
                     </div>
-                  </a>
+                  </a> */}
                 </div>
                 <div className={'form-row-small'}>
                   <div className={'signup-cta-text'}>
                     {"Don't have an account?"}
                   </div>
-                  <a href={'signup.html'} className={'link-style2'}>
-                    {'Sign Up'}
-                  </a>
+                  <button onClick={() => navigate('/signup')} className="link-style2">Sign Up</button>
                 </div>
               </form>
               <div className={'w-form-done'}>
                 <div>{'Thank you! Your submission has been received!'}</div>
               </div>
-              <div className={'w-form-fail'}>
+              <div className={'w-form-fail'} style={{ display: error ? 'block' : 'none' }}>
                 <div>
-                  {'Oops! Something went wrong while submitting the form.'}
+                  <div>{error}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Toaster />
     </>
   );
 };

@@ -14,6 +14,43 @@ Package.addDB("customerEngagement", [{ key: { dtCreated: -1 } }]);
 Package.addDB("customers", [{ key: { dtCreated: -1 } }]);
 Package.addDB("salesEnablement", [{ key: { dtCreated: -1 } }]);
 
+Package.addDB("transcripts", [{ key: { dtCreated: -1 } }, { key: { index1: 1 } }]);
+Package.addDB("vapiKnowledgeBase", [{ key: { dtCreated: -1 } }, { key: { index1: 1 } }]);
+Package.addDB("clientRequest", [{ key: { dtCreated: -1 } }]);
+Package.addDB("vapiFiles", [{ key: { createdAt: -1 } }, { key: { index1: 1 } }]);
+Package.addDB("assistants", [{ key: { userId: -1 } }, { key: { createdAt: -1 } }, { key: { keywords: 1 } }]);
+Package.addDB("clientRequest", [{ key: { dtCreated: -1 } }]);
+Package.addDB("contactUsRequest", [{ key: { dtCreated: -1 } }]);
+Package.addDB("channelPartnerRequest", [{ key: { dtCreated: -1 } }]);
+Package.addDB("whiteLabelRequest", [{ key: { dtCreated: -1 } }]);
+Package.addDB("wholeSalerRequest", [{ key: { dtCreated: -1 } }]);
+Package.addDB("affiliateRequest", [{ key: { dtCreated: -1 } }]);
+Package.addDB("opportunityRequest", [{ key: { dtCreated: -1 } }]);
+Package.addDB("userNumbers", [{ key: { createdAt: -1 } }, { key: { userId: 1 } }]);
+Package.addDB("fineTuneModels", [{ key: { createdAt: -1 } }, { key: { userId: 1 } }]);
+Package.addDB("fineTuneJobs", [{ key: { createdAt: -1 } }, { key: { userId: 1 } }]);
+Package.addDB("threadsAssitants", [{ key: { createdAt: -1 } }, { key: { userId: 1 } }]);
+Package.addDB("voices", [{ key: { createdAt: -1 } }, { key: { index1: -1 } }, { key: { keywords: 1 } }]);
+Package.addDB("products", [{ key: { dtCreated: -1 } }]);
+Package.addDB("billingWebhook", [{ key: { created: -1 } }]);
+Package.addDB("phoneNumbers", [{ key: { createdAt: -1 } }, { key: { updatedAt: -1 } }]);
+Package.addDB("settings", [{ key: { key: 1 } }]);
+Package.addDB("callLogs", [{ key: { createdAt: -1 } }]);
+Package.addDB("chatLogs", [{ key: { createdAt: -1 } }]);
+Package.addDB("crawlLogs", [{ key: { createdAt: -1 } }]);
+Package.addDB("useCaseMessages", [{ key: { createdAt: -1 } }]);
+Package.addDB("tools", [{ key: { createdAt: -1 } }, { key: { userId: 1 } }, { key: { index1: -1 } }]);
+Package.addDB("phones", [{ key: { createdAt: -1 } }]);
+Package.addDB("mediaFiles", [{ key: { createdAt: -1 } }]);
+Package.addDB("knowledgeBase", [{ key: { createdAt: -1 } }, { key: { userId: 1 } }, { key: { index1: -1 } }]);
+Package.addDB("widgetConfig", [{ key: { createdAt: -1 } }, { key: { userId: 1 } }, { key: { index1: -1 } }]);
+// BILLING
+Package.addDB("subscriptions", [{ key: { createdAt: -1 } }]);
+Package.addDB("invoices", [{ key: { createdAt: -1 } }]);
+Package.addDB("charges", [{ key: { createdAt: -1 } }]);
+Package.addDB("paymentSessions", [{ key: { createdAt: -1 } }]);
+Package.addDB("subscriptionPlans", [{ key: { createdAt: -1 } }]);
+Package.addDB("regions", [{ key: { createdAt: -1 } }]);
 // /imports/startup/server/index.js (or server/main.js)
 
 

@@ -7,6 +7,8 @@ const FormcontrolItem_b5c12d0a = ({
   placeholder,
   type,
   id,
+  value,
+  onChange
 }) => {
   return (
     <div className={'form-control'}>
@@ -19,6 +21,8 @@ const FormcontrolItem_b5c12d0a = ({
         placeholder={placeholder || 'Enter Email'}
         type={type || 'email'}
         id={id || 'email'}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );
