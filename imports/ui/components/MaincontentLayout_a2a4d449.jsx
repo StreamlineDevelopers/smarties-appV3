@@ -27,6 +27,7 @@ import ConvoinbounddurationItem from './ConvoinbounddurationItem';
 import CalltranscriptdivItem from './CalltranscriptdivItem';
 import MessageplayerItem from './MessageplayerItem';
 import ConvobotavatarItem from './ConvobotavatarItem';
+import ConvodividercontentItem from './ConvodividercontentItem';
 import ConvoinboundavatarItem from './ConvoinboundavatarItem';
 import AttachmentimagenameinfowrapItem from './AttachmentimagenameinfowrapItem';
 import SmsattachmentpopupItem from './SmsattachmentpopupItem';
@@ -374,7 +375,9 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                                   }
                                   dataWId={'2ee757d2-bd3e-4a12-ca0b-9190293817ff'}
                                 />
-                                <div className="messaging-inbox-user-tag">PROSPECT</div>
+                                <div className={'messaging-inbox-user-tag'}>
+                                  {data.tag}
+                                </div>
                               </div>
                               <div className={'messaging-inbox-textcontent'}>
                                 <div className={'messaging-inbox-textcontent-top'}>
@@ -390,19 +393,21 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                                       />
                                     </div>
                                     <div className={'messaging-inbox-preview'}>
-                                      {truncateText(data.latestSnippet)}
+                                      {
+                                        'I’m having trouble with the system not saving...'
+                                      }
                                     </div>
                                   </div>
                                 </div>
                                 <MessaginginboxtextcontentbotItem_6121060c
                                   divText={'Pricing inquiry'}
                                   dataWId={'b4729139-7f78-8afa-aaa9-4ab7545ae1b0'}
-                                  divText1={moment(data.latestAt).format('hh:mm A')}
+                                  divText1={'2:15 PM'}
                                 />
                               </div>
                             </div>
                             <MessaginginboxitemrightItem_d2b9f097
-                              dataWId={'2ee757d2-bd3e-4a12-ca0b-91902938181b'}
+                              dataWId={'fc19d0d7-f5e8-4f20-e129-a4d9753767c8'}
                             />
                           </a>
                         )
@@ -669,6 +674,19 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                             </div>
                           </div>
                           <div
+                            data-w-id={'40a4a7a3-cd6d-b64d-c5e8-2df6143245bd'}
+                            className={'button-returncallai'}
+                          >
+                            <div>{'Return Call to AI'}</div>
+                            <div className={'fluentchat-28-regular'}>
+                              <img
+                                loading={'lazy'}
+                                src={'images/smarties-icon-ai.svg'}
+                                alt={''}
+                              />
+                            </div>
+                          </div>
+                          <div
                             data-w-id={'a6dc440d-420d-352d-d335-dbe1bda29f2e'}
                             className={'button-takeover'}
                             onClick={() => watcher.toggleSmartiesAssistant()}
@@ -682,6 +700,34 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                               />
                             </div>
                             <div>{'Takeover Chat'}</div>
+                          </div>
+                          <div
+                            data-w-id={'40a4a7a3-cd6d-b64d-c5e8-2df6143245b8'}
+                            className={'button-takeover-call'}
+                          >
+                            <div className={'fluentchat-28-regular'}>
+                              <img
+                                loading={'lazy'}
+                                src={'images/smarties-icon-take-over.svg'}
+                                alt={''}
+                              />
+                            </div>
+                            <div>{'Takeover Call'}</div>
+                          </div>
+                          <div
+                            data-w-id={'40a4a7a3-cd6d-b64d-c5e8-2df6143245c2'}
+                            className={'button-endcall'}
+                          >
+                            <div className={'fluentchat-28-regular'}>
+                              <img
+                                loading={'lazy'}
+                                src={
+                                  'images/smarties-avatar-icon-endcall-white.svg'
+                                }
+                                alt={''}
+                              />
+                            </div>
+                            <div>{'End Call'}</div>
                           </div>
                           <div className={'button-assign'}>
                             <div className={'fluentchat-28-regular'}>
@@ -978,10 +1024,14 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                           }
                         />
                       </div>
-                      <CallconvodividerItem
-                        src={'images/smarties-avatar-icon-endcall.svg'}
-                        divText={'Call Ended • 10:35 AM'}
-                      />
+                      <div className={'call-convo-divider'}>
+                        <div className={'convo-divider-line'}></div>
+                        <ConvodividercontentItem
+                          src={'images/smarties-avatar-icon-endcall.svg'}
+                          divText={'Call Ended • 10:35 AM'}
+                        />
+                        <div className={'convo-divider-line'}></div>
+                      </div>
                       <div className={'convo-outbound'}>
                         <ConvoinbounddurationItem
                           dataWId={'ed25a2ca-ae5e-00d3-7e6d-6e13ad6e8413'}
@@ -1094,7 +1144,6 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                           divText={'10:30 AM'}
                         />
                       </div>
-                   
                     </div> */}
                   </div>
                   <div className={'messaging-main-bot'}>
@@ -1111,49 +1160,6 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                           {'Call in Progress'}
                         </div>
                         <div>{'03:51'}</div>
-                      </div>
-                      <div className={'callinprogress-row-right'}>
-                        <div
-                          data-w-id={'fa22c22e-438d-312e-ba20-a1dd4c97343c'}
-                          className={'button-takeover-call'}
-                        >
-                          <div className={'fluentchat-28-regular'}>
-                            <img
-                              loading={'lazy'}
-                              src={'images/smarties-icon-take-over.svg'}
-                              alt={''}
-                            />
-                          </div>
-                          <div>{'Takeover Call'}</div>
-                        </div>
-                        <div
-                          data-w-id={'a6617ed8-f879-55c5-f746-8745523323fc'}
-                          className={'button-returncallai'}
-                        >
-                          <div>{'Return Call to AI'}</div>
-                          <div className={'fluentchat-28-regular'}>
-                            <img
-                              loading={'lazy'}
-                              src={'images/smarties-icon-ai.svg'}
-                              alt={''}
-                            />
-                          </div>
-                        </div>
-                        <div
-                          data-w-id={'17ce7d24-5bba-54de-7e91-17d3acc22bd5'}
-                          className={'button-endcall'}
-                        >
-                          <div className={'fluentchat-28-regular'}>
-                            <img
-                              loading={'lazy'}
-                              src={
-                                'images/smarties-avatar-icon-endcall-white.svg'
-                              }
-                              alt={''}
-                            />
-                          </div>
-                          <div>{'End Call'}</div>
-                        </div>
                       </div>
                     </div>
                     <div className={'user-typing-div'}>
@@ -1471,17 +1477,7 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                           {answer.body}
                         </div>
                       ))}
-                      <div className="quickreply-add" onClick={() => {
-                        watcher.setValue("POPUP.PREDEFINED_ANSWER", true)
-                      }}>
-                        <img
-                          src="/images/smarties-quickrep-icon-06.svg"
-                          loading="lazy"
-                          alt=""
-                        />
-                      </div>
                     </div>
-
                   </div>
                 </div>
               </form>
