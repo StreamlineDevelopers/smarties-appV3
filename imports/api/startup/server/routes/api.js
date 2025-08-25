@@ -8,6 +8,8 @@ import SchemaErrorHandler from '../../../server/utils/schemaErrorHandler.js';
 import InteractionManager from '../../../server/classes/interactions/InteractionManager.js';
 import Server from '../../../server/Server.js';
 import Interactions from '../../../server/classes/dbTemplates/Interactions.js';
+import Sessions, { SessionsCollection } from '../../../server/classes/dbTemplates/Sessions.js';
+import PageViews from '../../../server/classes/dbTemplates/PageViews.js';
 import { IdentityResolution } from '../../../server/classes/identity/IdentityResolution.js';
 import { rankPersonsForConsumer } from '../../../server/classes/identity/IdentityRanker.js';
 
@@ -64,9 +66,12 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
         try {
             const biz = await InteractionManager.resolveBusinessBySlug(slug);
 
-            const { provider, type, identifier, externalId, text, attachments } = InteractionManager.normalizeInbound(req.body || {});
+            // First pass: get minimal hints to resolve channel
+            const hint = InteractionManager.extractChannelHint(req.body || {});
+            const channel = await InteractionManager.resolveChannel({ businessId: biz._id, type: hint.type, identifier: hint.identifier, provider: hint.provider, metadata: req.body?.meta });
 
-            const channel = await InteractionManager.resolveChannel({ businessId: biz._id, type, identifier, provider, metadata: req.body?.meta });
+            // Second pass: normalize with channel context
+            const { provider, type, identifier, externalId, text, attachments } = InteractionManager.normalizeInbound((req.body || {}), { channel });
             const consumer = await InteractionManager.resolveOrCreateConsumer({ businessId: biz._id, externalId });
             const metaRaw = req.body?.meta || {};
             const meta = {
@@ -148,7 +153,6 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
             }
         }
     });
-
     // Outbound send --> provider send + persist + update inbox
     router.post('/:slug/channels/messages/outbound', async (req, res) => {
         const { slug } = req.params;
@@ -253,5 +257,178 @@ WebApp.connectHandlers.use('/api/b', connectRoute((router) => {
             }
         }
 
+    });
+    router.post('/:slug/sessions', async (req, res) => {
+        const { slug } = req.params;
+        Logger.debug(`Received session webhook for business ${slug}`, req.body);
+        try {
+            const biz = await InteractionManager.resolveBusinessBySlug(slug);
+            const {
+                externalSessionId,
+                status,
+                startedAt,
+                lastSeenAt,
+                endedAt,
+                durationMs,
+                pageCount,
+                utm,
+                referrer,
+                device,
+                userAgent,
+                meta
+            } = req.body || {};
+
+            if (!externalSessionId) {
+                return InteractionManager.bad(res, 400, 'missing_externalSessionId');
+            }
+            const attributes = [];
+            if (req.body.meta) {
+                for (const key in req.body.meta) {
+                    attributes.push({ key, value: req.body.meta[key] });
+                }
+            }
+
+            // Try to find existing session by attribute
+            const existing = await SessionsCollection.findOneAsync({
+                businessId: biz._id,
+                externalSessionId,
+            });
+
+            let session;
+            if (existing) {
+                session = new Sessions(existing);
+                if (externalSessionId != null) session.externalSessionId = externalSessionId;
+                if (status != null) session.status = status;
+                if (startedAt != null) session.startedAt = startedAt;
+                if (lastSeenAt != null) session.lastSeenAt = lastSeenAt;
+                if (endedAt != null) session.endedAt = endedAt;
+                if (durationMs != null) session.durationMs = durationMs;
+                if (pageCount != null) session.pageCount = pageCount;
+                if (utm != null) session.utm = utm;
+                if (referrer != null) session.referrer = referrer;
+                if (device != null) session.device = device;
+                if (userAgent != null) session.userAgent = userAgent;
+                if (meta != null) session.meta = meta;
+                session.attributes = attributes.length ? attributes : session.attributes || [];
+            } else {
+                // Derive linkage from interactions carrying this sessionId attribute (if any)
+                const matches = await Interactions.findByAttribute('sessionId', externalSessionId);
+                const latest = Array.isArray(matches) && matches.length
+                    ? matches.reduce((acc, cur) => (cur.timestamp > (acc?.timestamp || 0) ? cur : acc), null)
+                    : null;
+
+                session = new Sessions({
+                    businessId: biz._id,
+                    externalSessionId: externalSessionId ?? null,
+                    channelId: latest?.channelId || null,
+                    consumerId: latest?.consumerId || null,
+                    inboxId: latest?.inboxId || null,
+                    status: status ?? 'active',
+                    startedAt: startedAt ?? Date.now(),
+                    lastSeenAt: lastSeenAt ?? Date.now(),
+                    endedAt: endedAt ?? null,
+                    durationMs: durationMs ?? null,
+                    pageCount: pageCount ?? 0,
+                    utm: utm ?? null,
+                    referrer: referrer ?? null,
+                    device: device ?? null,
+                    userAgent: userAgent ?? null,
+                    attributes: attributes,
+                    createdAt: Date.now(),
+                });
+            }
+
+            const savedId = await session.save();
+            InteractionManager.ok(res, {
+                businessId: biz._id,
+                id: savedId,
+                externalSessionId,
+                status: session.status,
+            });
+        } catch (error) {
+            InteractionManager.bad(res, 400, error.message || 'session_failed');
+        }
+    });
+    router.post('/:slug/page-views', async (req, res) => {
+        const { slug } = req.params;
+        Logger.debug(`Received page-view webhook for business ${slug}`, req.body);
+        try {
+            const biz = await InteractionManager.resolveBusinessBySlug(slug);
+            const {
+                externalSessionId,
+                type,
+                path,
+                title,
+                order,
+                timestamp,
+                dwellMs,
+                metadata
+            } = req.body || {};
+
+            if (!externalSessionId) {
+                return InteractionManager.bad(res, 400, 'missing_externalSessionId');
+            }
+
+            // Find or create session stub tied by sessionId attribute
+            let sessionDoc = await SessionsCollection.findOneAsync({
+                businessId: biz._id,
+                externalSessionId,
+            });
+
+            if (!sessionDoc) {
+                const matches = await Interactions.findByAttribute('sessionId', externalSessionId);
+                const latest = Array.isArray(matches) && matches.length
+                    ? matches.reduce((acc, cur) => (cur.timestamp > (acc?.timestamp || 0) ? cur : acc), null)
+                    : null;
+                const newSession = new Sessions({
+                    businessId: biz._id,
+                    externalSessionId: externalSessionId ?? null,
+                    channelId: latest?.channelId || null,
+                    consumerId: latest?.consumerId || null,
+                    inboxId: latest?.inboxId || null,
+                    status: 'active',
+                    startedAt: timestamp ?? Date.now(),
+                    lastSeenAt: timestamp ?? Date.now(),
+                    pageCount: 0,
+                    attributes: [{ key: 'sessionId', value: externalSessionId }],
+                    createdAt: Date.now(),
+                });
+                await newSession.save();
+                sessionDoc = await SessionsCollection.findOneAsync(newSession._id);
+            }
+
+            const session = new Sessions(sessionDoc);
+
+            const pageView = new PageViews({
+                sessionId: session._id,
+                businessId: session.businessId || biz._id,
+                channelId: session.channelId || null,
+                consumerId: session.consumerId || null,
+                inboxId: session.inboxId || null,
+                type: type ?? 'page',
+                path: path ?? null,
+                title: title ?? null,
+                order: typeof order === 'number' ? order : (session.pageCount ?? 0) + 1,
+                timestamp: timestamp ?? Date.now(),
+                dwellMs: dwellMs ?? null,
+                metadata: metadata ?? null,
+                createdAt: Date.now(),
+            });
+            const pageViewId = await pageView.save();
+
+            // Update session counters and lastSeen
+            session.pageCount = (session.pageCount ?? 0) + 1;
+            session.lastSeenAt = timestamp ?? Date.now();
+            await session.save();
+
+            InteractionManager.ok(res, {
+                businessId: biz._id,
+                sessionDbId: session._id,
+                externalSessionId,
+                pageViewId,
+            });
+        } catch (error) {
+            InteractionManager.bad(res, 400, error.message || 'page_view_failed');
+        }
     });
 }));
