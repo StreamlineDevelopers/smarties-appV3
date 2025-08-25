@@ -50,7 +50,7 @@ const messageData = [
         timestamp: new Date().toLocaleTimeString(),
         userId: "789",
     },
-]
+];
 
 
 Adapter.Meteor = Meteor;
@@ -65,12 +65,12 @@ export const POPUP = {
 
 export const TOGGLE = {
     SMARTIES_ASSISTANT: "smartiesAssistant"
-}
+};
 
 export const TAB = {
     MESSAGES: "messagesTab",
     CUSTOMER_INFORMATION: "customerInformationTab"
-}
+};
 
 export const INTERACTION = {
     LOADING_MESSAGE: "loadingMessage",
@@ -83,7 +83,7 @@ export const INTERACTION = {
     PREDEFINED_ANSWERS: "predefinedAnswers",
     SUGGESTIONS: "suggestions",
     LATEST_INTERACTION: "latestInteraction",
-}
+};
 
 // Global initialization state
 let initialized = false;
@@ -139,12 +139,12 @@ function decodeAttributeList(list) {
 }
 
 class MessagingWatcher extends Watcher2 {
-    #data
+    #data;
     #lastBasis = null;
     #processes = {};
     #listen = null;
     #sessionId = null;
-    #businessId = "63b81a722f8146be93163e3e";
+    #businessId = "5d2b8fb5faa44f514b1b7760";
     #interactionData = null;
     #pamClient = null;
     #predefinedAnswers = [];
@@ -185,7 +185,7 @@ class MessagingWatcher extends Watcher2 {
             const res = await this.getPredefinedAnswersByBusinessId();
 
             // #NOTE: remove if the adding of predefined answer in UI is made
-            if (res.length === 0) {
+            if (res && res.length === 0) {
                 await this.addPredefinedAnswer({
                     businessId: this.#businessId,
                     title: "Sample Predefined Answer",
@@ -411,7 +411,7 @@ class MessagingWatcher extends Watcher2 {
                 "priority": "normal",
                 "responseTime": Date.now()
             }
-        })
+        });
 
         if (res.data.ok) {
             this.setValue(INTERACTION.MESSAGE_TEXT, '');
@@ -612,7 +612,7 @@ class MessagingWatcher extends Watcher2 {
                     latestAt: change.data.latestAt || change.data.createdAt || null,
                     latestDirection: change.data.latestDirection || null,
                     createdAt: change.data.createdAt
-                }
+                };
 
                 switch (change.type) {
                     case 'initial':
@@ -697,7 +697,7 @@ class MessagingWatcher extends Watcher2 {
                                 timestamp: change.data.createdAt,
                                 attributes: change.data.attributes,
                                 sender: change.data.direction === 'inbound' ? 'User' : 'Agent'
-                            }
+                            };
                             // find the sessionId in the attributes
                             const sessionId = change.data.attributes.find(attribute => attribute.key === 'sessionId')?.value;
                             if (sessionId !== this.#sessionId) {

@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.20.7",
-    "@content-creation/client": "file:content-creation-client-1.0.0.tgz",
-    "@customer-engagement/client": "file:customer-engagement-client-1.0.0.tgz",
-    "@sales-enablement/client": "file:sales-enablement-client-1.0.0.tgz",
+    "@content-creation/client": "file:.core-packages/content-creation-client-1.0.0.tgz",
+    "@customer-engagement/client": "file:.core-packages/customer-engagement-client-1.0.0.tgz",
+    "@sales-enablement/client": "file:.core-packages/sales-enablement-client-1.0.0.tgz",
     "@smarties/attachments": "file:.core-packages/smarties-attachments-0.1.0.tgz",
     "@tmq-dev-ph/tmq-dev-core-client": "file:.core-packages/tmq-dev-ph-tmq-dev-core-client-1.3.148.tgz",
     "@tmq-dev-ph/tmq-dev-core-server": "file:.core-packages/tmq-dev-ph-tmq-dev-core-server-1.2.735.tgz",
