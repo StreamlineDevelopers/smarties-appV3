@@ -12,5 +12,6 @@ Meteor.startup(() => {
   // TODO: Re-enable Server startup once webhook testing is complete
   Server.startUp("Server running...");
   Server.startAllService().then(() => {
+    Server.registerBillingWebhook();
   });
 });

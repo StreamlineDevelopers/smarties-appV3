@@ -117,6 +117,32 @@
 0x9e42790f		CustomerEngagementService.generateResponse
 0x6f678e77		TakeoverService.CheckStatus
 0x9e2202ca		TakeoverService.ToggleStatus
+0x56950f9c		AssistantService.createAssistant
+0xfb1ded5a		AssistantService.fetchAssistant
+0xcf55909		AssistantService.updateAssistant
+0xb59511c6		AssistantService.fetchAssistantConfig
+0x2ff8d88c		AssistantService.fetchVoices
+0xadb13723		FileService.fetchFiles
+0x703f5f0		KnowledgeBaseService.createKnowledgeBase
+0x27971cae		KnowledgeBaseService.uploadKnowledgeBase
+0xc2261c79		KnowledgeBaseService.fetchKnowledgeBase
+0xad71a3ae		KnowledgeBaseService.generateUrl
+0x2152493d		ToolService.createTool
+0x410eff1d		ToolService.fetchTools
+0x168a1ba5		ToolService.updateTools
+0x130f51e		PhoneService.createPhone
+0xa2263f75		PhoneService.fetchPhones
+0x99419f51		RequestDetailsService.fetchRequestDetails
+0x9d4e73e7		CustomBillingService.fetchAuth
+0x48f221e8		CustomBillingService.fetchInvoices
+0xd1fbcb2e		CustomBillingService.fetchSubscription
+0x47fa5676		CustomBillingService.fetchPaymentMethod
+0x3cccdb81		AccService.fetchCustomerId
+0x6feb999d		AccService.fetchAccountDetails
+0x4f0a7208		AccService.updateAccountDetails
+0x62cb6156		WidgetConfigService.createWidgetConfig
+0xc21c51a7		WidgetConfigService.fetchWidgetConfig
+0x3840809d		WidgetConfigService.updateWidgetConfig
 
 
  -- Subscriptions --

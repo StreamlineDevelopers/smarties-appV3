@@ -8,16 +8,20 @@ const FormrowItem_e8606e74 = ({
   placeholder,
   type,
   id,
+  value,
+  onChange = () => { }
 }) => {
   return (
     <div className={'form-row'}>
       <FormcontrolItem_b5c12d0a
-        label={'Email'}
-        name={'email'}
-        dataName={'email'}
-        placeholder={'Enter Email'}
-        type={'email'}
-        id={'email'}
+        label={label}
+        name={name}
+        dataName={dataName}
+        placeholder={placeholder}
+        type={type}
+        id={id}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );

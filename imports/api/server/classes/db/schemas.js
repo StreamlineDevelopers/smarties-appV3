@@ -235,72 +235,284 @@ const schemas = {
 
     users: {
         "bsonType": "object",
-        "title": "users",
+        "required": [
+            "_id",
+            "createdAt",
+            "emails",
+            "profile",
+            "services",
+            "sessionToken",
+            "sessionTokenExpires",
+            "status",
+            "username"
+        ],
         "properties": {
-            "businessId": {
-                "bsonType": "objectId"
+            "_id": {
+                "bsonType": "string"
             },
-            "name": {
-                "bsonType": "object",
-                "title": "object",
-                "properties": {
-                    "given": {
-                        "bsonType": "string"
+            "createdAt": {
+                "bsonType": "date"
+            },
+            "emails": {
+                "bsonType": "array",
+                "items": {
+                    "bsonType": "object",
+                    "properties": {
+                        "address": {
+                            "bsonType": "string"
+                        },
+                        "verified": {
+                            "bsonType": "bool"
+                        }
                     },
-                    "family": {
-                        "bsonType": "string"
-                    }
+                    "required": [
+                        "address",
+                        "verified"
+                    ]
                 }
             },
-            "email": {
-                "bsonType": "string"
-            },
-            "role": {
-                "bsonType": "string"
+            "profile": {
+                "bsonType": "object",
+                "properties": {
+                    "address": {
+                        "bsonType": "string"
+                    },
+                    "address2": {
+                        "bsonType": "string"
+                    },
+                    "avatar": {
+                        "bsonType": "string"
+                    },
+                    "city": {
+                        "bsonType": "string"
+                    },
+                    "clientinfo": {
+                        "bsonType": "null"
+                    },
+                    "country": {
+                        "bsonType": "string"
+                    },
+                    "displayName": {
+                        "bsonType": "string"
+                    },
+                    "email": {
+                        "bsonType": "string"
+                    },
+                    "firstName": {
+                        "bsonType": "string"
+                    },
+                    "lastName": {
+                        "bsonType": "string"
+                    },
+                    "nickName": {
+                        "bsonType": "string"
+                    },
+                    "phone": {
+                        "bsonType": "string"
+                    },
+                    "roles": {
+                        "anyOf": [
+                            {
+                                "bsonType": "array",
+                                "items": {
+                                    "bsonType": "string"
+                                }
+                            },
+                            {
+                                "bsonType": "object",
+                                "properties": {
+                                    "packageExpiresAt": {
+                                        "bsonType": "int"
+                                    },
+                                    "packageRole": {
+                                        "bsonType": "string"
+                                    },
+                                    "userRole": {
+                                        "bsonType": "string"
+                                    }
+                                },
+                                "required": [
+                                    "packageExpiresAt",
+                                    "packageRole",
+                                    "userRole"
+                                ]
+                            }
+                        ]
+                    },
+                    "state": {
+                        "bsonType": "string"
+                    },
+                    "website": {
+                        "bsonType": "string"
+                    },
+                    "zip": {
+                        "bsonType": "string"
+                    }
+                },
+                "required": [
+                    "displayName",
+                    "roles"
+                ]
             },
             "services": {
                 "bsonType": "object",
-                "title": "object",
                 "properties": {
                     "password": {
                         "bsonType": "object",
-                        "title": "object",
                         "properties": {
                             "bcrypt": {
                                 "bsonType": "string"
                             }
-                        }
+                        },
+                        "required": [
+                            "bcrypt"
+                        ]
                     },
                     "resume": {
                         "bsonType": "object",
-                        "title": "object",
                         "properties": {
                             "loginTokens": {
                                 "bsonType": "array",
                                 "items": {
-                                    "title": "object",
+                                    "bsonType": "object",
                                     "properties": {
-                                        "when": {
-                                            "bsonType": "date"
-                                        },
                                         "hashedToken": {
                                             "bsonType": "string"
+                                        },
+                                        "when": {
+                                            "bsonType": "date"
                                         }
-                                    }
+                                    },
+                                    "required": [
+                                        "hashedToken",
+                                        "when"
+                                    ]
                                 }
                             }
-                        }
+                        },
+                        "required": [
+                            "loginTokens"
+                        ]
+                    }
+                },
+                "required": [
+                    "password",
+                    "resume"
+                ]
+            },
+            "sessionToken": {
+                "bsonType": "string"
+            },
+            "sessionTokenExpires": {
+                "bsonType": "double"
+            },
+            "signupStatus": {
+                "bsonType": "object",
+                "properties": {
+                    "clientAddress": {
+                        "bsonType": "string"
+                    },
+                    "connectionId": {
+                        "bsonType": "string"
+                    },
+                    "httpHeaders": {
+                        "bsonType": "string"
+                    },
+                    "userId": {
+                        "bsonType": "string"
+                    }
+                },
+                "required": [
+                    "clientAddress",
+                    "connectionId",
+                    "httpHeaders",
+                    "userId"
+                ]
+            },
+            "status": {
+                "bsonType": "object",
+                "properties": {
+                    "clientAddress": {
+                        "bsonType": "string"
+                    },
+                    "httpHeaders": {
+                        "bsonType": "object",
+                        "properties": {
+                            "accept-language": {
+                                "bsonType": "string"
+                            },
+                            "host": {
+                                "bsonType": "string"
+                            },
+                            "referer": {
+                                "bsonType": "string"
+                            },
+                            "user-agent": {
+                                "bsonType": "string"
+                            },
+                            "x-forwarded-for": {
+                                "bsonType": "string"
+                            },
+                            "x-forwarded-host": {
+                                "bsonType": "string"
+                            },
+                            "x-forwarded-port": {
+                                "bsonType": "string"
+                            },
+                            "x-forwarded-proto": {
+                                "bsonType": "string"
+                            }
+                        },
+                        "required": [
+                            "accept-language",
+                            "host",
+                            "user-agent",
+                            "x-forwarded-for",
+                            "x-forwarded-port",
+                            "x-forwarded-proto"
+                        ]
+                    },
+                    "id": {
+                        "bsonType": "string"
+                    },
+                    "isLoggedIn": {
+                        "bsonType": "bool"
+                    },
+                    "lastConnId": {
+                        "bsonType": "string"
+                    },
+                    "lastLogin": {
+                        "bsonType": "object",
+                        "properties": {
+                            "date": {
+                                "bsonType": "double"
+                            },
+                            "ipAddr": {
+                                "bsonType": "string"
+                            },
+                            "userAgent": {
+                                "bsonType": "string"
+                            }
+                        },
+                        "required": [
+                            "date",
+                            "ipAddr",
+                            "userAgent"
+                        ]
+                    },
+                    "loginCount": {
+                        "bsonType": "int"
+                    },
+                    "online": {
+                        "bsonType": "bool"
                     }
                 }
             },
-            "isActive": {
+            "username": {
+                "bsonType": "string"
+            },
+            "widgetAccount": {
                 "bsonType": "bool"
-            },
-            "lastLoginAt": {
-                "bsonType": "double"
-            },
-            "createdAt": {
-                "bsonType": "double"
             }
         }
     },
@@ -605,16 +817,16 @@ const indexes = {
         }
     ],
 
-    users: [
-        {
-            keys: { "businessId": 1, "email": 1 },
-            options: { name: "index1", unique: true }
-        },
-        {
-            keys: { "businessId": 1, "role": 1 },
-            options: { name: "index2" }
-        }
-    ],
+    // users: [
+    //     {
+    //         keys: { "businessId": 1, "email": 1 },
+    //         options: { name: "index1", unique: true }
+    //     },
+    //     {
+    //         keys: { "businessId": 1, "role": 1 },
+    //         options: { name: "index2" }
+    //     }
+    // ],
 
     departments: [
         {

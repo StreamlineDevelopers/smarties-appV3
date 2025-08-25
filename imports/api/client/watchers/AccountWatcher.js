@@ -26,16 +26,14 @@ class AccountWatcher extends Watcher2 {
     }
 
 
-    async signup(username, password, email, profile) {
+    async signup(email, password) {
         if (this.#processes["signUp"]) return;
         this.#processes["signUp"] = true;
         try {
             await Accounts.createUser({
-                username: username,
                 email: email,
                 password: password,
                 profile: {
-                    ...profile,
                     roles: ["user"]
                 }
             });

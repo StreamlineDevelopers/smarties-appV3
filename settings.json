@@ -1,5 +1,69 @@
 {
-    "public": {},
+    "public": {
+        "scrapeApiKey": "sample-api-key",
+        "scrapeUrl": "http://localhost:8050",
+        "llmUrl": "https://llm.ph03.us",
+        "llmApiKey": "api-key-change-in-production",
+        "assistantId": "AS_68113d3d1d0fe180c828e12e",
+        "callAssistantPublicKey": "4ade29a8-cfd7-46bc-beae-475019bb448a",
+        "callManagerConfig": {
+            "serverUrl": "https://callmanager.ph03.us",
+            "apiKey": "your-client-api-key"
+        },
+        "widgetConfig": {
+            "serverUrl": "https://widget-server.ph03.us/"
+        },
+        "vmConfig":{
+            "serverUrl":"https://vpmanager.ph03.us",
+            "apiKey":"abc123",
+            "refreshEndpoint":"/auth/token"
+        },
+        "websiteVerifier": {
+            "serverUrl": "https://webvalidator.ph03.us",
+            "apiKey": "your-client-api-key-change-in-production"
+        },
+        "unleash": {
+            "url": "http://localhost:4242/api/frontend/", 
+            "clientKey": "*:development.f0c7a6d47f7d7b7f00a3601b3da74895c55bd395d33602c3fd344713", 
+            "refreshInterval": 15,
+            "appName":"smarties"
+        },  
+        "toolsUrl": "https://toolsmanager.ph03.us",
+        "toolsJwtApiKey": "abc123", 
+        "uploadConfig": {
+            "config": {
+                "maxFileSize": 52428800,
+                "singleFile": true,
+                "supportedTypes": [
+                    "application/pdf",
+                    "image/jpeg",
+                    "image/png",
+                    "image/gif",
+                    "image/bmp",
+                    "image/tiff",
+                    "image/webp",
+                    "image/heic",
+                    "image/heif",
+                    "image/heic-sequence",
+                    "image/heif-sequence",
+                    "txt",
+                    "pdf"
+                ],
+                "baseUrl": "https://uploadmanager.ph03.us",
+                "maxCacheSize": 52428800,
+                "enableCache": true,
+                "authConfig": {
+                    "apiKey": "abc123",
+                    "tokenRefreshInterval": 1000,
+                    "maxRetries": 3,
+                    "retryDelay": 1000,
+                    "refreshEndpoint": "/api/auth/token",
+                    "withCredentials": false,
+                    "timeout": 10000
+                }
+            }
+        }
+        },
     "redisOplog": {
         "redis": {
             "port": 6379,
@@ -11,6 +75,19 @@
             "pushToRedis": true
         },
         "debug": false
+    },
+    "widgetConfig": {
+        "serverUrl": "https://widget-server.ph03.us/"   ,
+        "domain": "https://smarties-app.ph03.us",
+        "call": {
+            "serverUrl": "https://callmanager.ph03.us",
+            "apiKey": "your-client-api-key",
+            "token": "4ade29a8-cfd7-46bc-beae-475019bb448a"
+        },
+        "llm": {
+            "serverUrl": "https://llm.ph03.us",
+            "apiKey": "api-key-change-in-production"
+        }
     },
     "server": {
         "wsPort": 3502,

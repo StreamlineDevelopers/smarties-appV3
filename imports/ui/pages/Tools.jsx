@@ -1,20 +1,20 @@
 import React from 'react';
 import MaincontentLayout_d40c6329 from '../components/MaincontentLayout_d40c6329';
 import SidebarLayout from '../components/SidebarLayout';
-import TopbarLayout_b82cb3b4 from '../components/TopbarLayout_b82cb3b4';
-import FormrowItem_6c8184ec from '../components/FormrowItem_6c8184ec';
-import FormrowItem_e7b693eb from '../components/FormrowItem_e7b693eb';
-import FormrowItem_447d1c8c from '../components/FormrowItem_447d1c8c';
-import PopupformhddivItem_5f63f8c3 from '../components/PopupformhddivItem_5f63f8c3';
-import Noticedivstyle2Item from '../components/Noticedivstyle2Item';
-import PropertylistItem from '../components/PropertylistItem';
-import PropertydivItem from '../components/PropertydivItem';
-import FormrowItem_28bc7af8 from '../components/FormrowItem_28bc7af8';
-import HeaderlistItem from '../components/HeaderlistItem';
-import MessagedivItem from '../components/MessagedivItem';
-import Btnstyle1Item_6c79aff5 from '../components/Btnstyle1Item_6c79aff5';
-import WformdoneItem from '../components/WformdoneItem';
-import WformfailItem from '../components/WformfailItem';
+import TopbarLayout_b82cb3b4 from '../components-v2/TopbarLayout_b82cb3b4';
+import FormrowItem_6c8184ec from '../components-v2/FormrowItem_6c8184ec';
+import FormrowItem_e7b693eb from '../components-v2/FormrowItem_e7b693eb';
+import FormrowItem_447d1c8c from '../components-v2/FormrowItem_447d1c8c';
+import PopupformhddivItem_5f63f8c3 from '../components-v2/PopupformhddivItem_5f63f8c3';
+import Noticedivstyle2Item from '../components-v2/Noticedivstyle2Item';
+import PropertylistItem from '../components-v2/PropertylistItem';
+import PropertydivItem from '../components-v2/PropertydivItem';
+import FormrowItem_28bc7af8 from '../components-v2/FormrowItem_28bc7af8';
+import HeaderlistItem from '../components-v2/HeaderlistItem';
+import MessagedivItem from '../components-v2/MessagedivItem';
+import Btnstyle1Item_6c79aff5 from '../components-v2/Btnstyle1Item_6c79aff5';
+import WformdoneItem from '../components-v2/WformdoneItem';
+import WformfailItem from '../components-v2/WformfailItem';
 
 const Tools = () => {
   return (

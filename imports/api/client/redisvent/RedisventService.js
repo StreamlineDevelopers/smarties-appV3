@@ -34,6 +34,12 @@ class RedisventService extends RedisVent {
         return this;
     }
 
+    get Invoices() {
+        this.setSpace("invoices");
+        return this;
+    }
+
+
 }
 
 export default new RedisventService();

@@ -1,5 +1,4 @@
 import core from "@tmq-dev-ph/tmq-dev-core-client";
-import { Accounts } from "meteor/accounts-base";
 import { DDP } from "meteor/ddp-client";
 import { Meteor } from "meteor/meteor";
 import { Mongo } from "meteor/mongo";
@@ -7,6 +6,7 @@ import { Watcher2 } from "./Watcher2";
 import { toast } from "sonner";
 import { TOAST_STYLE } from "../common/const";
 const { Adapter, Logger, Account } = core;
+import { Accounts } from 'meteor/tmq:accounts';
 
 Adapter.Accounts = Accounts;
 Adapter.Meteor = Meteor;
@@ -47,7 +47,7 @@ class Client extends Watcher2 {
         // }, 1000);
     }
     async loginWithPassword(email, password) {
-        return this.account.loginAccount(email, password);
+        return Accounts.loginWithPassword(email, password)
     }
 
     SignOut() {
