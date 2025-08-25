@@ -978,7 +978,7 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                                   <div className={'convo-divider-line'}></div>
                                   <ConvodividercontentItem
                                     src={'images/smarties-avatar-icon-endcall.svg'}
-                                    divText={'Call Ended • 10:35 AM'}
+                                    divText={`Call Started • ${moment(data.timestamp).format('h:mm A')}`}
                                   />
                                   <div className={'convo-divider-line'}></div>
                                 </div>
@@ -1266,7 +1266,7 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                         </div>
                       </div> */}
                     </div>
-                    <div className={'user-typing-div'}>
+                    {/* <div className={'user-typing-div'}>
                       <div className={'usertyping-avatar'}>
                         <img
                           loading={'lazy'}
@@ -1277,7 +1277,7 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                         />
                       </div>
                       <div>{'John Smith is typing...'}</div>
-                    </div>
+                    </div> */}
                     <div className={'reply-row'}
                       style={{ pointerEvents: isSmartiesAssistantToggled ? 'none' : 'auto', opacity: isSmartiesAssistantToggled ? 0.5 : 1 }}>
                       <div className={'reply-row-aisuggestion-row'} style={{ display: isSmartiesAssistantToggled ? 'none' : 'block' }}>
