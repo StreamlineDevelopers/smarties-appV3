@@ -9,6 +9,7 @@ const { Adapter, Logger } = core;
 import inboxService from "../../common/static_codegen/tmq/inbox_pb";
 import interactionService from "../../common/static_codegen/tmq/interaction_pb";
 import takeoverService from "../../common/static_codegen/tmq/takeover_pb";
+import LiveKitVoiceClient from "@tmq.paul/pipecat-livekit-sdk";
 import {
     collectionManager,
     syncManager,
@@ -50,12 +51,11 @@ const messageData = [
         timestamp: new Date().toLocaleTimeString(),
         userId: "789",
     },
-]
+];
 
 
 Adapter.Meteor = Meteor;
 // Adapter.Accounts = Accounts;
-
 
 export const POPUP = {
     SCRIPT_INJECTION: "scriptInjectionPopup",
@@ -65,12 +65,12 @@ export const POPUP = {
 
 export const TOGGLE = {
     SMARTIES_ASSISTANT: "smartiesAssistant"
-}
+};
 
 export const TAB = {
     MESSAGES: "messagesTab",
     CUSTOMER_INFORMATION: "customerInformationTab"
-}
+};
 
 export const INTERACTION = {
     LOADING_MESSAGE: "loadingMessage",
@@ -83,7 +83,7 @@ export const INTERACTION = {
     PREDEFINED_ANSWERS: "predefinedAnswers",
     SUGGESTIONS: "suggestions",
     LATEST_INTERACTION: "latestInteraction",
-}
+};
 
 // Global initialization state
 let initialized = false;
@@ -139,15 +139,20 @@ function decodeAttributeList(list) {
 }
 
 class MessagingWatcher extends Watcher2 {
-    #data
+    #data;
     #lastBasis = null;
     #processes = {};
     #listen = null;
     #sessionId = null;
-    #businessId = "63b81a722f8146be93163e3e";
+    #businessId = "5d2b8fb5faa44f514b1b7760";
     #interactionData = null;
     #pamClient = null;
-    #predefinedAnswers = [];
+    #liveKitClient = null;
+    #currentRoom = null;
+    #isSpeaking = false;
+    #audioElements = new Map();
+    #currentOutputDeviceId = null;
+    #audioUnblockRegistered = false;
     constructor(parent) {
         super(parent);
         this.setValue(TAB.MESSAGES, 'all');
@@ -166,7 +171,6 @@ class MessagingWatcher extends Watcher2 {
 
         this.listening = false;
         this.initialized = false;
-
     }
     get DB() {
         return this.#data;
@@ -185,7 +189,7 @@ class MessagingWatcher extends Watcher2 {
             const res = await this.getPredefinedAnswersByBusinessId();
 
             // #NOTE: remove if the adding of predefined answer in UI is made
-            if (res.length === 0) {
+            if (res && res.length === 0) {
                 await this.addPredefinedAnswer({
                     businessId: this.#businessId,
                     title: "Sample Predefined Answer",
@@ -198,6 +202,7 @@ class MessagingWatcher extends Watcher2 {
                 this.getPredefinedAnswersByBusinessId();
             }
         }
+        if (!this.#liveKitClient) await this.initializeLiveKit();
         // Subscribe to space
         if (!syncManager.subscribedSpaces.has('inboxapp')) {
             syncManager.subscribeToSpace('inboxapp');
@@ -219,6 +224,207 @@ class MessagingWatcher extends Watcher2 {
 
     }
 
+    async initializeLiveKit() {
+        if (this.#liveKitClient) return;
+        this.#liveKitClient = new LiveKitVoiceClient({ serverUrl: 'http://localhost:7880' });
+        this.liveInitEventListeners();
+    }
+
+    async liveInitEventListeners() {
+        this.#liveKitClient.on('connected', (data) => {
+            console.log('Connected to room', data);
+            this.#isSpeaking = false;
+            // this.setValue(CALL_SMARTIE.STATUS, CALL_STATUS.ONGOING);
+            // this.setValue(CALL_SMARTIE.SPEAKING, false);
+        });
+        this.#liveKitClient.on('disconnected', () => {
+            console.log('Disconnected from room');
+        });
+        this.#liveKitClient.on('status', (status) => {
+            console.log('Status:', status);
+        });
+        this.#liveKitClient.on('error', (error) => {
+            console.log('Error:', error);
+        });
+        this.#liveKitClient.on('participantConnected', (participant) => {
+            console.log('Participant connected:', participant);
+        });
+        this.#liveKitClient.on('participantDisconnected', (participant) => {
+            console.log('Participant disconnected:', participant);
+        });
+        this.#liveKitClient.on('participantsUpdated', (participants) => {
+            console.log('Participants updated:', participants);
+        });
+        this.#liveKitClient.on('audioTrackSubscribed', (track) => {
+            console.log('Audio track subscribed:', track);
+
+            try {
+                // Resolve underlying remote audio track and a stable ID
+                let remoteTrack = null;
+                if (typeof track?.attach === 'function' || track?.mediaStreamTrack) {
+                    remoteTrack = track;
+                } else if (track?.track && (typeof track.track.attach === 'function' || track.track.mediaStreamTrack)) {
+                    remoteTrack = track.track;
+                } else if (track?.audioTrack && (typeof track.audioTrack.attach === 'function' || track.audioTrack.mediaStreamTrack)) {
+                    remoteTrack = track.audioTrack;
+                }
+
+                const trackId = remoteTrack?.sid
+                    || remoteTrack?.mediaStreamTrack?.id
+                    || track?.sid
+                    || track?.trackSid
+                    || track?.publication?.trackSid
+                    || remoteTrack?.id
+                    || track?.id;
+
+                if (!trackId) return;
+                if (this.#audioElements.has(trackId)) return;
+
+                let container = document.getElementById('livekit-audio-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'livekit-audio-container';
+                    container.style.position = 'fixed';
+                    container.style.bottom = '0';
+                    container.style.right = '0';
+                    container.style.width = '1px';
+                    container.style.height = '1px';
+                    container.style.overflow = 'hidden';
+                    container.style.zIndex = '-1';
+                    document.body.appendChild(container);
+                }
+
+                const audio = document.createElement('audio');
+                audio.autoplay = true;
+                audio.playsInline = true;
+                audio.muted = false;
+                audio.volume = 1.0;
+                audio.preload = 'auto';
+                audio.dataset.trackId = String(trackId);
+                audio.style.display = 'none';
+
+                let attached = false;
+                if (remoteTrack && typeof remoteTrack.attach === 'function') {
+                    try {
+                        remoteTrack.attach(audio);
+                        attached = true;
+                    } catch (_e) {
+                        attached = false;
+                    }
+                }
+
+                if (!attached) {
+                    const mstrack = remoteTrack?.mediaStreamTrack
+                        || track?.mediaStreamTrack
+                        || track?.track?.mediaStreamTrack
+                        || track?.audioTrack?.mediaStreamTrack;
+                    if (mstrack) {
+                        const stream = new MediaStream([mstrack]);
+                        audio.srcObject = stream;
+                    }
+                }
+
+                // Set output device if specified
+                if (this.#currentOutputDeviceId && typeof audio.setSinkId === 'function') {
+                    audio.setSinkId(this.#currentOutputDeviceId).catch(() => { });
+                }
+
+                container.appendChild(audio);
+
+                // Attempt to play immediately; if blocked, register one-time user-gesture resume
+                const playPromise = audio.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch((_err) => {
+                        if (!this.#audioUnblockRegistered) {
+                            this.#audioUnblockRegistered = true;
+                            const resumeAll = () => {
+                                this.#audioElements.forEach((a) => {
+                                    try { a.muted = false; } catch (_e) { }
+                                    const p = a.play();
+                                    if (p && typeof p.catch === 'function') { p.catch(() => { }); }
+                                });
+                                document.removeEventListener('click', resumeAll);
+                                document.removeEventListener('touchstart', resumeAll);
+                                this.#audioUnblockRegistered = false;
+                            };
+                            document.addEventListener('click', resumeAll, { once: true, passive: true });
+                            document.addEventListener('touchstart', resumeAll, { once: true, passive: true });
+                        }
+                        console.warn('Autoplay may be blocked. Click or tap the page to enable audio.');
+                    });
+                }
+
+                this.#audioElements.set(trackId, audio);
+            } catch (e) {
+                console.error('Failed to attach audio track:', e);
+            }
+        });
+        this.#liveKitClient.on('audioTrackUnsubscribed', (track) => {
+            console.log('Audio track unsubscribed:', track);
+            try {
+                const trackId = track?.sid
+                    || track?.mediaStreamTrack?.id
+                    || track?.id
+                    || track?.trackSid
+                    || track?.publication?.trackSid
+                    || track?.track?.sid
+                    || track?.audioTrack?.sid
+                    || track?.track?.mediaStreamTrack?.id
+                    || track?.audioTrack?.mediaStreamTrack?.id;
+                const audio = this.#audioElements.get(trackId);
+                if (audio) {
+                    try {
+                        if (typeof track?.detach === 'function') track.detach(audio);
+                    } catch (_e) { }
+                    audio.pause();
+                    if (audio.srcObject) {
+                        const tracks = audio.srcObject.getTracks?.() || [];
+                        tracks.forEach(t => t.stop?.());
+                        audio.srcObject = null;
+                    }
+                    if (audio.parentElement) audio.parentElement.removeChild(audio);
+                    this.#audioElements.delete(trackId);
+                }
+            } catch (e) {
+                console.error('Failed to detach audio track:', e);
+            }
+        });
+        this.#liveKitClient.on('microphoneEnabled', () => {
+            console.log('Microphone enabled');
+        });
+        this.#liveKitClient.on('microphoneDisabled', () => {
+            console.log('Microphone disabled');
+        });
+        // Transcription Events
+        this.#liveKitClient.on('userTranscription', (data) => {
+            // Session.sendChatMessage(data?.data?.text ?? data?.text ?? '', 'call', this.#currentRoom)
+            console.log('User transcription:', data);
+        });
+        this.#liveKitClient.on('assistantTranscription', (data) => {
+            // Session.sendChatMessageOutbound(data?.data?.text ?? data?.text ?? '', 'call', this.#currentRoom)
+            console.log('Assistant transcription:', data);
+        });
+
+        // Speaking State Events
+        this.#liveKitClient.on('userSpearkingState', (state) => {
+            console.log('User speaking state:', state);
+        });
+
+        this.#liveKitClient.on('botSpeakingState', (state) => {
+            if (state.state === 'start') {
+                this.#isSpeaking = true;
+                // this.setValue(CALL_SMARTIE.SPEAKING, true);
+            } else if (state.state === 'stop') {
+                this.#isSpeaking = false;
+                // this.setValue(CALL_SMARTIE.SPEAKING, false);
+            }
+        });
+
+        // User Recording Event
+        this.#liveKitClient.on('userRecording', (recording) => {
+            console.log('User recording:', recording);
+        });
+    }
     async getAll() {
         return await this.#data.find({}, { sort: { latestAt: -1 } }).fetch();
     }
@@ -362,6 +568,17 @@ class MessagingWatcher extends Watcher2 {
                 this.setValue(INTERACTION.LATEST_INTERACTION, latestInteraction);
                 const isAgent = this.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? false;
                 if (latestInteraction.direction === 'inbound' && !isAgent) this.fetchSuggestions(latestInteraction.message);
+
+                // check if  medium is call
+                if (latestInteraction.medium === 'call') {
+                    this.setValue("IS_CURRENTLY_IN_CALL", true);
+                    this.#currentRoom = latestInteraction.attributes.find(attribute => attribute.key === 'roomId')?.value;
+                }
+                else {
+                    this.setValue("IS_CURRENTLY_IN_CALL", false);
+                    this.#currentRoom = null;
+                }
+
                 // get the sessionId in latestInteraction.attributes
                 // set latest interaction data
                 const sessionId = latestInteraction.attributes.find(attribute => attribute.key === 'sessionId')?.value;
@@ -397,21 +614,22 @@ class MessagingWatcher extends Watcher2 {
      *  
      * @param {string} message - The message text to send.
      */
-    async sendMessage() {
+    async sendMessage(message = null) {
+        if (!message) message = this.getValue(INTERACTION.MESSAGE_TEXT);
         const res = await axios.post(`/api/b/smarties-test/channels/messages/outbound`, {
             "provider": "smarty",
             "type": "chat",
             "from": "smarty-chat-main",
             // "identifier": "smarty-chat-main",
             "to": "widget",
-            "text": this.getValue(INTERACTION.MESSAGE_TEXT),
+            "text": message,
             "meta": {
                 "agentId": "agent_001",
                 "agentName": "Support Agent",
                 "priority": "normal",
                 "responseTime": Date.now()
             }
-        })
+        });
 
         if (res.data.ok) {
             this.setValue(INTERACTION.MESSAGE_TEXT, '');
@@ -584,6 +802,49 @@ class MessagingWatcher extends Watcher2 {
         }
     }
 
+    /** LiveKit */
+    async joinRoom() {
+        try {
+            console.log("joinRoom", this.#currentRoom);
+            if (!this.#liveKitClient) await this.initializeLiveKit();
+            if (!this.#currentRoom) {
+                toast.warning("Room not set", TOAST_STYLE.WARNING);
+                return;
+            }
+            const room = await this.#liveKitClient.join({
+                roomName: this.#currentRoom,
+                userIdentity: this.#businessId
+            });
+            if (room.roomName) {
+                await this.#liveKitClient.sendBotControl('MUTE');
+                console.log('Connected to room:', room.roomName);
+            }
+            else {
+                toast.error("Failed to join room", TOAST_STYLE.ERROR);
+                this.setValue("isJoinedRoom", false);
+            }
+        } catch (error) {
+            toast.error("Failed to join room", TOAST_STYLE.ERROR);
+            this.setValue("isJoinedRoom", false);
+        }
+
+    }
+
+    async leaveRoom() {
+        if (!this.#liveKitClient) await this.initializeLiveKit();
+        await this.#liveKitClient.sendBotControl('UNMUTE');
+        await this.#liveKitClient.disconnect();
+        console.log('Disconnected from room');
+    }
+
+    async callRoom() {
+        if (!this.#liveKitClient) await this.initializeLiveKit();
+        if (!this.#currentRoom) {
+            toast.warning("Room not set", TOAST_STYLE.WARNING);
+            return;
+        }
+    }
+
     inboxListen() {
         if (this.listening) return;
         if (!this.#businessId) {
@@ -612,7 +873,7 @@ class MessagingWatcher extends Watcher2 {
                     latestAt: change.data.latestAt || change.data.createdAt || null,
                     latestDirection: change.data.latestDirection || null,
                     createdAt: change.data.createdAt
-                }
+                };
 
                 switch (change.type) {
                     case 'initial':
@@ -697,7 +958,7 @@ class MessagingWatcher extends Watcher2 {
                                 timestamp: change.data.createdAt,
                                 attributes: change.data.attributes,
                                 sender: change.data.direction === 'inbound' ? 'User' : 'Agent'
-                            }
+                            };
                             // find the sessionId in the attributes
                             const sessionId = change.data.attributes.find(attribute => attribute.key === 'sessionId')?.value;
                             if (sessionId !== this.#sessionId) {

@@ -540,8 +540,8 @@ const schemas = {
                 "bsonType": "double"
             }
         }
-    }
-    ,
+    },
+
     people: {
         "bsonType": "object",
         "title": "people",
@@ -612,6 +612,7 @@ const schemas = {
             "createdAt": { "bsonType": "double" }
         }
     },
+
     person_profile_links: {
         "bsonType": "object",
         "title": "person_profile_links",
@@ -628,6 +629,131 @@ const schemas = {
         }
     },
 
+    sessions: {
+        "bsonType": "object",
+        "title": "sessions",
+        "properties": {
+            "businessId": {
+                "bsonType": "objectId"
+            },
+            "channelId": {
+                "bsonType": "objectId"
+            },
+            "consumerId": {
+                "bsonType": "objectId"
+            },
+            "inboxId": {
+                "bsonType": "objectId"
+            },
+            "status": {
+                "bsonType": "string"
+            },
+            "startedAt": {
+                "bsonType": "double"
+            },
+            "lastSeenAt": {
+                "bsonType": "double"
+            },
+            "endedAt": {
+                "bsonType": "double"
+            },
+            "durationMs": {
+                "bsonType": "double"
+            },
+            "pageCount": {
+                "bsonType": "int"
+            },
+            "utm": {
+                "bsonType": "object",
+                "title": "object",
+                "properties": {
+                    "source": {
+                        "bsonType": "string"
+                    },
+                    "medium": {
+                        "bsonType": "string"
+                    },
+                    "campaign": {
+                        "bsonType": "string"
+                    },
+                    "term": {
+                        "bsonType": "string"
+                    },
+                    "content": {
+                        "bsonType": "string"
+                    }
+                }
+            },
+            "referrer": {
+                "bsonType": "string"
+            },
+            "device": {
+                "bsonType": "string"
+            },
+            "userAgent": {
+                "bsonType": "string"
+            },
+            "attributes": {
+                "bsonType": "array",
+                "items": {
+                    "title": "object"
+                }
+            },
+            "externalSessionId": {
+                "bsonType": "string"
+            },
+            "createdAt": {
+                "bsonType": "double"
+            }
+        }
+    },
+
+    page_views: {
+        "bsonType": "object",
+        "title": "page_views",
+        "properties": {
+            "sessionId": {
+                "bsonType": "objectId"
+            },
+            "businessId": {
+                "bsonType": "objectId"
+            },
+            "channelId": {
+                "bsonType": "objectId"
+            },
+            "consumerId": {
+                "bsonType": "objectId"
+            },
+            "inboxId": {
+                "bsonType": "objectId"
+            },
+            "type": {
+                "bsonType": "string"
+            },
+            "path": {
+                "bsonType": "string"
+            },
+            "title": {
+                "bsonType": "string"
+            },
+            "order": {
+                "bsonType": "int"
+            },
+            "timestamp": {
+                "bsonType": "double"
+            },
+            "dwellMs": {
+                "bsonType": "double"
+            },
+            "metadata": {
+                "bsonType": "object",
+                "title": "object"
+            },
+            "createdAt": {
+                "bsonType": "double"
+            }
+        }
+    }
 };
 
 // Index definitions for all collections
@@ -711,8 +837,8 @@ const indexes = {
             keys: { "businessId": 1, "channelIds": 1 },
             options: { name: "index2" }
         }
-    ]
-    ,
+    ],
+
     people: [
         { keys: { "businessId": 1, "lastSeenAt": -1 }, options: { name: "people_idx1" } },
         { keys: { "businessId": 1, "emails.valueHash": 1, "emails.verified": 1 }, options: { name: "people_idx2" } },
@@ -721,10 +847,51 @@ const indexes = {
         { keys: { "businessId": 1, "fingerprints.deviceIds": 1 }, options: { name: "people_idx5" } },
         { keys: { "businessId": 1, "fingerprints.cookies": 1 }, options: { name: "people_idx6" } }
     ],
+
     person_profile_links: [
         { keys: { "businessId": 1, "personId": 1, "profileId": 1 }, options: { name: "ppl_idx1", unique: true } },
         { keys: { "businessId": 1, "profileId": 1, "confidence": -1 }, options: { name: "ppl_idx2" } },
         { keys: { "businessId": 1, "personId": 1, "linkType": 1, "confidence": -1 }, options: { name: "ppl_idx3", partialFilterExpression: { linkType: "soft" } } }
+    ],
+
+    sessions: [
+        {
+            keys: { "businessId": 1, "channelId": 1, "startedAt": -1 },
+            options: { name: "biz_channel_startedAt" }
+        }, {
+            keys: { "consumerId": 1, "startedAt": -1 },
+            options: { name: "consumer_startedAt" }
+        },
+        {
+            keys: { "status": 1, "lastSeenAt": -1 },
+            "startedAt": -1
+        }, {
+            keys: { "inboxId": 1, "startedAt": -1 },
+            options: { name: "inbox_startedAt" }
+        },
+        {
+            keys: { "businessId": 1, "externalSessionId": 1 },
+            options: { name: "biz_extSessionId", sparse: true, unique: true }
+        }
+    ],
+
+    page_views: [
+        {
+            keys: { "sessionId": 1, "timestamp": -1 },
+            options: { name: "session_ts" }
+        },
+        {
+            keys: { "businessId": 1, "path": 1, "timestamp": -1 },
+            options: { name: "biz_path_ts" }
+        },
+        {
+            keys: { "consumerId": 1, "timestamp": -1 },
+            options: { name: "consumer_ts" }
+        },
+        {
+            keys: { "businessId": 1, "type": 1, "timestamp": -1 },
+            options: { name: "biz_type_ts" }
+        }
     ]
 };
 

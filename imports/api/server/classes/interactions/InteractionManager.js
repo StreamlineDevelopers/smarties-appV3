@@ -201,15 +201,34 @@ class InteractionManager {
      * @param {any} reqBody 
      * @returns {any}
      */
-    static normalizeInbound(reqBody) {
-        // try common fields first; adapt per provider if needed
-        const provider = (reqBody.provider || reqBody.meta?.provider || 'sms').toLowerCase();
-        const type = reqBody.type || 'messaging';
-        const identifier = reqBody.to || reqBody.destination || reqBody.channel || reqBody.identifier || 'default';
+    static normalizeInbound(reqBody, context = {}) {
+        // Use channel context if available; otherwise derive hints from the request
+        const hint = InteractionManager.extractChannelHint(reqBody);
+        const channel = context.channel;
+
+        const provider = (channel?.provider || reqBody.provider || reqBody.meta?.provider || hint.provider || 'sms').toLowerCase();
+        const type = channel?.type || reqBody.type || hint.type || 'messaging';
+        const identifier = channel?.identifier || hint.identifier || reqBody.to || reqBody.destination || reqBody.channel || reqBody.identifier || 'default';
         const externalId = reqBody.from || reqBody.externalId || reqBody.sender;
         const text = reqBody.text ?? reqBody.message ?? '';
         const attachments = Array.isArray(reqBody.attachments) ? reqBody.attachments : [];
         return { provider, type, identifier, externalId, text, attachments };
+    }
+
+    /**
+     * Extract minimal info to resolve channel before full normalization
+     * @param {any} reqBody
+     * @returns {{provider:string,type:string,identifier:string}}
+     */
+    static extractChannelHint(reqBody) {
+        const provider = (reqBody.provider || reqBody.meta?.provider || '').toLowerCase() || undefined;
+        const type = reqBody.type || reqBody.meta?.type || undefined;
+        const identifier = reqBody.to || reqBody.destination || reqBody.channel || reqBody.identifier || undefined;
+        return {
+            provider: provider || 'sms',
+            type: type || 'messaging',
+            identifier: identifier || 'default',
+        };
     }
 
     /**

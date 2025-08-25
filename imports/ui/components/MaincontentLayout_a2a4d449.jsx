@@ -27,6 +27,7 @@ import ConvoinbounddurationItem from './ConvoinbounddurationItem';
 import CalltranscriptdivItem from './CalltranscriptdivItem';
 import MessageplayerItem from './MessageplayerItem';
 import ConvobotavatarItem from './ConvobotavatarItem';
+import ConvodividercontentItem from './ConvodividercontentItem';
 import ConvoinboundavatarItem from './ConvoinboundavatarItem';
 import AttachmentimagenameinfowrapItem from './AttachmentimagenameinfowrapItem';
 import SmsattachmentpopupItem from './SmsattachmentpopupItem';
@@ -166,6 +167,7 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
   const loadingInbox = watcher.getValue(INTERACTION.LOADING_INBOX);
   const suggestions = watcher.getValue(INTERACTION.SUGGESTIONS);
   const loadingSuggestions = watcher.getValue(INTERACTION.LOADING_SUGGESTIONS);
+  const isCallInProgress = watcher.getValue("IS_CURRENTLY_IN_CALL");
   // Auto-scroll to bottom when new messages are added
   useEffect(() => {
     if (conversationDivRef.current && messageList.length > 0) {
@@ -669,10 +671,23 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                             </div>
                           </div>
                           <div
+                            data-w-id={'40a4a7a3-cd6d-b64d-c5e8-2df6143245bd'}
+                            className={'button-returncallai'}
+                          >
+                            <div>{'Return Call to AI'}</div>
+                            <div className={'fluentchat-28-regular'}>
+                              <img
+                                loading={'lazy'}
+                                src={'images/smarties-icon-ai.svg'}
+                                alt={''}
+                              />
+                            </div>
+                          </div>
+                          <div
                             data-w-id={'a6dc440d-420d-352d-d335-dbe1bda29f2e'}
                             className={'button-takeover'}
                             onClick={() => watcher.toggleSmartiesAssistant()}
-                            style={{ display: isSmartiesAssistantToggled ? 'flex' : 'none' }}
+                            style={{ display: isSmartiesAssistantToggled && !isCallInProgress ? 'flex' : 'none' }}
                           >
                             <div className={'fluentchat-28-regular'}>
                               <img
@@ -683,7 +698,39 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                             </div>
                             <div>{'Takeover Chat'}</div>
                           </div>
-                          <div className={'button-assign'}>
+                          <div
+                            data-w-id={'40a4a7a3-cd6d-b64d-c5e8-2df6143245b8'}
+                            className={'button-takeover-call'}
+                            onClick={() => watcher.toggleSmartiesAssistant()}
+                            style={{ display: isCallInProgress ? 'flex' : 'none' }}
+                          >
+                            <div className={'fluentchat-28-regular'}>
+                              <img
+                                loading={'lazy'}
+                                src={'images/smarties-icon-take-over.svg'}
+                                alt={''}
+                              />
+                            </div>
+                            <div>{'Takeover Call'}</div>
+                          </div>
+                          <div
+                            data-w-id={'40a4a7a3-cd6d-b64d-c5e8-2df6143245c2'}
+                            className={'button-endcall'}
+                            onClick={() => watcher.leaveRoom()}
+                            style={{ display: isCallInProgress ? 'flex' : 'none' }}
+                          >
+                            <div className={'fluentchat-28-regular'}>
+                              <img
+                                loading={'lazy'}
+                                src={
+                                  'images/smarties-avatar-icon-endcall-white.svg'
+                                }
+                                alt={''}
+                              />
+                            </div>
+                            <div>{'End Call'}</div>
+                          </div>
+                          <div className={'button-assign'} style={{ display: isCallInProgress ? 'none' : 'flex' }}>
                             <div className={'fluentchat-28-regular'}>
                               <img
                                 loading={'lazy'}
@@ -809,12 +856,46 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                                 </div>
                               </div>
                             </div>
-
-                            <div className="convo-bubble-inbound">
+                            {currentMedium === "call" ? (<div className="convo-bubble-inbound">
+                              <div className="call-transcript-div">
+                                <div className="call-transcript-icon">
+                                  <img
+                                    loading="lazy"
+                                    src="https://cdn.prod.website-files.com/68a6ed699293ec31a61d4e9f/68a6fabdad109b0959a01c94_smarties-avatar-icon-calltranscript.svg"
+                                    alt=""
+                                  />
+                                </div>
+                                <div>Call Transcript</div>
+                              </div>
                               <div>
                                 {data.message}
                               </div>
+                              <div className="message-player">
+                                <div className="btn-play">
+                                  <img
+                                    loading="lazy"
+                                    src="/images/smarties-icon-play.svg"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="player-main">
+                                  <div className="player-bar">
+                                    <div className="player-active" />
+                                  </div>
+                                  <div className="player">
+                                    <div>0:15</div>
+                                    <div>/</div>
+                                    <div>0:32</div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
+                            ) : (<div className="convo-bubble-inbound">
+                              <div>
+                                {data.message}
+                              </div>
+                            </div>)}
+
                             <ConvoinbounddurationItem
                               dataWId="d2601b0f-93ed-ec78-d431-297ce3d04872"
                               divText={moment(data.timestamp).format('h:mm A')}
@@ -828,18 +909,64 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                               dataWId="40de4617-1996-b595-f7c8-2ed436404f34"
                               divText={moment(data.timestamp).format('h:mm A')}
                             />
-                            <div className="convo-bubble-outbound">
+                            {currentMedium === "call" ? (<div className="convo-bubble-outbound">
+                              <div className="call-transcript-div">
+                                <div className="call-transcript-icon">
+                                  <img
+                                    loading="lazy"
+                                    src="/images/smarties-avatar-icon-calltranscript.svg"
+                                    alt=""
+                                  />
+                                </div>
+                                <div>Call Transcript</div>
+                              </div>
                               <div>
                                 {data.message}
                               </div>
-                            </div>
+                              <div className="message-player">
+                                <div className="btn-play">
+                                  <img
+                                    loading="lazy"
+                                    src="/images/smarties-icon-play.svg"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="player-main">
+                                  <div className="player-bar">
+                                    <div className="player-active" />
+                                  </div>
+                                  <div className="player">
+                                    <div>0:15</div>
+                                    <div>/</div>
+                                    <div>0:32</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>) : (<div className="convo-bubble-outbound">
+                              <div>
+                                {data.message}
+                              </div>
+                            </div>)}
                             <div className="convo-bot-avatar">
                               <img
                                 loading="lazy"
-                                src="images/smarties-head.png"
+                                src="/images/smarties-head.png"
                                 alt=""
                               />
+                              <div className="message-type-div">
+                                <div className="message-type" >
+                                  <img
+                                    loading="lazy"
+                                    src="/images/smarties-avatar-icon-call.svg"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="message-type-tooltip" style={{ display: "none" }}>
+                                  <div>Call</div>
+                                </div>
+                              </div>
                             </div>
+
                           </div>
                         );
 
@@ -847,10 +974,14 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                           <React.Fragment key={index}>
                             {shouldShowDivider && (
                               currentMedium === 'call' ? (
-                                <CallconvodividerItem
-                                  src={'images/smarties-avatar-icon-call.svg'}
-                                  divText={`Call started • ${moment(data.timestamp).format('h:mm A')}`}
-                                />
+                                <div className={'call-convo-divider'}>
+                                  <div className={'convo-divider-line'}></div>
+                                  <ConvodividercontentItem
+                                    src={'images/smarties-avatar-icon-endcall.svg'}
+                                    divText={'Call Ended • 10:35 AM'}
+                                  />
+                                  <div className={'convo-divider-line'}></div>
+                                </div>
                               ) : (
                                 <ConvodividerItem
                                   src={'images/smarties-head.png'}
@@ -1076,7 +1207,7 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                     </div> */}
                   </div>
                   <div className={'messaging-main-bot'}>
-                    <div className={'callinprogress-row'}>
+                    <div className={'callinprogress-row'} style={{ display: isCallInProgress ? 'flex' : 'none' }}>
                       <div className={'callinprogress-row-left'}>
                         <div className={'convo-divider-avatar'}>
                           <img
@@ -1090,10 +1221,11 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                         </div>
                         <div>{'03:51'}</div>
                       </div>
-                      <div className={'callinprogress-row-right'}>
+                      {/* <div className={'callinprogress-row-right'}>
                         <div
                           data-w-id={'fa22c22e-438d-312e-ba20-a1dd4c97343c'}
                           className={'button-takeover-call'}
+                          onClick={() => watcher.joinRoom()}
                         >
                           <div className={'fluentchat-28-regular'}>
                             <img
@@ -1132,7 +1264,7 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                           </div>
                           <div>{'End Call'}</div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                     <div className={'user-typing-div'}>
                       <div className={'usertyping-avatar'}>
