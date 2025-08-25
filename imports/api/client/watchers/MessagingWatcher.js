@@ -18,7 +18,6 @@ import {
 import axios from "axios";
 import PredefinedAnswerClient from 'predefined-answer-client';
 
-<<<<<<< HEAD
 const messageData = [
     {
         id: "1",
@@ -55,8 +54,6 @@ const messageData = [
 ];
 
 
-=======
->>>>>>> 79918c1ee9429036fd1419cf42fd66e1cf7ee469
 Adapter.Meteor = Meteor;
 // Adapter.Accounts = Accounts;
 
