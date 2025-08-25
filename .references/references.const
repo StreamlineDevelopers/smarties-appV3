@@ -60,7 +60,10 @@
 0x44eee41		SpeechService.GetSpeechVoices
 0x88c8ce27		HelloWorldService.SayHello
 0x2686675b		InboxService.GetInbox
+0xd3e96bac		InboxService.GetMergedInbox
 0x7626071f		InteractionService.GetInteractions
+0x8df8e3a3		InteractionService.GetInteractionsByInboxIds
+0xcbaf7911		InteractionService.GetInteractionsByConsumer
 0xbb9d4ba3		ConfigService.GetClientConfig
 0xc9137196		SalesEnablementService.connectStripe
 0x5f2e2388		SalesEnablementService.createCustomer

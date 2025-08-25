@@ -32,8 +32,33 @@ message GetInboxResponse {
   string error_message = 4;   // Error message if success is false
 }
 
+// Merged inbox view grouped by consumer
+message MergedInbox {
+  string consumer_id = 1;
+  repeated string inbox_ids = 2;
+  string representative_inbox_id = 3; // pick doc with max latest_at
+  string latest_interaction_id = 4;
+  string latest_snippet = 5;
+  double latest_at = 6;
+  string latest_direction = 7;
+  int32 total_unread_for_assignee = 8;
+}
+
+message GetMergedInboxRequest {
+  string business_id = 1;
+}
+
+message GetMergedInboxResponse {
+  repeated MergedInbox inboxes = 1;
+  int32 total_count = 2;
+  bool success = 3;
+  string error_message = 4;
+}
+
 // Service definition for inbox operations
 service InboxService {
   // Get inbox entries by business ID
   rpc GetInbox(GetInboxRequest) returns (GetInboxResponse);
+  // Get merged inbox entries grouped by consumer ID
+  rpc GetMergedInbox(GetMergedInboxRequest) returns (GetMergedInboxResponse);
 }
