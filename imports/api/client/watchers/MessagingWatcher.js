@@ -412,12 +412,10 @@ class MessagingWatcher extends Watcher2 {
         this.setValue(INTERACTION.LOADING_INBOX, true);
 
         try {
-            // Create request for InboxService.GetInbox
-            const req = new proto.tmq.GetInboxRequest();
+            const req = new proto.tmq.GetMergedInboxRequest();
             req.setBusinessId(this.#businessId);
 
-            // Call InboxService.GetInbox - 0x2686675b
-            const { err, result } = await this.Parent.callFunc(0x2686675b, req);
+            const { err, result } = await this.Parent.callFunc(0xd3e96bac, req);
 
             if (err) {
                 console.error("Error fetching inbox:", err);
@@ -427,25 +425,23 @@ class MessagingWatcher extends Watcher2 {
             }
 
             // Deserialize the response
-            const response = proto.tmq.GetInboxResponse.deserializeBinary(result);
+            const response = proto.tmq.GetMergedInboxResponse.deserializeBinary(result);
             const responseObj = response.toObject();
 
             if (responseObj.success) {
-                // Transform server data to UI format if needed
-                const transformedInbox = responseObj.inboxesList.map(inbox => ({
-                    _id: inbox.id,
-                    businessId: inbox.businessId,
-                    consumerId: inbox.consumerId,
-                    channelId: inbox.channelId,
-                    status: inbox.status,
-                    assigneeId: inbox.assigneeId,
-                    lockedAt: inbox.lockedAt,
-                    unreadForAssignee: inbox.unreadForAssignee,
-                    latestInteractionId: inbox.latestInteractionId,
-                    latestSnippet: inbox.latestSnippet,
-                    latestAt: inbox.latestAt,
-                    latestDirection: inbox.latestDirection,
-                    createdAt: inbox.createdAt
+                // Transform merged server data to UI format
+                const transformedInbox = responseObj.inboxesList.map(m => ({
+                    _id: m.consumerId, // use consumerId as stable key for merged rows
+                    businessId: this.#businessId,
+                    consumerId: m.consumerId,
+                    inboxIds: m.inboxIdsList || [],
+                    representativeInboxId: m.representativeInboxId || null,
+                    unreadForAssignee: m.totalUnreadForAssignee || 0,
+                    latestInteractionId: m.latestInteractionId || null,
+                    latestSnippet: m.latestSnippet || '',
+                    latestAt: m.latestAt || 0,
+                    latestDirection: m.latestDirection || '',
+                    createdAt: m.latestAt || 0
                 }));
 
                 const existing = await this.#data.find({}).fetch();
@@ -484,15 +480,20 @@ class MessagingWatcher extends Watcher2 {
         this.setValue(INTERACTION.LOADING_MESSAGE, true);
         this.setValue(INTERACTION.CURRENT, inboxData);
         this.setValue("inboxActive", true);
-        this.interactionListen(inboxData._id);
+        // subscribe to all inboxIds for merged view; fallback to representativeInboxId
+        const representativeInboxId = inboxData.representativeInboxId || inboxData._id;
+        const inboxIds = inboxData.inboxIds || [];
+        if (Array.isArray(inboxIds) && inboxIds.length > 0) this.interactionListenMultiple(inboxIds);
+        else if (representativeInboxId) this.interactionListen(representativeInboxId);
         const latestInteractionId = inboxData.latestInteractionId;
         try {
-            // Create request for InteractionService.GetInteractions
-            const req = new proto.tmq.GetInteractionsRequest();
-            req.setInboxId(inboxData._id);
+            // Prefer fetching by consumer for merged view
+            const req = new proto.tmq.GetInteractionsByConsumerRequest();
+            req.setBusinessId(this.#businessId);
+            req.setConsumerId(inboxData.consumerId);
 
-            // Call InteractionService.GetInteractions - 0x7626071f
-            const { err, result } = await this.Parent.callFunc(0x7626071f, req);
+            // Call InteractionService.GetInteractionsByConsumer - 0xcbaf7911
+            const { err, result } = await this.Parent.callFunc(0xcbaf7911, req);
 
             if (err) {
                 console.error("Error fetching interactions:", err);
@@ -507,7 +508,7 @@ class MessagingWatcher extends Watcher2 {
 
             if (responseObj.success) {
                 // Transform server data to UI message format
-                const transformedMessages = responseObj.interactionsList.map(interaction => {
+                let transformedMessages = responseObj.interactionsList.map(interaction => {
                     const attributes = decodeAttributeList(interaction.attributesList);
                     return {
                         id: interaction.id,
@@ -527,14 +528,17 @@ class MessagingWatcher extends Watcher2 {
                         sender: interaction.direction === 'inbound' ? 'User' : 'Agent'
                     };
                 });
-                // get the latestInteraction from the latestInteractionId
-                const latestInteraction = transformedMessages.find(interaction => interaction.id.includes(latestInteractionId));
+                // Ensure strict timestamp ordering (oldest -> newest)
+                transformedMessages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                // get the latestInteraction from the latestInteractionId, fallback to last by time
+                const latestInteraction = transformedMessages.find(interaction => interaction.id && latestInteractionId && interaction.id.includes(latestInteractionId))
+                    || transformedMessages[transformedMessages.length - 1];
                 this.setValue(INTERACTION.LATEST_INTERACTION, latestInteraction);
                 const isAgent = this.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? false;
-                if (latestInteraction.direction === 'inbound' && !isAgent) this.fetchSuggestions(latestInteraction.message);
+                if (latestInteraction && latestInteraction.direction === 'inbound' && !isAgent && latestInteraction.message) this.fetchSuggestions(latestInteraction.message);
 
                 // check if  medium is call
-                if (latestInteraction.medium === 'call') {
+                if (latestInteraction && latestInteraction.medium === 'call') {
                     this.setValue("IS_CURRENTLY_IN_CALL", true);
                     this.#currentRoom = latestInteraction.attributes.find(attribute => attribute.key === 'roomId')?.value;
                 }
@@ -545,9 +549,11 @@ class MessagingWatcher extends Watcher2 {
 
                 // get the sessionId in latestInteraction.attributes
                 // set latest interaction data
-                const sessionId = latestInteraction.attributes.find(attribute => attribute.key === 'sessionId')?.value;
-                this.#sessionId = sessionId;
-                await this.checkSmartiesAssistantStatus(sessionId);
+                const sessionId = latestInteraction && latestInteraction.attributes && latestInteraction.attributes.find(attribute => attribute.key === 'sessionId')?.value;
+                if (sessionId) {
+                    this.#sessionId = sessionId;
+                    await this.checkSmartiesAssistantStatus(sessionId);
+                }
                 const existing = await this.#interactionData.find({}).fetch();
                 for (const doc of existing) {
                     await this.#interactionData.remove(doc._id);
@@ -839,47 +845,105 @@ class MessagingWatcher extends Watcher2 {
                     createdAt: change.data.createdAt
                 }
 
-                switch (change.type) {
-                    case 'initial':
-                        // Initial data - already in minimongo from fetch
-                        console.log('Initial data received');
-                        break;
-
-                    case 'insert':
-                        // Check if already exists
-                        const exists = await this.#data.findOne({ _id: change.id });
-                        if (!exists) {
-                            await this.#data.insert(data);
-                        }
-                        console.log('Inbox added:', change.data);
-                        break;
-
-                    case 'update':
-                        if (change.data._id) delete change.data._id;
-                        if (data._id) delete data._id;
-                        await this.#data.update(change.id, data);
-                        // this.setValue(INTERACTION.INBOX, data);
-                        console.log('Inbox updated:', change.data);
-                        break;
-
-                    case 'remove':
-                        await this.#data.remove(change.id);
-                        console.log('Inbox removed:', change.id);
-                        break;
-
-                    case 'custom':
-                        const { action, ...customData } = change.data;
-                        console.log('Custom event:', action, customData);
-                        // Handle custom events as needed
-                        break;
-
-                    default:
-                        console.log('Unknown event:', change.type);
+                // Refresh merged view to avoid updating non-existent merged docs by raw inbox _id
+                try {
+                    await this.fetchInbox();
+                } catch (e) {
+                    console.warn('Failed to refresh merged inbox on change', e);
                 }
             }
         );
 
         this.listening = true;
+    }
+
+    interactionListenMultiple(inboxIds = []) {
+        // Stop existing single subscription
+        if (this.interactionSubscription) {
+            this.interactionSubscription.stop();
+            this.interactionSubscription = null;
+        }
+        // Stop existing multi subscriptions
+        if (this.interactionSubscriptions && Array.isArray(this.interactionSubscriptions)) {
+            this.interactionSubscriptions.forEach(sub => sub && sub.stop && sub.stop());
+        }
+        this.interactionSubscriptions = [];
+
+        inboxIds.forEach(inboxId => {
+            const sub = subscriptionManager.listen(
+                'interactionapp',
+                'interaction',
+                inboxId,
+                async (change) => {
+                    switch (change.type) {
+                        case 'initial':
+                            break;
+                        case 'insert': {
+                            const exists = await this.#interactionData.findOne({ _id: change.id });
+                            if (!exists) {
+                                const data = {
+                                    _id: change.data._id._str,
+                                    businessId: change.data.businessId._str,
+                                    inboxId: change.data.inboxId._str,
+                                    channelId: change.data.channelId._str,
+                                    consumerId: change.data.consumerId._str,
+                                    userId: change.data.userId,
+                                    medium: change.data.medium,
+                                    direction: change.data.direction,
+                                    message: change.data.payload?.text || '',
+                                    attachments: change.data.payload?.attachmentsList || [],
+                                    status: change.data.status,
+                                    timestamp: change.data.createdAt,
+                                    attributes: change.data.attributes,
+                                    sender: change.data.direction === 'inbound' ? 'User' : 'Agent'
+                                };
+                                const sessionId = change.data.attributes.find(attribute => attribute.key === 'sessionId')?.value;
+                                if (sessionId !== this.#sessionId) {
+                                    this.#sessionId = sessionId;
+                                    await this.checkSmartiesAssistantStatus(sessionId);
+                                }
+                                const isAgent = this.getValue(TOGGLE.SMARTIES_ASSISTANT) ?? false;
+                                if (data.direction === 'inbound' && data.message && !isAgent) this.fetchSuggestions(data.message);
+                                await this.#interactionData.insert(data);
+                            }
+                            break;
+                        }
+                        case 'update': {
+                            const updated = {
+                                businessId: change.data.businessId?._str ?? change.data.businessId,
+                                inboxId: change.data.inboxId?._str ?? change.data.inboxId,
+                                channelId: change.data.channelId?._str ?? change.data.channelId,
+                                consumerId: change.data.consumerId?._str ?? change.data.consumerId,
+                                userId: change.data.userId,
+                                medium: change.data.medium,
+                                direction: change.data.direction,
+                                message: change.data.payload?.text || '',
+                                attachments: change.data.payload?.attachmentsList || [],
+                                status: change.data.status,
+                                timestamp: change.data.createdAt,
+                                attributes: decodeAttributeList(change.data.attributesList),
+                                sender: change.data.direction === 'inbound' ? 'User' : 'Agent'
+                            };
+                            await this.#interactionData.update(change.id, updated);
+
+                            const sessionAttr = (change.data.attributesList || []).find(attribute => attribute.key === 'sessionId');
+                            const decodedSessionId = sessionAttr && sessionAttr.value && typeof sessionAttr.value === 'object' ? decodeAny(sessionAttr.value) : sessionAttr?.value;
+                            if (decodedSessionId) {
+                                this.#sessionId = decodedSessionId;
+                            }
+                            break;
+                        }
+                        case 'remove':
+                            await this.#interactionData.remove(change.id);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            );
+            this.interactionSubscriptions.push(sub);
+        });
+        this.interactionListening = true;
     }
 
     interactionListen(inboxId) {

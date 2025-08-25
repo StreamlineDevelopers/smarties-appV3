@@ -43,8 +43,23 @@ message GetInteractionsResponse {
   string error_message = 4;     // Error message if success is false
 }
 
+// Request: interactions across multiple inboxes
+message GetInteractionsByInboxIdsRequest {
+  repeated string inbox_ids = 1;
+}
+
+// Request: interactions by consumer (scoped to business)
+message GetInteractionsByConsumerRequest {
+  string business_id = 1;
+  string consumer_id = 2;
+}
+
 // Service definition for interaction operations
 service InteractionService {
   // Get interactions by inbox ID
   rpc GetInteractions(GetInteractionsRequest) returns (GetInteractionsResponse);
+  // Get interactions by multiple inbox IDs
+  rpc GetInteractionsByInboxIds(GetInteractionsByInboxIdsRequest) returns (GetInteractionsResponse);
+  // Get interactions by consumer within a business
+  rpc GetInteractionsByConsumer(GetInteractionsByConsumerRequest) returns (GetInteractionsResponse);
 }

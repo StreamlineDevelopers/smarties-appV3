@@ -5,7 +5,7 @@ import Inbox from "../classes/dbTemplates/Inbox.js";
 import { toObjectId } from "../classes/db/helper.js";
 
 const { DefaultResponse } = common;
-const { GetInboxRequest, GetInboxResponse, Inbox: InboxMsg } = inbox;
+const { GetInboxRequest, GetInboxResponse, Inbox: InboxMsg, GetMergedInboxRequest, GetMergedInboxResponse, MergedInbox } = inbox;
 
 export default {
     /**
@@ -84,6 +84,92 @@ export default {
             response.success = false;
             response.error_message = error.message || "Internal server error";
             response.total_count = 0;
+            callback(null, response);
+        }
+    }
+    ,
+    /**
+     * Get merged inbox entries grouped by consumer ID for a business
+     * @param {Object} call
+     * @param {GetMergedInboxRequest} call.request
+     * @param {function} callback 
+     */
+    GetMergedInbox: async function ({ request }, callback) {
+        try {
+            Logger.showDebug("InboxService.GetMergedInbox: business_id=%s", request.business_id);
+
+            if (!request.business_id) {
+                const response = new GetMergedInboxResponse();
+                response.success = false;
+                response.error_message = "Business ID is required";
+                response.total_count = 0;
+                response.inboxes = [];
+                callback(null, response);
+                return;
+            }
+
+            // Fetch all inbox entries for business
+            const inboxEntries = await Inbox.findByBusinessId(request.business_id, {
+                sort: {
+                    latestAt: -1
+                }
+            });
+
+            // Group by consumerId
+            const groups = new Map();
+            for (const entry of inboxEntries) {
+                const consumerId = entry.consumerId && entry.consumerId._str ? entry.consumerId._str : (entry.consumerId || "");
+                if (!consumerId) continue;
+
+                if (!groups.has(consumerId)) {
+                    groups.set(consumerId, {
+                        consumerId,
+                        inboxIds: [],
+                        totalUnread: 0,
+                        latestEntry: null
+                    });
+                }
+                const g = groups.get(consumerId);
+                const idStr = entry._id && entry._id._str ? entry._id._str : String(entry._id || "");
+                if (idStr) g.inboxIds.push(idStr);
+                g.totalUnread += (typeof entry.unreadForAssignee === 'number' ? entry.unreadForAssignee : 0);
+
+                const entryLatestAt = typeof entry.latestAt === 'number' ? entry.latestAt : (entry.createdAt || 0);
+                const currentLatestAt = g.latestEntry ? (typeof g.latestEntry.latestAt === 'number' ? g.latestEntry.latestAt : (g.latestEntry.createdAt || 0)) : -Infinity;
+                if (!g.latestEntry || entryLatestAt > currentLatestAt) {
+                    g.latestEntry = entry;
+                }
+            }
+
+            // Build response
+            const response = new GetMergedInboxResponse();
+            response.success = true;
+            response.error_message = "";
+            response.total_count = groups.size;
+            response.inboxes = Array.from(groups.values()).map(g => {
+                const latest = g.latestEntry || {};
+                const merged = new MergedInbox();
+                merged.consumer_id = g.consumerId;
+                merged.inbox_ids = g.inboxIds;
+                merged.representative_inbox_id = latest._id && latest._id._str ? latest._id._str : (latest._id ? String(latest._id) : "");
+                merged.latest_interaction_id = latest.latestInteractionId && latest.latestInteractionId._str ? latest.latestInteractionId._str : (latest.latestInteractionId || "");
+                merged.latest_snippet = latest.latestSnippet || "";
+                merged.latest_at = typeof latest.latestAt === 'number' ? latest.latestAt : (latest.createdAt || 0);
+                merged.latest_direction = latest.latestDirection || "";
+                merged.total_unread_for_assignee = g.totalUnread;
+                return merged;
+            });
+
+            Logger.showDebug("InboxService.GetMergedInbox: Groups %d", groups.size);
+            callback(null, response);
+
+        } catch (error) {
+            Logger.showError("InboxService.GetMergedInbox: Error - %s", error.message);
+            const response = new GetMergedInboxResponse();
+            response.success = false;
+            response.error_message = error.message || "Internal server error";
+            response.total_count = 0;
+            response.inboxes = [];
             callback(null, response);
         }
     }
