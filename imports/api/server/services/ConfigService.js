@@ -9,7 +9,8 @@ const {
     SmartiesAssistantConfig,
     AuthConfig,
     PredefinedConfig,
-    SuggestionConfig
+    SuggestionConfig,
+    LiveKit
 } = config;
 
 export default {
@@ -37,6 +38,7 @@ export default {
             const clientSettings = settings.client || {};
             const smartiesSettings = clientSettings.smartiesAssistant || {};
             const authSettings = settings.auth || {};
+            const liveKitSettings = settings.livekit || {};
 
             const response = new GetClientConfigResponse();
             response.success = true;
@@ -63,11 +65,14 @@ export default {
             predefinedMsg.apiKey = predefinedConfig.apiKey || "";
             predefinedMsg.refreshEndpoint = predefinedConfig.refreshEndpoint || "";
 
+            const liveKitMsg = new LiveKit();
+            liveKitMsg.serverUrl = liveKitSettings.serverUrl || "";
+
             const cfgMsg = new Config();
             cfgMsg.client = clientMsg;
             cfgMsg.auth = authMsg;
             cfgMsg.predefined = predefinedMsg;
-
+            cfgMsg.livekit = liveKitMsg;
             response.config = cfgMsg;
 
             callback(null, response);

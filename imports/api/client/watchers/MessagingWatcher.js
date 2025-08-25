@@ -233,7 +233,8 @@ class MessagingWatcher extends Watcher2 {
 
     async initializeLiveKit() {
         if (this.#liveKitClient) return;
-        this.#liveKitClient = new LiveKitVoiceClient({ serverUrl: 'http://localhost:7880' });
+        const data = await this.ensureConfig();
+        this.#liveKitClient = new LiveKitVoiceClient({ serverUrl: data.livekit.serverUrl || "http://localhost:8007" });
         this.liveInitEventListeners();
     }
 
@@ -246,6 +247,7 @@ class MessagingWatcher extends Watcher2 {
         });
         this.#liveKitClient.on('disconnected', () => {
             console.log('Disconnected from room');
+            this.#stt.stopListening();
         });
         this.#liveKitClient.on('status', (status) => {
             console.log('Status:', status);
@@ -634,7 +636,7 @@ class MessagingWatcher extends Watcher2 {
             "type": type || 'chat',
             "from": "smarty-chat-main",
             // "identifier": "smarty-chat-main",
-            "to": "widget",
+            "to": this.#sessionId,
             "text": message,
             "meta": {
                 "agentId": "agent_001",

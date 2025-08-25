@@ -40,6 +40,10 @@ message PredefinedConfig {
   string refreshEndpoint = 3;
 }
 
+message LiveKit {
+  string serverUrl = 1;
+}
+
 // Root config object
 message Config {
   ClientConfig client = 1;

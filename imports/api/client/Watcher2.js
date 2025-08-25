@@ -42,6 +42,9 @@ class Watcher2 extends Watcher {
                         serverUrl: cfg.predefined?.serverurl || "",
                         apiKey: cfg.predefined?.apikey || "",
                         refreshEndpoint: cfg.predefined?.refreshendpoint || ""
+                    },
+                    livekit: {
+                        serverUrl: cfg.livekit?.serverUrl || ""
                     }
                 };
                 Watcher2._config = mapped;
