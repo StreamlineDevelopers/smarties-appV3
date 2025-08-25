@@ -405,6 +405,7 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                             </div>
                             <MessaginginboxitemrightItem_d2b9f097
                               dataWId={'2ee757d2-bd3e-4a12-ca0b-91902938181b'}
+                              count={data.unreadForAssignee}
                             />
                           </a>
                         )
@@ -701,7 +702,7 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                           <div
                             data-w-id={'40a4a7a3-cd6d-b64d-c5e8-2df6143245b8'}
                             className={'button-takeover-call'}
-                            onClick={() => watcher.toggleSmartiesAssistant()}
+                            onClick={() => watcher.joinRoom()}
                             style={{ display: isCallInProgress ? 'flex' : 'none' }}
                           >
                             <div className={'fluentchat-28-regular'}>
@@ -924,7 +925,9 @@ const MaincontentLayout_a2a4d449 = ({ }) => {
                                 {data.message}
                               </div>
                               <div className="message-player">
-                                <div className="btn-play">
+                                <div className="btn-play" onClick={() => {
+                                  watcher.speak(data.message)
+                                }}>
                                   <img
                                     loading="lazy"
                                     src="/images/smarties-icon-play.svg"

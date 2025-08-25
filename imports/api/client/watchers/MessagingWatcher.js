@@ -17,6 +17,8 @@ import {
 } from 'redisvent-module';
 import axios from "axios";
 import PredefinedAnswerClient from 'predefined-answer-client';
+import { WebSpeechSTTProvider } from "./stt/webspeech";
+import { WebSpeechTTSProvider } from "./tts/webspeech";
 
 const messageData = [
     {
@@ -144,10 +146,14 @@ class MessagingWatcher extends Watcher2 {
     #processes = {};
     #listen = null;
     #sessionId = null;
-    #businessId = "5d2b8fb5faa44f514b1b7760";
+    #businessId = "63b81a722f8146be93163e3e";
+    #businessSlug = "smarties-test";
+    #currentIdentity = null;
     #interactionData = null;
     #pamClient = null;
     #liveKitClient = null;
+    #stt = null;
+    #tts = null;
     #currentRoom = null;
     #isSpeaking = false;
     #audioElements = new Map();
@@ -203,6 +209,7 @@ class MessagingWatcher extends Watcher2 {
             }
         }
         if (!this.#liveKitClient) await this.initializeLiveKit();
+        if (!this.#stt || !this.#tts) await this.initializeSTTAndTTS();
         // Subscribe to space
         if (!syncManager.subscribedSpaces.has('inboxapp')) {
             syncManager.subscribeToSpace('inboxapp');
@@ -398,7 +405,7 @@ class MessagingWatcher extends Watcher2 {
         // Transcription Events
         this.#liveKitClient.on('userTranscription', (data) => {
             // Session.sendChatMessage(data?.data?.text ?? data?.text ?? '', 'call', this.#currentRoom)
-            console.log('User transcription:', data);
+            // if (data.text !== "" && (this.#currentIdentity === data.participantId)) this.sendMessage(data.text);
         });
         this.#liveKitClient.on('assistantTranscription', (data) => {
             // Session.sendChatMessageOutbound(data?.data?.text ?? data?.text ?? '', 'call', this.#currentRoom)
@@ -620,11 +627,11 @@ class MessagingWatcher extends Watcher2 {
      *  
      * @param {string} message - The message text to send.
      */
-    async sendMessage(message = null) {
+    async sendMessage(message = null, type = 'chat') {
         if (!message) message = this.getValue(INTERACTION.MESSAGE_TEXT);
-        const res = await axios.post(`/api/b/smarties-test/channels/messages/outbound`, {
+        const res = await axios.post(`/api/b/${this.#businessSlug}/channels/messages/outbound`, {
             "provider": "smarty",
-            "type": "chat",
+            "type": type || 'chat',
             "from": "smarty-chat-main",
             // "identifier": "smarty-chat-main",
             "to": "widget",
@@ -811,15 +818,19 @@ class MessagingWatcher extends Watcher2 {
     /** LiveKit */
     async joinRoom() {
         try {
-            console.log("joinRoom", this.#currentRoom);
             if (!this.#liveKitClient) await this.initializeLiveKit();
+            console.log(this.#currentRoom);
+
             if (!this.#currentRoom) {
                 toast.warning("Room not set", TOAST_STYLE.WARNING);
                 return;
             }
+
+            if (!this.#stt || !this.#tts) await this.initializeSTTAndTTS();
+            this.#stt.startListening();
+
             const room = await this.#liveKitClient.join({
                 roomName: this.#currentRoom,
-                userIdentity: this.#businessId
             });
             if (room.roomName) {
                 await this.#liveKitClient.sendBotControl('MUTE');
@@ -849,6 +860,59 @@ class MessagingWatcher extends Watcher2 {
             toast.warning("Room not set", TOAST_STYLE.WARNING);
             return;
         }
+    }
+
+    // STT
+    async initializeSTTAndTTS(config = {}) {
+        if (this.#stt && this.#tts) return;
+        this.#stt = new WebSpeechSTTProvider({ continuous: true });
+        this.#tts = new WebSpeechTTSProvider();
+        this.#stt.initialize();
+        this.#tts.initialize();
+        this.initSTTAndTTSEventListeners();
+    }
+
+    async initSTTAndTTSEventListeners() {
+        this.#stt.onInterimResult((result) => {
+            console.log(`🎯 Interim: "${result.transcript}"`);
+        });
+
+        // Listen for final results
+        this.#stt.onFinalResult(async (result) => {
+            if (result.transcript !== "" && result.transcript !== null) this.sendMessage(result.transcript, "call");
+        });
+
+        // Listen for errors
+        this.#stt.onError((error) => {
+            console.error("❌ STT Error:", error);
+        });
+
+        // Listen for start/stop events
+        this.#stt.onStart(() => {
+            console.log("🎤 Started listening...");
+        });
+
+        this.#stt.onEnd(() => {
+            console.log("🔇 Stopped listening.");
+        });
+
+        this.#tts.onSpeechStart((utterance) => {
+            console.log('��️ Speech started!', utterance.text);
+        });
+
+        this.#tts.onSpeechEnd((utterance) => {
+            console.log('🔇 Speech ended!', utterance.text);
+        });
+
+        // Method 2: Using generic event system
+        this.#tts.on('speechStart', (utterance) => {
+            console.log('Speech started!');
+        });
+    }
+
+    speak(text) {
+        if (!this.#tts) this.initializeSTTAndTTS();
+        this.#tts.speak(text);
     }
 
     inboxListen() {
